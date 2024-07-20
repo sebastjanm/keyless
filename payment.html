@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Details - Keyless Car Rental</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <header class="custom-header shadow">
+        <div class="container mx-auto px-12 py-8">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-xl font-bold">Avant2go Keyless</a>
+                <nav class="space-x-4">
+                    <a href="index.html">Find a car</a>
+                    <a href="#">Business customers</a>
+                    <a href="#">Top offers</a>
+                </nav>
+                <div class="space-x-4">
+                    <a href="#">FAQ</a>
+                    <a href="#">Cart</a>
+                    <a href="#">Profile</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <main class="container mx-auto px-6 py-8">
+        <nav class="mb-4" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="index.html" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
+                        Home
+                    </a>
+                </li>
+                <li class="inline-flex items-center">
+                    <svg class="w-3 h-3 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.293 14.707a1 1 0 010-1.414L12.586 10 9.293 6.707a1 1 0 011.414-1.414l4 4a 1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"></path>
+                    </svg>
+                    <a href="car-details.html" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600">Car Details</a>
+                </li>
+                <li class="inline-flex items-center">
+                    <svg class="w-3 h-3 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.293 14.707a1 1 0 010-1.414L12.586 10 9.293 6.707a1 1 0 011.414-1.414l4 4a 1 1 0 010 1.414l-4 4a 1 1 0 01-1.414 0z"></path>
+                    </svg>
+                    <a href="personal_data.html" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600">Personal Data</a>
+                </li>
+                <li class="inline-flex items-center">
+                    <svg class="w-3 h-3 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.293 14.707a1 1 0 010-1.414L12.586 10 9.293 6.707a1 1 0 011.414-1.414l4 4a 1 1 0 010 1.414l-4 4a 1 1 0 01-1.414 0z"></path>
+                    </svg>
+                    <a href="payment.html" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600">Payment</a>
+                </li>
+            </ol>
+        </nav>
+
+        <div class="flex justify-between items-start space-x-6">
+            <section class="w-2/3 space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4">Subscription Overview</h2>
+                    <div class="flex space-x-4">
+                        <div class="w-2/3">
+                            <img id="car-image" src="" alt="Car Image" class="w-full h-auto rounded mb-4">
+                        </div>
+                        <div class="w-1/3">
+                            <p class="text-xl font-bold" id="car-title"></p>
+                            <p id="car-type"></p>
+                            <p id="preferred-color"></p>
+                            <p id="transmission"></p>
+                            <p id="kilometer-options"></p>
+                            <p id="insurance-package"></p>
+                            <p id="cost-extra-km"></p>
+                            <p id="admin-fee"></p>
+                            <p id="first-payment"></p>
+                            <p id="monthly-price"></p>
+                            <p id="delivery"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4">Personal Information</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="font-semibold">Title</p>
+                            <p id="title"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">First Name</p>
+                            <p id="first-name"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Last Name</p>
+                            <p id="last-name"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Email</p>
+                            <p id="email"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Phone</p>
+                            <p id="phone"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Date of Birth</p>
+                            <p id="dob"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Residence Status</p>
+                            <p id="residence-status"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Street Address</p>
+                            <p id="street-address"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Street Number</p>
+                            <p id="street-number"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Postcode</p>
+                            <p id="postcode"></p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">City</p>
+                            <p id="city"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="w-1/3 flex flex-col space-y-6" id="order-overview-section">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4">All Inclusive</h2>
+                    <div id="all-inclusive-details">
+                        <!-- All Inclusive details will be populated here -->
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4">Payment Details</h2>
+                    <form>
+                        <div class="mb-4">
+                            <label for="card-number" class="block font-semibold">Card Number</label>
+                            <input type="text" id="card-number" class="w-full border border-gray-300 p-2 rounded" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="expiry-date" class="block font-semibold">Expiry Date</label>
+                            <input type="text" id="expiry-date" class="w-full border border-gray-300 p-2 rounded" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="cvv" class="block font-semibold">CVV</label>
+                            <input type="text" id="cvv" class="w-full border border-gray-300 p-2 rounded" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="coupon-code" class="block font-semibold">Coupon Code (optional)</label>
+                            <input type="text" id="coupon-code" class="w-full border border-gray-300 p-2 rounded">
+                        </div>
+                        <div class="mb-4">
+                            <input type="checkbox" id="terms" class="mr-2">
+                            <label for="terms">I agree to the <a href="#" class="text-blue-500">Keyless Terms and Conditions</a>.</label>
+                        </div>
+                        <div class="mb-4">
+                            <input type="checkbox" id="insurance" class="mr-2">
+                            <label for="insurance">I agree to the <a href="#" class="text-blue-500">insurance terms</a>.</label>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded">Pay</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2023 Avant2go Keyless. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const carId = urlParams.get('carId');
+            if (!carId) {
+                console.error('Car ID not found in the URL.');
+                return;
+            }
+
+            try {
+                const carDetailsResponse = await fetch(`/car-details/${carId}`);
+                if (!carDetailsResponse.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const car = await carDetailsResponse.json();
+                populateOrderOverview(car);
+                populateAllInclusive(car);
+                populatePersonalInfo();
+                updateBreadcrumb(car);
+            } catch (error) {
+                console.error('Error fetching details:', error);
+            }
+        });
+
+        function populateOrderOverview(car) {
+            const subscriptionOptions = JSON.parse(localStorage.getItem('subscriptionOptions'));
+            if (!subscriptionOptions) {
+                console.error('Subscription options not found.');
+                return;
+            }
+
+            document.getElementById('car-title').textContent = `${car.manufacturer} ${car.model}`;
+            document.getElementById('car-image').src = car.image;
+            document.getElementById('car-type').textContent = `Car Type: ${car.category_type}`;
+            document.getElementById('preferred-color').textContent = `Preferred Colour: ${subscriptionOptions.color}`;
+            document.getElementById('transmission').textContent = `Transmission: ${car.transmission}`;
+            document.getElementById('kilometer-options').textContent = `Kilometer Options: ${subscriptionOptions.kmPerMonth} km`;
+            document.getElementById('insurance-package').textContent = `Insurance Package: ${subscriptionOptions.insurancePackage}`;
+            document.getElementById('cost-extra-km').textContent = `Cost/extra KM: €${car.additional_cost_per_km !== undefined ? car.additional_cost_per_km : 'N/A'}`;
+            document.getElementById('admin-fee').textContent = `Administration Fee: €${car.administration_fee !== undefined ? car.administration_fee : 'N/A'}`;
+            document.getElementById('first-payment').textContent = `First Payment (deposit): €${car.deposit !== undefined ? car.deposit : 'N/A'}`;
+            document.getElementById('monthly-price').textContent = `Monthly Price: €${car.price !== undefined ? car.price : 'N/A'}`;
+            document.getElementById('delivery').textContent = `Delivery: ${subscriptionOptions.delivery}`;
+        }
+
+        function populateAllInclusive(car) {
+            const subscriptionOptions = JSON.parse(localStorage.getItem('subscriptionOptions'));
+            if (!subscriptionOptions) {
+                console.error('Subscription options not found.');
+                return;
+            }
+
+            const allInclusiveDetails = document.getElementById('all-inclusive-details');
+            allInclusiveDetails.innerHTML = `
+                <p>Min. Duration: ${subscriptionOptions.minTerm} months</p>
+                <p>Kilometers/Month: ${subscriptionOptions.kmPerMonth} km</p>
+                <p>Insurance Package: ${subscriptionOptions.insurancePackage}</p>
+                <p>Cost/extra KM: €${car.additional_cost_per_km !== undefined ? car.additional_cost_per_km : 'N/A'}</p>
+                <p>Delivery: ${subscriptionOptions.delivery}</p>
+                <p>Monthly Price: €${car.price !== undefined ? car.price : 'N/A'}</p>
+            `;
+        }
+
+        function populatePersonalInfo() {
+            const personalInfo = JSON.parse(localStorage.getItem('personalInfo'));
+            if (!personalInfo) {
+                console.error('Personal info not found.');
+                return;
+            }
+
+            document.getElementById('title').textContent = personalInfo.title;
+            document.getElementById('first-name').textContent = personalInfo.firstName;
+            document.getElementById('last-name').textContent = personalInfo.lastName;
+            document.getElementById('email').textContent = personalInfo.email;
+            document.getElementById('phone').textContent = personalInfo.phone;
+            document.getElementById('dob').textContent = personalInfo.dob;
+            document.getElementById('residence-status').textContent = personalInfo.residenceStatus;
+            document.getElementById('street-address').textContent = personalInfo.streetAddress;
+            document.getElementById('street-number').textContent = personalInfo.streetNumber;
+            document.getElementById('postcode').textContent = personalInfo.postcode;
+            document.getElementById('city').textContent = personalInfo.city;
+        }
+
+        function updateBreadcrumb(car) {
+            const breadcrumbLink = document.getElementById('breadcrumb-car-link');
+            breadcrumbLink.href = `car-details.html?carId=${car.car_id}`;
+            breadcrumbLink.textContent = `${car.manufacturer} ${car.model}`;
+        }
+    </script>
+</body>
+</html>

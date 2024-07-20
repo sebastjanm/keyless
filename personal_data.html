@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Details - Keyless Car Rental</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <header class="custom-header shadow">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-xl font-bold">Avant2go Keyless</a>
+                <nav class="space-x-4">
+                    <a href="index.html">Find a car</a>
+                    <a href="#">Business customers</a>
+                    <a href="#">Top offers</a>
+                </nav>
+                <div class="space-x-4">
+                    <a href="#">FAQ</a>
+                    <a href="#">Cart</a>
+                    <a href="#">Profile</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <main class="container mx-auto px-6 py-8">
+        <nav class="flex mb-4">
+            <a href="index.html" class="text-blue-600 hover:underline">Home</a>
+            <span class="mx-2">/</span>
+            <a href="car-details.html" class="text-blue-600 hover:underline" id="breadcrumb-car-link"></a>
+            <span class="mx-2">/</span>
+            <a href="personal_data.html" class="text-blue-600 hover:underline">Personal Data</a>
+        </nav>
+
+        <div class="flex justify-between items-start space-x-8">
+            <section class="w-2/3 bg-white p-6 rounded-lg shadow-lg mb-6" id="personal-section-section">
+                <h2 class="text-2xl font-bold mb-4">Personal details</h2>
+                <p class="text-gray-600 mb-4">First name and Last name, as on your driver's license. These details will be added to your invoice.</p>
+                <form id="personal-info-form">
+                    <div class="mb-4">
+                        <label for="title" class="block font-semibold">Title</label>
+                        <select id="title" class="w-full border border-gray-300 p-2 rounded">
+                            <option value="Mr">Mr</option>
+                            <option value="Ms">Ms</option>
+                            <option value="Mrs">Mrs</option>
+                            <option value="Dr">Dr</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="firstName" class="block font-semibold">First name</label>
+                        <input type="text" id="firstName" class="w-full border border-gray-300 p-2 rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="lastName" class="block font-semibold">Last name</label>
+                        <input type="text" id="lastName" class="w-full border border-gray-300 p-2 rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block font-semibold">Email address</label>
+                        <input type="email" id="email" class="w-full border border-gray-300 p-2 rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="phone" class="block font-semibold">Mobile hone</label>
+                        <input type="tel" id="phone" class="w-full border border-gray-300 p-2 rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="dob" class="block font-semibold">Date of birth</label>
+                        <input type="date" id="dob" class="w-full border border-gray-300 p-2 rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="residenceStatus" class="block font-semibold">Residence Status</label>
+                        <input type="text" id="residenceStatus" class="w-full border border-gray-300 p-2 rounded" required>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4">Address Information</h2>
+                    <p class="text-gray-600 mb-4">The address where you are officially registered as a resident.</p>
+                    <div class="mb-4">
+                        <label for="streetAddress" class="block font-semibold">Street Address</label>
+                        <input type="text" id="streetAddress" class="w-full border border-gray-300 p-2 rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="streetNumber" class="block font-semibold">Street Number</label>
+                        <input type="text" id="streetNumber" class="w-full border border-gray-300 p-2 rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="postcode" class="block font-semibold">Postcode</label>
+                        <input type="text" id="postcode" class="w-full border border-gray-300 p-2 rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="city" class="block font-semibold">City</label>
+                        <input type="text" id="city" class="w-full border border-gray-300 p-2 rounded" required>
+                    </div>
+                </form>
+            </section>
+
+            <div class="w-1/3 flex flex-col space-y-6" id="order-overwiew-section">
+                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+                    <h2 class="text-2xl font-bold mb-4">Order Overview</h2>
+                    <div id="order-overview">
+                        <!-- Order overview will be populated here -->
+                    </div>
+                    <div class="mt-4">
+                        <button type="button" onclick="savePersonalInfo()" class="w-full bg-blue-500 text-white p-2 rounded">Next Step (Overview)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2023 Avant2go Keyless. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const carId = urlParams.get('carId');
+            if (!carId) {
+                console.error('Car ID not found in the URL.');
+                return;
+            }
+
+            try {
+                const carDetailsResponse = await fetch(`/car-details/${carId}`);
+                if (!carDetailsResponse.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const car = await carDetailsResponse.json();
+                populateOrderOverview(car);
+                updateBreadcrumb(car);
+            } catch (error) {
+                console.error('Error fetching details:', error);
+            }
+        });
+
+        function populateOrderOverview(car) {
+            const subscriptionOptions = JSON.parse(localStorage.getItem('subscriptionOptions'));
+            if (!subscriptionOptions) {
+                console.error('Subscription options not found.');
+                return;
+            }
+
+            const orderOverview = document.getElementById('order-overview');
+            orderOverview.innerHTML = `
+                <p class="text-xl font-bold mb-4">${car.manufacturer} ${car.model}</p>
+                <img src="${car.image}" alt="${car.model}" class="w-full h-auto rounded mb-4">
+                <p>Car Type: ${car.category_type}</p>
+                <p>Preferred Colour: ${subscriptionOptions.color}</p>
+                <p>Transmission: ${car.transmission}</p>
+                <p class="flex items-center">Drive: ${car.drive || 'N/A'}</p>
+                <p>Min. Duration: ${subscriptionOptions.minTerm} months</p>
+                <p>Kilometers/Month: ${subscriptionOptions.kmPerMonth} km</p>
+                <p>Insurance Package: ${subscriptionOptions.insurancePackage}</p>
+                <p>Cost/extra KM: €${car.additional_cost_per_km !== undefined ? car.additional_cost_per_km : 'N/A'}</p>
+                <p>Delivery: ${subscriptionOptions.delivery}</p>
+                <p class="text-xl font-bold mt-4 mb-4">Monthly Price: €${car.price !== undefined ? car.price : 'N/A'}</p>
+            `;
+        }
+
+        function updateBreadcrumb(car) {
+            const breadcrumbLink = document.getElementById('breadcrumb-car-link');
+            breadcrumbLink.href = `car-details.html?carId=${car.car_id}`;
+            breadcrumbLink.textContent = `${car.manufacturer} ${car.model}`;
+        }
+
+        function savePersonalInfo() {
+            const personalInfo = {
+                title: document.getElementById('title').value,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                dob: formatDate(document.getElementById('dob').value),
+                residenceStatus: document.getElementById('residenceStatus').value,
+                streetAddress: document.getElementById('streetAddress').value,
+                streetNumber: document.getElementById('streetNumber').value,
+                postcode: document.getElementById('postcode').value,
+                city: document.getElementById('city').value,
+            };
+
+            localStorage.setItem('personalInfo', JSON.stringify(personalInfo));
+            window.location.href = 'payment.html?carId=' + new URLSearchParams(window.location.search).get('carId');
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            return new Date(dateString).toLocaleDateString('en-GB', options);
+        }
+    </script>
+</body>
+</html>
