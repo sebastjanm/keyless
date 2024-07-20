@@ -152,27 +152,30 @@ async function getCars(filters) {
 }
 
 async function getCarDetails(carId) {
-    const carDetailsQuery = `
-        SELECT 
-            c.car_id, 
-            cm.model_id, cm.image, cm.model, cm.manufacturer, cm.description, cm.acriss_code, 
-            cm.trailer_hitch, cm.additional_cost_per_km, cm.transmission::text AS transmission, 
-            cm.seats, cm.doors, cm.shopping_bags, cm.fuel_type::text AS fuel_type, 
-            cm.fuel_consumption, cm.horse_power, cm.engine_size, cm.co2_emissions, 
-            cm.battery_capacity, cm.max_charging, cm.drive::text AS drive, 
-            cm.displacement, cm.config_basis AS basis, cm.config_safety AS safety, 
-            cm.config_entertainment AS entertainment, cm.config_comfort AS comfort,
-            c.status::text AS status, c.mileage, 
-            p.monthly_payment AS price, p.administration_fee, p.extras AS reduced_price, 
-            cat.category_type, e.efficiency_rating
-        FROM cars c
-        JOIN car_models cm ON c.model_id = cm.model_id
-        LEFT JOIN car_pricing cp ON c.car_id = cp.car_id
-        LEFT JOIN pricing p ON cp.pricing_id = p.pricing_id
-        LEFT JOIN car_categories cat ON cm.category_id = cat.category_id
-        LEFT JOIN energy_efficiency_ratings e ON cm.efficiency_id = e.efficiency_id
-        WHERE c.car_id = $1
-    `;
+// server.js - Fetch car details including deposit
+const carDetailsQuery = `
+    SELECT 
+        c.car_id, 
+        cm.model_id, cm.image, cm.model, cm.manufacturer, cm.description, cm.acriss_code, 
+        cm.trailer_hitch, cm.additional_cost_per_km, cm.transmission::text AS transmission, 
+        cm.seats, cm.doors, cm.shopping_bags, cm.fuel_type::text AS fuel_type, 
+        cm.fuel_consumption, cm.horse_power, cm.engine_size, cm.co2_emissions, 
+        cm.battery_capacity, cm.max_charging, cm.drive::text AS drive, 
+        cm.displacement, cm.config_basis AS basis, cm.config_safety AS safety, 
+        cm.config_entertainment AS entertainment, cm.config_comfort AS comfort,
+        c.status::text AS status, c.mileage, 
+        p.monthly_payment AS price, p.administration_fee, p.extras AS reduced_price, 
+        p.deposit, 
+        cat.category_type, e.efficiency_rating
+    FROM cars c
+    JOIN car_models cm ON c.model_id = cm.model_id
+    LEFT JOIN car_pricing cp ON c.car_id = cp.car_id
+    LEFT JOIN pricing p ON cp.pricing_id = p.pricing_id
+    LEFT JOIN car_categories cat ON cm.category_id = cat.category_id
+    LEFT JOIN energy_efficiency_ratings e ON cm.efficiency_id = e.efficiency_id
+    WHERE c.car_id = $1
+`;
+
 
     const carColorsQuery = `
         SELECT col.color_name 
