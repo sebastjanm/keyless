@@ -21,12 +21,47 @@ function handleError(res, err, message) {
     res.status(500).json({ error: `${message}: ${err.message}` });
 }
 
+// Define the getFilters function
+async function getFilters() {
+    try {
+        const brandsQuery = await pool.query('SELECT DISTINCT manufacturer FROM car_models');
+        const modelsQuery = await pool.query('SELECT DISTINCT model FROM car_models');
+        const fuelTypesQuery = await pool.query('SELECT DISTINCT fuel_type FROM car_models');
+        const vehicleTypesQuery = await pool.query('SELECT DISTINCT category_type FROM car_categories');
+        const transmissionsQuery = await pool.query('SELECT DISTINCT transmission FROM car_models');
+        const driveTrainsQuery = await pool.query('SELECT DISTINCT drive FROM car_models');
+        const seatsQuery = await pool.query('SELECT DISTINCT seats FROM car_models');
+        const colorsQuery = await pool.query(`
+            SELECT DISTINCT col.color_name AS color
+            FROM cars c
+            LEFT JOIN car_colors cc ON c.car_id = cc.car_id
+            LEFT JOIN colors col ON cc.color_id = col.color_id
+        `);
+        const availabilityQuery = await pool.query('SELECT DISTINCT status FROM cars');
+
+        return {
+            brands: brandsQuery.rows.map(row => row.manufacturer),
+            models: modelsQuery.rows.map(row => row.model),
+            fuelTypes: fuelTypesQuery.rows.map(row => row.fuel_type),
+            vehicleTypes: vehicleTypesQuery.rows.map(row => row.category_type),
+            transmissions: transmissionsQuery.rows.map(row => row.transmission),
+            driveTrains: driveTrainsQuery.rows.map(row => row.drive),
+            seats: seatsQuery.rows.map(row => row.seats),
+            colors: colorsQuery.rows.map(row => row.color),
+            availability: availabilityQuery.rows.map(row => row.status),
+        };
+    } catch (err) {
+        console.error('Error fetching filters:', err);
+        throw new Error('Database query failed.');
+    }
+}
+
 app.get('/filters', async (req, res) => {
     try {
         const filters = await getFilters();
         res.json(filters);
     } catch (err) {
-        handleError(res, err, 'Error fetching filters. Please try again later.');
+        handleError(res, err, 'Error fetching filters');
     }
 });
 
@@ -35,7 +70,7 @@ app.get('/cars', async (req, res) => {
         const cars = await getCars(req.query);
         res.json(cars);
     } catch (err) {
-        handleError(res, err, 'Error fetching cars. Please try again later.');
+        handleError(res, err, 'Error fetching cars');
     }
 });
 
@@ -49,7 +84,7 @@ app.get('/car-details/:carId', async (req, res) => {
         const car = await getCarDetails(carId);
         res.json(car);
     } catch (err) {
-        handleError(res, err, 'Error fetching car details. Please try again later.');
+        handleError(res, err, 'Error fetching car details');
     }
 });
 
@@ -58,7 +93,7 @@ app.get('/subscription-options', async (req, res) => {
         const options = await getSubscriptionOptions();
         res.json(options);
     } catch (err) {
-        handleError(res, err, 'Error fetching subscription options. Please try again later.');
+        handleError(res, err, 'Error fetching subscription options');
     }
 });
 
@@ -70,39 +105,19 @@ app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
 
-async function getFilters() {
-    try {
-        const brandsQuery = await pool.query('SELECT DISTINCT manufacturer FROM car_models');
-        const modelsQuery = await pool.query('SELECT DISTINCT model FROM car_models');
-        const fuelTypesQuery = await pool.query('SELECT DISTINCT fuel_type FROM car_models');
-        const vehicleTypesQuery = await pool.query('SELECT DISTINCT category_type FROM car_categories');
-        const transmissionsQuery = await pool.query('SELECT DISTINCT transmission FROM car_models');
-        const driveTrainsQuery = await pool.query('SELECT DISTINCT drive FROM car_models');
-        const seatsQuery = await pool.query('SELECT DISTINCT seats FROM car_models');
+// Ensure other necessary functions like getCars, getCarDetails, and getSubscriptionOptions are defined similarly
 
-        return {
-            brands: brandsQuery.rows.map(row => row.manufacturer),
-            models: modelsQuery.rows.map(row => row.model),
-            fuelTypes: fuelTypesQuery.rows.map(row => row.fuel_type),
-            vehicleTypes: vehicleTypesQuery.rows.map(row => row.category_type),
-            transmissions: transmissionsQuery.rows.map(row => row.transmission),
-            driveTrains: driveTrainsQuery.rows.map(row => row.drive),
-            seats: seatsQuery.rows.map(row => row.seats),
-        };
-    } catch (err) {
-        console.error('Error fetching filters:', err);
-        throw new Error('Database query failed.');
-    }
-}
 
 async function getCars(filters) {
-    const { brand, model, fuel, vehicleType, transmission, driveTrain, seats } = filters;
+    const { brand, vehicleType, fuel, transmission, drive, color, availability } = filters;
     let query = `
         SELECT c.car_id, cm.*, c.status, p.monthly_payment AS price, p.extras AS reduced_price, c.mileage, cm.image
         FROM car_models cm
         JOIN cars c ON cm.model_id = c.model_id
         LEFT JOIN car_pricing cp ON c.car_id = cp.car_id
         LEFT JOIN pricing p ON cp.pricing_id = p.pricing_id
+        LEFT JOIN car_colors cc ON c.car_id = cc.car_id
+        LEFT JOIN colors col ON cc.color_id = col.color_id
         WHERE 1=1
     `;
     const params = [];
@@ -111,39 +126,44 @@ async function getCars(filters) {
         params.push(brand);
         query += ` AND cm.manufacturer = $${params.length}`;
     }
-    if (model) {
-        params.push(model);
-        query += ` AND cm.model = $${params.length}`;
+    if (vehicleType) {
+        params.push(vehicleType);
+        query += ` AND cm.category_id IN (SELECT category_id FROM car_categories WHERE category_type = $${params.length})`;
     }
     if (fuel) {
         params.push(fuel);
         query += ` AND cm.fuel_type = $${params.length}`;
     }
-    if (vehicleType) {
-        params.push(vehicleType);
-        query += ` AND cm.category_id IN (SELECT category_id FROM car_categories WHERE category_type = $${params.length})`;
-    }
     if (transmission) {
         params.push(transmission);
         query += ` AND cm.transmission = $${params.length}`;
     }
-    if (driveTrain) {
-        params.push(driveTrain);
+    if (drive) {
+        params.push(drive);
         query += ` AND cm.drive = $${params.length}`;
     }
-    if (seats) {
-        params.push(seats);
-        query += ` AND cm.seats = $${params.length}`;
+    if (color) {
+        params.push(color);
+        query += ` AND col.color_name = $${params.length}`;
     }
+    if (availability) {
+        params.push(availability);
+        query += ` AND c.status = $${params.length}`;
+    }
+
+    console.log('Constructed Query:', query); // Log the constructed query
+    console.log('Parameters:', params); // Log the parameters
 
     try {
         const result = await pool.query(query, params);
+        console.log('Result Rows:', result.rows); // Log the result rows
         return result.rows;
     } catch (err) {
-        console.error('Error fetching cars:', err);
+        console.error('Error executing query:', err);
         throw new Error('Database query failed.');
     }
 }
+
 
 async function getCarDetails(carId) {
     const carDetailsQuery = `
