@@ -5,7 +5,7 @@
 .hero {
             background-size: cover;
             background-position: center;
-            height: 70vh; /* Make the hero section full height */
+            height: 80vh; /* Make the hero section full height */
 }
 
 .custom-header {
