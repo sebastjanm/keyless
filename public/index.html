@@ -3,108 +3,415 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avant2go Car subscription - Home</title>
+    <title>Avant2go Car Subscription - Home</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
+    <script>
+        function setRandomHeroImage() {
+            const images = [
+                '/images/bg-1.jpg',
+                '/images/bg-2.jpg',
+                '/images/bg-3.jpg',
+                '/images/bg-4.jpg',
+                '/images/bg-5.jpg',
+                '/images/bg-6.jpg',
+                '/images/bg-7.jpg'
+            ];
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+            document.getElementById('hero').style.backgroundImage = `url(${randomImage})`;
+        }
+        document.addEventListener('DOMContentLoaded', setRandomHeroImage);
+    </script>
 </head>
-<body class="bg-gray-100">
-    <header class="custom-header shadow">
-        <div class="container mx-auto px-12 py-8">
-            <div class="flex items-center justify-between">
-                <a href="index.html" class="text-xl font-bold">Avant2go Car subscription</a>
-                <nav class="space-x-4">
-                    <a href="index.html">Find a car</a>
-                    <a href="#">Business customers</a>
-                    <a href="#">Top offers</a>
-                </nav>
-                <div class="space-x-4">
-                    <a href="#">FAQ</a>
-                    <a href="#">Cart</a>
-                    <a href="#">Profile</a>
+<body class="font-sans antialiased bg-gray-100">
+
+<!-- Top Menu -->
+<header class="fixed top-0 left-0 right-0 bg-transparent z-50">
+    <div class="container mx-auto px-12 py-8">
+        <div class="flex items-center justify-between">
+            <a href="index.html" class="text-xl font-bold text-blue-600">Avant2go Car Subscription</a>
+            <nav class="space-x-8 text-gray-700">
+                <a href="cars.html" class="hover:text-blue-600">Find a car</a>
+                <a href="business.html" class="hover:text-blue-600">Business customers</a>
+                <a href="#" class="hover:text-blue-600">Top offers</a>
+            </nav>
+            <div class="space-x-8 text-gray-700">
+                <a href="#" class="hover:text-blue-600">FAQ</a>
+                <a href="#" class="hover:text-blue-600">Cart</a>
+                <a href="#" class="hover:text-blue-600">Profile</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Hero Section -->
+<section id="hero" class="hero bg-blue-600 text-white flex items-center justify-center">
+    <div class="container mx-auto text-center">
+        <h1 class="text-5xl font-bold mb-4">Drive Your Dreams with Avant2go</h1>
+        <p class="text-xl mb-8">
+            Flexible car subscription service tailored for your needs.<br>
+            No commitment, just freedom.<br>
+            Choose the duration that best suits you.<br>
+            Hire it 100% online.<br>
+            We deliver it to your home for free.<br>
+            We offset the CO₂ of your car.<br>
+            All included in one monthly fee.
+        </p>
+        <a href="cars.html" class="bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg shadow-lg">Browse cars</a>
+    </div>
+</section>
+
+<!-- Popular Cars Section -->
+<section id="popular-cars" class="bg-gray-100 py-20">
+    <div class="container mx-auto px-4 flex flex-col md:flex-row">
+        <div class="md:w-1/4 mb-8 md:mb-0 md:pr-8">
+            <h2 class="text-3xl font-bold">The REVEL Forest</h2>
+            <p class="text-gray-600 mb-4">The REVEL Forest is the result of our active reforestation.</p>
+            <p class="text-gray-600">Located in Villavilla de Gumiel (province of Burgos), it is in an area of high ecological value, very close to the Ribera del Duero.</p>
+        </div>
+        <div class="md:w-3/4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <a href="car-details.html?carId=3" class="block border bg-white border-gray-300 rounded-lg p-4 hover:shadow-lg">
+                <img src="https://www.carify.com//s3/vimg_0190b550-7b99-0000-d192-5dbdc38c7c88.jpg" alt="Toyota Corolla" class="w-full h-auto rounded mb-4">
+                <h3 class="text-xl font-bold">Toyota Corolla</h3>
+                <p class="text-gray-600">Fuel Type: Hybrid</p>
+                <p class="text-gray-600">Transmission: Manual</p>
+                <p class="text-gray-600">Drive: Front-Wheel Drive</p>
+                <p class="text-gray-600">Seats: 5</p>
+                <p class="text-gray-600">Status: Available</p>
+                <p class="text-blue-500 font-bold">Price: 875 € per month</p>
+            </a>
+            <a href="car-details.html?carId=4" class="block border bg-white border-gray-300 rounded-lg p-4 hover:shadow-lg">
+                <img src="https://example.com/images/car2.jpg" alt="Car 2" class="w-full h-auto rounded mb-4">
+                <h3 class="text-xl font-bold">Car 2</h3>
+                <p class="text-gray-600">Fuel Type: Petrol</p>
+                <p class="text-gray-600">Transmission: Automatic</p>
+                <p class="text-gray-600">Drive: Rear-Wheel Drive</p>
+                <p class="text-gray-600">Seats: 4</p>
+                <p class="text-gray-600">Status: Not Available</p>
+                <p class="text-blue-500 font-bold">Price: 900 € per month</p>
+            </a>
+            <a href="car-details.html?carId=5" class="block border bg-white border-gray-300 rounded-lg p-4 hover:shadow-lg">
+                <img src="https://example.com/images/car3.jpg" alt="Car 3" class="w-full h-auto rounded mb-4">
+                <h3 class="text-xl font-bold">Car 3</h3>
+                <p class="text-gray-600">Fuel Type: Diesel</p>
+                <p class="text-gray-600">Transmission: Semi-Automatic</p>
+                <p class="text-gray-600">Drive: All-Wheel Drive</p>
+                <p class="text-gray-600">Seats: 5</p>
+                <p class="text-gray-600">Status: Available</p>
+                <p class="text-blue-500 font-bold">Price: 950 € per month</p>
+            </a>
+            <a href="car-details.html?carId=6" class="block border bg-white border-gray-300 rounded-lg p-4 hover:shadow-lg">
+                <img src="https://example.com/images/car4.jpg" alt="Car 4" class="w-full h-auto rounded mb-4">
+                <h3 class="text-xl font-bold">Car 4</h3>
+                <p class="text-gray-600">Fuel Type: Electric</p>
+                <p class="text-gray-600">Transmission: Automatic</p>
+                <p class="text-gray-600">Drive: Front-Wheel Drive</p>
+                <p class="text-gray-600">Seats: 5</p>
+                <p class="text-gray-600">Status: Available</p>
+                <p class="text-blue-500 font-bold">Price: 1000 € per month</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section id="how-it-works" class="bg-gray-100 py-20">
+    <div class="container mx-auto px-16">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-black">The advantages of a car subscription with <span class="text-blue-600">Subscription2Go</span></h2>
+        </div>
+        <div class="flex flex-col md:flex-row items-center md:items-start">
+            <!-- Feature Blocks -->
+            <div class="md:w-1/2 space-y-8">
+                <div class="flex items-center bg-white rounded-lg p-6">
+                    <div class="flex-shrink-0">
+                        <span class="inline-block w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold">🔍</span>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-xl font-semibold">Everything included except refueling</h3>
+                        <p class="text-gray-600">All-inclusive mobility package at a fixed monthly price. No deposit, no hidden costs.</p>
+                    </div>
+                </div>
+                <div class="flex items-center bg-white rounded-lg p-6">
+                    <div class="flex-shrink-0">
+                        <span class="inline-block w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold">📅</span>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-xl font-semibold">Short-terms</h3>
+                        <p class="text-gray-600">You decide how long you need your company car. Starting from 1 month.</p>
+                    </div>
+                </div>
+                <div class="flex items-center bg-white rounded-lg p-6">
+                    <div class="flex-shrink-0">
+                        <span class="inline-block w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold">🔄</span>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-xl font-semibold">Complete flexibility. Every month</h3>
+                        <p class="text-gray-600">Various models are available to suit your current business situation. Do you need a small car in spring and SUV in summertime?</p>
+                    </div>
+                </div>
+                <div class="flex items-center bg-white rounded-lg p-6">
+                    <div class="flex-shrink-0">
+                        <span class="inline-block w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold">📍</span>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-xl font-semibold">Pick up locations</h3>
+                        <p class="text-gray-600">You can pick up new company cars in Ciemno-Gnojna (near Warsaw) or Bytom (Katowice area).</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Image Placeholder -->
+            <div class="md:w-1/2 md:pl-8 mt-8 md:mt-0">
+                <div class="bg-white rounded-lg overflow-hidden">
+                    <img src="https://via.placeholder.com/800x600.png" alt="Car Image" class="w-full h-full object-cover">
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</section>
 
-    <main class="container mx-auto px-6 py-8">
-        <div class="flex justify-between items-start space-x-16">
-            <!-- Filter Section -->
-            <section class="w-1/4 filter-section p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-bold mb-4">Car subscription</h2>
-                <form id="filterForm">
-                    <div class="mb-4">
-                        <label for="brand" class="block font-semibold">Brand</label>
-                        <select id="brand" class="w-full input-field p-2 rounded">
-                            <option value="">Select a brand</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="vehicleType" class="block font-semibold">Vehicle Type</label>
-                        <select id="vehicleType" class="w-full input-field p-2 rounded">
-                            <option value="">Select a type</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="fuel" class="block font-semibold">Fuel Type</label>
-                        <select id="fuel" class="w-full input-field p-2 rounded">
-                            <option value="">Select a fuel type</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="transmission" class="block font-semibold">Transmission</label>
-                        <select id="transmission" class="w-full input-field p-2 rounded">
-                            <option value="">Select a transmission</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="drive" class="block font-semibold">Drive Train</label>
-                        <select id="drive" class="w-full input-field p-2 rounded">
-                            <option value="">Select a drive train</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="color" class="block font-semibold">Color</label>
-                        <select id="color" class="w-full input-field p-2 rounded">
-                            <option value="">Select a color</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="availability" class="block font-semibold">Availability</label>
-                        <select id="availability" class="w-full input-field p-2 rounded">
-                            <option value="">Select availability</option>
-                        </select>
-                    </div>
-                    <button id="resetFilters" type="button" class="w-full button-primary text-white p-2 rounded">Reset Filters</button>
-                </form>
-            </section>
-
-            <!-- Vehicles Section -->
-            <section class="w-3/4">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold">Vehicles</h2>
-                    <select class="custom-select input-field p-2 rounded" id="sorting">
-                        <option value="-top_picks">Recommended</option>
-                        <option value="+base_price">Price - Low to High</option>
-                        <option value="-base_price">Price - High to Low</option>
-                        <option value="-approved_datetime">Date Added - New to Old</option>
-                        <option value="+approved_datetime">Date Added - Old to New</option>
-                        <option value="-rank">Search Relevance</option>
-                        <option value="-has_promo">Promotions</option>
-                    </select>
-                </div>
-                <div id="vehicleList" class="grid grid-cols-3 gap-4">
-                    <!-- Vehicle Cards will be populated here -->
-                </div>
-            </section>
+<!-- How to Start Section -->
+<section id="how-to-start" class="bg-gray-100 py-20">
+    <div class="container mx-auto px-16 text-center">
+        <h2 class="text-4xl font-bold text-blue-600 mb-4">Kako postati Avant2Go uporabnik?</h2>
+        <p class="text-gray-700 mb-8">Registrirajte se, pogodbo podpišite digitalno preko aplikacije in uživajte v brezskrbni vožnji.</p>
+        <div class="w-full md:w-2/3 lg:w-1/2 mx-auto">
+            <div class="aspect-w-16 aspect-h-9">
+                <iframe class="w-full h-full" src="https://www.youtube.com/embed/PQkZqDB89HM?si=uW49yaeMgB-1a-9y" frameborder="0" allowfullscreen></iframe>
+            </div>
         </div>
-    </main>
+    </div>
+</section>
 
-    <footer class="bg-gray-800 text-white py-4">
-        <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2023 Avant2go Keyless. All rights reserved.</p>
+<!-- Service Comparison Section -->
+<section id="service-comparison" class="py-20 bg-gray-100">
+    <div class="container mx-auto px-16">
+        <div class="text-left mb-8">
+            <h2 class="text-4xl font-bold mb-4">Car subscription, leasing, rental: what’s the difference?</h2>
+            <p class="text-gray-700">Avant2Go, as a car subscription provider, sits exactly in the middle between rental cars and leasing contracts. The duration of a subscription is usually longer than that of a rental car, but much shorter and more flexible than leasing. While leased vehicles have to be driven for several years, thanks to Avant2Go, you can freely determine the average duration of your car subscription according to your needs. Make a direct comparison to leasing and car rental here:</p>
         </div>
-    </footer>
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full bg-white rounded-lg">
+                <thead>
+                    <tr class="text-gray-700 border-b border-gray-300">
+                        <th class="py-4 px-6 text-left"></th>
+                        <th class="py-4 px-6 text-left font-bold uppercase">Leasing</th>
+                        <th class="py-4 px-6 text-left font-bold uppercase bg-black text-white">Avant2Go</th>
+                        <th class="py-4 px-6 text-left font-bold uppercase">Rental</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left font-semibold">Monthly payment w/o VAT</td>
+                        <td class="py-4 px-6 text-center">2,212.50 €</td>
+                        <td class="py-4 px-6 text-center bg-gray-100">1,500.00 €</td>
+                        <td class="py-4 px-6 text-center">2,500.00 €</td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left font-semibold">Without initial payment / deposit</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left font-semibold">Insurance</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left font-semibold">Vehicle tax</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left font-semibold">Registration and Fees</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left font-semibold">Service</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left font-semibold">Seasonal Tires</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left font-semibold">Roadside assistance 24/7</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left font-semibold">Affordable monthly rates</td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left font-semibold">Flexible terms</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left font-semibold">Maintenance and wear</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left font-semibold">Main inspection</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                        <td class="py-4 px-6 text-left"></td>
+                        <td class="py-4 px-6 text-center"></td>
+                        <td class="py-4 px-6 text-center bg-gray-100">
+                            <a href="#" class="bg-black text-white font-semibold py-2 px-4 rounded-lg">Find a car</a>
+                        </td>
+                        <td class="py-4 px-6 text-center"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
 
-    <script src="/js/app.js"></script>
+<!-- Testimonials Section -->
+<section id="testimonials" class="py-20 bg-gray-100">
+    <div class="container mx-auto px-36">
+        <div class="text-center mb-8">
+            <h2 class="text-4xl font-bold text-black">What Our Customers Say About Us</h2>
+            <p class="text-gray-700">Here are some comments from our customers, be one of them</p>
+        </div>
+        <div class="flex flex-col md:flex-row items-start justify-center space-y-8 md:space-y-0 md:space-x-8">
+            <!-- Testimonial 1 -->
+            <div class="bg-white p-6 rounded-lg w-full md:w-1/4 shadow-lg">
+                <div class="flex items-center mb-4">
+                    <img src="https://via.placeholder.com/50" alt="User Image" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <h3 class="text-xl font-semibold">Jane Cooper</h3>
+                        <p class="text-gray-500">Abuja, Nigeria</p>
+                        <div class="flex items-center">
+                            <span class="text-yellow-500">★★★★★</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-600">"I had an incredible experience renting from Rent Cars! The process was seamless, the car was in pristine condition, and the customer service was top-notch.."</p>
+            </div>
+            <!-- Testimonial 2 -->
+            <div class="bg-black p-6 rounded-lg w-full md:w-1/2 shadow-lg text-white">
+                <div class="flex items-center mb-4">
+                    <img src="https://via.placeholder.com/50" alt="User Image" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <h3 class="text-xl font-semibold">Leslie Alexander</h3>
+                        <p class="text-gray-400">Lagos, Nigeria</p>
+                        <div class="flex items-center">
+                            <span class="text-yellow-500">★★★★★</span>
+                        </div>
+                    </div>
+                </div>
+                <p>"I was really impressed with the level of service I received from this car rental company. The process was smooth and easy, and the car I rented was in excellent condition.."</p>
+            </div>
+            <!-- Testimonial 3 -->
+            <div class="bg-white p-6 rounded-lg w-full md:w-1/4 shadow-lg">
+                <div class="flex items-center mb-4">
+                    <img src="https://via.placeholder.com/50" alt="User Image" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <h3 class="text-xl font-semibold">Ajay Kushni</h3>
+                        <p class="text-gray-500">Port Harcourt, Nigeria</p>
+                        <div class="flex items-center">
+                            <span class="text-yellow-500">★★★★★</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-600">"Rent Cars truly stands out. From their convenient online booking system to their prompt pickup and drop-off service, everything was convenient and stress-free."</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQs Section -->
+<section id="faqs" class="py-20 bg-gray-100">
+    <div class="container mx-auto px-16 text-center">
+        <h2 class="text-4xl font-bold mb-4">FAQ</h2>
+        <p class="text-lg mb-12">Cars, running time & kilometers</p>
+        <div class="text-left max-w-4xl mx-auto space-y-4">
+            <!-- Question 1 -->
+            <details class="bg-white p-4 rounded-lg shadow">
+                <summary class="font-semibold text-lg">Can I also subscribe to cars with alternative drive systems at Avant2go?</summary>
+                <p class="mt-2 text-gray-700">Yes, we offer a range of cars with alternative drive systems including electric and hybrid vehicles.</p>
+            </details>
+            <!-- Question 2 -->
+            <details class="bg-white p-4 rounded-lg shadow">
+                <summary class="font-semibold text-lg">What license plate will my car have?</summary>
+                <p class="mt-2 text-gray-700">Your car will have a standard license plate registered in the country of service.</p>
+            </details>
+            <!-- Question 3 -->
+            <details class="bg-white p-4 rounded-lg shadow">
+                <summary class="font-semibold text-lg">How long are the subscription periods at Avant2go?</summary>
+                <p class="mt-2 text-gray-700">Our subscription periods are flexible, starting from 1 month and can be extended as per your need.</p>
+            </details>
+            <!-- Question 4 -->
+            <details class="bg-white p-4 rounded-lg shadow">
+                <summary class="font-semibold text-lg">What happens if I exceed my monthly mileage package?</summary>
+                <p class="mt-2 text-gray-700">If you exceed your monthly mileage package, an additional fee will be charged based on the extra miles driven.</p>
+            </details>
+            <!-- Question 5 -->
+            <details class="bg-white p-4 rounded-lg shadow">
+                <summary class="font-semibold text-lg">Can I change my car during the term?</summary>
+                <p class="mt-2 text-gray-700">Yes, you can change your car during the subscription term. Contact our customer service for details.</p>
+            </details>
+            <!-- Question 6 -->
+            <details class="bg-white p-4 rounded-lg shadow">
+                <summary class="font-semibold text-lg">My subscription is expiring and I would like to keep the car. Can I seamlessly take out a new subscription?</summary>
+                <p class="mt-2 text-gray-700">Absolutely, you can renew your subscription and continue using the same car without any interruption.</p>
+            </details>
+            <!-- Question 7 -->
+            <details class="bg-white p-4 rounded-lg shadow">
+                <summary class="font-semibold text-lg">Is insurance included in the subscription fee?</summary>
+                <p class="mt-2 text-gray-700">Yes, comprehensive insurance is included in the subscription fee.</p>
+            </details>
+            <!-- Question 8 -->
+            <details class="bg-white p-4 rounded-lg shadow">
+                <summary class="font-semibold text-lg">What should I do if my car needs maintenance?</summary>
+                <p class="mt-2 text-gray-700">Maintenance is covered by us. Simply contact our support team to schedule a service appointment.</p>
+            </details>
+            <!-- Question 9 -->
+            <details class="bg-white p-4 rounded-lg shadow">
+                <summary class="font-semibold text-lg">Are there any hidden fees?</summary>
+                <p class="mt-2 text-gray-700">No, there are no hidden fees. The monthly subscription fee covers all costs except fuel.</p>
+            </details>
+            <!-- Question 10 -->
+            <details class="bg-white p-4 rounded-lg shadow">
+                <summary class="font-semibold text-lg">How can I contact customer support?</summary>
+                <p class="mt-2 text-gray-700">You can contact our customer support via phone, email, or live chat on our website.</p>
+            </details>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-blue-600 text-white py-10">
+    <div class="container mx-auto text-center">
+        <p>&copy; 2024 Avant2go Car Subscription. All rights reserved.</p>
+        <div class="flex justify-center space-x-4 mt-4">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
+        </div>
+    </div>
+</footer>
+
 </body>
 </html>

@@ -1,6 +1,13 @@
 /* styles.css */
 
 /* Custom styles for better alignment with avant2go.si */
+
+.hero {
+            background-size: cover;
+            background-position: center;
+            height: 70vh; /* Make the hero section full height */
+}
+
 .custom-header {
     background: #0067b6;
     color: white;

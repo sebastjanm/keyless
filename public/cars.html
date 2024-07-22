@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avant2go Car subscription - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+<!-- Top Menu -->
+<header class="custom-header shadow">
+    <div class="container mx-auto px-12 py-8">
+        <div class="flex items-center justify-between">
+            <a href="index.html" class="text-xl font-bold text-blue-600">Avant2go Car Subscription</a>
+            <nav class="space-x-8 text-gray-700">
+                <a href="cars.html" class="hover:text-blue-600">Find a car</a>
+                <a href="business.html" class="hover:text-blue-600">Business customers</a>
+                <a href="#" class="hover:text-blue-600">Top offers</a>
+            </nav>
+            <div class="space-x-8 text-gray-700">
+                <a href="#" class="hover:text-blue-600">FAQ</a>
+                <a href="#" class="hover:text-blue-600">Cart</a>
+                <a href="#" class="hover:text-blue-600">Profile</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <main class="container mx-auto px-6 py-8">
+        <div class="flex justify-between items-start space-x-16">
+            <!-- Filter Section -->
+            <section class="w-1/4 filter-section p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold mb-4">Car subscription</h2>
+                <form id="filterForm">
+                    <div class="mb-4">
+                        <label for="brand" class="block font-semibold">Brand</label>
+                        <select id="brand" class="w-full input-field p-2 rounded">
+                            <option value="">Select a brand</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vehicleType" class="block font-semibold">Vehicle Type</label>
+                        <select id="vehicleType" class="w-full input-field p-2 rounded">
+                            <option value="">Select a type</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="fuel" class="block font-semibold">Fuel Type</label>
+                        <select id="fuel" class="w-full input-field p-2 rounded">
+                            <option value="">Select a fuel type</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="transmission" class="block font-semibold">Transmission</label>
+                        <select id="transmission" class="w-full input-field p-2 rounded">
+                            <option value="">Select a transmission</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="drive" class="block font-semibold">Drive Train</label>
+                        <select id="drive" class="w-full input-field p-2 rounded">
+                            <option value="">Select a drive train</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="color" class="block font-semibold">Color</label>
+                        <select id="color" class="w-full input-field p-2 rounded">
+                            <option value="">Select a color</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="availability" class="block font-semibold">Availability</label>
+                        <select id="availability" class="w-full input-field p-2 rounded">
+                            <option value="">Select availability</option>
+                        </select>
+                    </div>
+                    <button id="resetFilters" type="button" class="w-full button-primary text-white p-2 rounded">Reset Filters</button>
+                </form>
+            </section>
+
+            <!-- Vehicles Section -->
+            <section class="w-3/4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold">Vehicles</h2>
+                    <select class="custom-select input-field p-2 rounded" id="sorting">
+                        <option value="-top_picks">Recommended</option>
+                        <option value="+base_price">Price - Low to High</option>
+                        <option value="-base_price">Price - High to Low</option>
+                        <option value="-approved_datetime">Date Added - New to Old</option>
+                        <option value="+approved_datetime">Date Added - Old to New</option>
+                        <option value="-rank">Search Relevance</option>
+                        <option value="-has_promo">Promotions</option>
+                    </select>
+                </div>
+                <div id="vehicleList" class="grid grid-cols-3 gap-4">
+                    <!-- Vehicle Cards will be populated here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2023 Avant2go Keyless. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>
