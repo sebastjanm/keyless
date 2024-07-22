@@ -21,11 +21,13 @@ async function fetchFilters() {
         populateSelect('seats', filters.seats);
     } catch (error) {
         console.error('Error fetching filters:', error);
+        showError('Error fetching filters. Please try again later.');
     }
 }
 
 function populateSelect(id, options) {
     const select = document.getElementById(id);
+    select.innerHTML = ''; // Clear any existing options
     options.forEach(option => {
         const opt = document.createElement('option');
         opt.value = option;
@@ -46,7 +48,7 @@ async function fetchCars() {
         cars.forEach(car => {
             const carCard = document.createElement('a');
             carCard.href = `car-details.html?carId=${car.car_id}`;
-            carCard.classList.add('block', 'border', 'bg-white','border-gray-300', 'rounded-lg', 'p-4', 'hover:shadow-lg');
+            carCard.classList.add('block', 'border', 'bg-white', 'border-gray-300', 'rounded-lg', 'p-4', 'hover:shadow-lg');
             carCard.innerHTML = `
                 <img src="${car.image}" alt="${car.manufacturer} ${car.model}" class="w-full h-auto rounded mb-4">
                 <h3 class="text-xl font-bold">${car.manufacturer} ${car.model}</h3>
@@ -62,10 +64,22 @@ async function fetchCars() {
         });
     } catch (error) {
         console.error('Error fetching cars:', error);
+        showError('Error fetching cars. Please try again later.');
     }
 }
 
 function resetFilters() {
     document.getElementById('filterForm').reset();
     fetchCars();
+}
+
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.classList.add('bg-red-500', 'text-white', 'p-4', 'rounded', 'mb-4');
+    errorDiv.textContent = message;
+    document.body.insertBefore(errorDiv, document.body.firstChild);
+
+    setTimeout(() => {
+        errorDiv.remove();
+    }, 5000);
 }
