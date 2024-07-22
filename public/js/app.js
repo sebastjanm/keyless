@@ -9,10 +9,9 @@ async function fetchFilters() {
     try {
         const response = await fetch('/filters');
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
         }
         const filters = await response.json();
-
         populateSelect('brand', filters.brands);
         populateSelect('model', filters.models);
         populateSelect('fuel', filters.fuelTypes);
@@ -39,10 +38,9 @@ async function fetchCars() {
     try {
         const response = await fetch('/cars');
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
         }
         const cars = await response.json();
-
         const vehicleList = document.getElementById('vehicleList');
         vehicleList.innerHTML = '';
         cars.forEach(car => {
@@ -59,7 +57,6 @@ async function fetchCars() {
                 <p class="text-gray-600">Status: ${car.status}</p>
                 <p class="text-blue-500 font-bold">Price: ${car.price} € per month</p>
                 <p class="text-red-500">Reduced from: ${car.reduced_price} € per month</p>
-                
             `;
             vehicleList.appendChild(carCard);
         });
@@ -67,8 +64,6 @@ async function fetchCars() {
         console.error('Error fetching cars:', error);
     }
 }
-
-
 
 function resetFilters() {
     document.getElementById('filterForm').reset();
