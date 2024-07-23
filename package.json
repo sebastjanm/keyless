@@ -13,11 +13,13 @@
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "express": "^4.17.1",
     "inquirer": "^8.2.4",
-    "pg": "^8.12.0"
+    "pg": "^8.12.0",
+    "tailwindcss": "^3.4.6"
   },
   "type": "module",
   "engines": {

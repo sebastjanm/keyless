@@ -1,1 +1,5 @@
 /node_modules/dotenv
+/node_modules/yaml
+/node_modules/ts-interface-checker/dist/types.js
+/node_modules/wrap-ansi-cjs/readme.md
+node_modules/
