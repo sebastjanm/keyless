@@ -4,6 +4,7 @@ module.exports = {
     './public/**/*.html', // Adjusted to match the HTML files in your public directory
     './public/**/*.js', // Adjusted to match the JavaScript files in your public directory
   ],
+  darkMode: false,
   theme: {
     extend: {
       colors: {
@@ -16,3 +17,4 @@ module.exports = {
     // other plugins if needed
   ],
 }
+

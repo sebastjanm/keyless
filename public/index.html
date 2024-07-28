@@ -27,19 +27,34 @@
 
 <!-- Top Menu -->
 <header id="top-menu" class="fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out bg-opacity-80">
-    <div class="container mx-auto px-12 py-8 bg-transparent">
+    <div class="container mx-auto px-4 py-4 bg-transparent md:px-12 md:py-8">
         <div class="flex items-center justify-between">
-            <a href="index.html" class="text-xl font-bold text-white" id="logo-text">Subcsribe2Go -  Car Subscription</a>
-            <nav class="space-x-4" id="nav-links">
-                <a href="index.html" class="text-white">Find a car</a>
+            <a href="index.html" class="text-xl font-bold text-white" id="logo-text">Subscribe2Go - Car Subscription</a>
+            <nav class="hidden md:flex space-x-4" id="nav-links">
+                <a href="cars.html" class="text-white">Find a car</a>
                 <a href="#" class="text-white">Business customers</a>
                 <a href="#" class="text-white">Top offers</a>
             </nav>
-            <div class="space-x-4" id="menu-links">
+            <div class="hidden md:flex space-x-4" id="menu-links">
                 <a href="#" class="text-white">FAQ</a>
                 <a href="#" class="text-white">Cart</a>
                 <a href="#" class="text-white">Profile</a>
             </div>
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-white" id="mobile-menu-button">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden mt-4 space-y-2" id="mobile-menu">
+            <a href="index.html" class="block text-white">Find a car</a>
+            <a href="#" class="block text-white">Business</a>
+            <a href="#" class="block text-white">Top offers</a>
+            <a href="#" class="block text-white">FAQ</a>
+            <a href="#" class="block text-white">Cart</a>
+            <a href="#" class="block text-white">Profile</a>
         </div>
     </div>
 </header>
@@ -150,100 +165,66 @@
 
 <!-- Service Comparison Section -->
 <section id="service-comparison" class="py-20 bg-gray-100">
-    <div class="container mx-auto px-16">
-        <div class="text-left mb-8">
-            <h2 class="text-4xl font-bold mb-4">Car subscription, leasing, rental: what’s the difference?</h2>
-            <p class="text-gray-700">Subcsribe2Go, as a car subscription provider, sits exactly in the middle between rental cars and leasing contracts. The duration of a subscription is usually longer than that of a rental car, but much shorter and more flexible than leasing. While leased vehicles have to be driven for several years, thanks to Subcsribe2Go, you can freely determine the average duration of your car subscription according to your needs. Make a direct comparison to leasing and car rental here:</p>
-        </div>
+    <div class="container mx-auto px-4 lg:px-12 text-center">
+        <h2 class="text-4xl font-bold mb-4">Service <span class="text-blue-600">Comparison</span></h2>
         <div class="overflow-x-auto">
-            <table class="table-auto w-11/12 md:w-9/12 lg:w-7/12 mx-auto bg-white rounded-lg">
+            <table class="table-auto w-full max-w-6xl mx-auto bg-white rounded-lg shadow-lg">
                 <thead>
-                <thead>
-                    <tr class="text-gray-700 border-b border-gray-300">
+                    <tr class="bg-gray-200 text-gray-700">
                         <th class="py-4 px-6 text-left"></th>
                         <th class="py-4 px-6 text-left font-bold uppercase">Leasing</th>
-                        <th class="py-4 px-6 text-left font-bold uppercase bg-black text-white">Subcsribe2Go</th>
-                        <th class="py-4 px-6 text-left font-bold uppercase">Rental</th>
+                        <th class="py-4 px-6 text-left font-bold uppercase bg-blue-600 text-white">Subscription</th>
+                        <th class="py-4 px-6 text-left font-bold uppercase">Short-Term Rental</th>
                     </tr>
                 </thead>
                 <tbody class="text-gray-700">
-                    <tr class="border-b border-gray-300">
+                    <tr>
                         <td class="py-4 px-6 text-left font-semibold">Monthly payment w/o VAT</td>
-                        <td class="py-4 px-6 text-center">2,212.50 €</td>
-                        <td class="py-4 px-6 text-center bg-gray-100">1,500.00 €</td>
-                        <td class="py-4 px-6 text-center">2,500.00 €</td>
+                        <td class="py-4 px-6 text-left">2,212.50 €</td>
+                        <td class="py-4 px-6 text-left bg-blue-100 text-blue-600 font-bold">1,500.00 €</td>
+                        <td class="py-4 px-6 text-left">2,500.00 €</td>
                     </tr>
-                    <tr class="border-b border-gray-300">
+                    <tr class="border-t">
                         <td class="py-4 px-6 text-left font-semibold">Without initial payment / deposit</td>
                         <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
                         <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
                     </tr>
-                    <tr class="border-b border-gray-300">
+                    <tr class="border-t">
                         <td class="py-4 px-6 text-left font-semibold">Insurance</td>
                         <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
                         <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
                     </tr>
-                    <tr class="border-b border-gray-300">
-                        <td class="py-4 px-6 text-left font-semibold">Vehicle tax</td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                    </tr>
-                    <tr class="border-b border-gray-300">
+                    <tr class="border-t">
                         <td class="py-4 px-6 text-left font-semibold">Registration and Fees</td>
                         <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
                         <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
                     </tr>
-                    <tr class="border-b border-gray-300">
+                    <tr class="border-t">
                         <td class="py-4 px-6 text-left font-semibold">Service</td>
                         <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
                         <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
                     </tr>
-                    <tr class="border-b border-gray-300">
+                    <tr class="border-t">
                         <td class="py-4 px-6 text-left font-semibold">Seasonal Tires</td>
                         <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
                         <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
                     </tr>
-                    <tr class="border-b border-gray-300">
+                    <tr class="border-t">
                         <td class="py-4 px-6 text-left font-semibold">Roadside assistance 24/7</td>
                         <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
                         <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
                     </tr>
-                    <tr class="border-b border-gray-300">
-                        <td class="py-4 px-6 text-left font-semibold">Affordable monthly rates</td>
-                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
-                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                    </tr>
-                    <tr class="border-b border-gray-300">
-                        <td class="py-4 px-6 text-left font-semibold">Flexible terms</td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
-                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
-                    </tr>
-                    <tr class="border-b border-gray-300">
-                        <td class="py-4 px-6 text-left font-semibold">Maintenance and wear</td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
-                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
-                    </tr>
-                    <tr class="border-b border-gray-300">
-                        <td class="py-4 px-6 text-left font-semibold">Main inspection</td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-gray-100"><span class="text-green-500">&check;</span></td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                    </tr>
-                    <tr class="border-b border-gray-300">
+                    <tr class="border-t">
                         <td class="py-4 px-6 text-left"></td>
                         <td class="py-4 px-6 text-center"></td>
-                        <td class="py-4 px-6 text-center bg-gray-100">
-                            <a href="#" class="bg-black text-white font-semibold py-2 px-4 rounded-lg">Find a car</a>
+                        <td class="py-4 px-6 text-center bg-blue-100">
+                            <a href="#" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg">ORDER NOW</a>
                         </td>
                         <td class="py-4 px-6 text-center"></td>
                     </tr>
@@ -252,6 +233,7 @@
         </div>
     </div>
 </section>
+
 
 <!-- Testimonials Section -->
 <section id="testimonials" class="py-20 bg-gray-100">
@@ -316,6 +298,46 @@
         </div>
     </div>
 </section>
+
+ <!-- Mobile App Section -->
+<section id="mobile-app" class="bg-orange-500 py-20 relative">
+     <div class="container mx-auto px-16 text-center">
+
+        <!-- Background design elements -->
+    <div class="absolute inset-x-0 bottom-36 h-80 z-0">
+        <img src="/images/background-design.png" alt="Background Design" class="w-full h-full object-cover opacity-80">
+    </div>
+
+    <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between px-4 lg:px-12">
+       
+        <!-- Left Column -->
+        <div class="lg:w-1/2 flex flex-col justify-center items-start text-left space-y-6 z-10">
+            <h2 class="text-4xl font-bold text-white">Download Subscribe2Go Mobile App for free</h2>
+            <p class="text-white">For faster, easier booking and exclusive deals.</p>
+            <div class="flex space-x-4">
+                <a href="#" class="bg-black text-white py-2 px-4 rounded-lg flex items-center space-x-2">
+                    <img src="/images/apple-store-icon.png" alt="App Store" class="w-6 h-6">
+                    <span>Download on the App Store</span>
+                </a>
+                <a href="#" class="bg-black text-white py-2 px-4 rounded-lg flex items-center space-x-2">
+                    <img src="/images/google-play-icon.png" alt="Google Play" class="w-6 h-6">
+                    <span>Get it on Google Play</span>
+                </a>
+            </div>
+        </div>
+        <!-- Right Column -->
+        <div class="lg:w-1/2 mt-12 lg:mt-0 flex justify-center relative">
+            <div class="relative w-64 h-auto">
+                <img src="/images/phone-mockup.png" alt="Phone Mockup" class="w-64 h-auto object-contain z-30">
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+
+
 
 
 <!-- FAQs Section -->

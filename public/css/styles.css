@@ -65,3 +65,22 @@ main {
 .custom-footer-bg {
   background-color: #0067b6;
 }
+
+
+@layer utilities {
+  .relative {
+    position: relative;
+  }
+  .z-0 {
+    z-index: 0;
+  }
+  .z-10 {
+    z-index: 10;
+  }
+  .inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}

@@ -1,3 +1,14 @@
+// main.js
+
+document.addEventListener('DOMContentLoaded', function () {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuButton.addEventListener('click', function () {
+        mobileMenu.classList.toggle('hidden');
+    });
+});
+
 // Function to handle the scroll event
 function handleScroll() {
     const header = document.getElementById('top-menu');
