@@ -1,0 +1,87 @@
+/* styles.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Custom styles for better alignment with avant2go.si */
+
+.hero {
+  background-size: cover;
+  background-position: center;
+  height: 80vh; /* Make the hero section full height */
+}
+
+.custom-header {
+  background: #0067b6;
+  color: white;
+}
+.custom-header a {
+  color: white;
+  transition: color 0.3s ease;
+}
+.custom-header a:hover {
+  color: #e2e8f0;
+}
+.filter-section {
+  background: #edf2f7;
+  border: 1px solid #cbd5e0;
+}
+.vehicle-card {
+  border: 1px solid #cbd5e0;
+  border-radius: 0.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.vehicle-card:hover {
+  transform: translateY(-0.5rem);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+.button-primary {
+  background: #eca918;
+  color: white;
+  transition: background 0.3s ease;
+}
+.button-primary:hover {
+  background: #2c5282;
+}
+.input-field {
+  border: 1px solid #cbd5e0;
+  transition: border-color 0.3s ease;
+}
+.input-field:focus {
+  border-color: #3182ce;
+}
+/* Sticky footer */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+main {
+  flex: 1;
+}
+
+/* Custom footer background color */
+.custom-footer-bg {
+  background-color: #0067b6;
+}
+
+
+@layer utilities {
+  .relative {
+    position: relative;
+  }
+  .z-0 {
+    z-index: 0;
+  }
+  .z-10 {
+    z-index: 10;
+  }
+  .inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}

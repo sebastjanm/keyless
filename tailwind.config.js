@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './public/**/*.html', // Adjusted to match the HTML files in your public directory
-    './public/**/*.js', // Adjusted to match the JavaScript files in your public directory
+    './src/**/*.{js,jsx,ts,tsx,html}',  // Ensure paths cover your HTML and JS files
+    './public/**/*.html',               // Ensure paths cover your HTML files in public
   ],
-  darkMode: false,
+
   theme: {
     extend: {
       colors: {
@@ -12,9 +12,6 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/aspect-ratio'),
-    // other plugins if needed
-  ],
+  plugins: [],
 }
 

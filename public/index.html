@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avant2go Car Subscription - Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
-    <script>
+    <title>Avant2go Car subscription - Home</title>
+<link rel="stylesheet" href="/css/styles.css">
+<script>
         function setRandomHeroImage() {
             const images = [
                 '/images/bg-1.jpg',
@@ -22,9 +21,10 @@
         }
         document.addEventListener('DOMContentLoaded', setRandomHeroImage);
     </script>
-</head>
-<body class="font-sans antialiased bg-gray-100">
 
+</head>
+<body class="bg-gray-100">
+<!-- Top Menu -->
 <!-- Top Menu -->
 <header id="top-menu" class="fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out bg-opacity-80">
     <div class="container mx-auto px-4 py-4 bg-transparent md:px-12 md:py-8">
@@ -58,8 +58,6 @@
         </div>
     </div>
 </header>
-
-
 
 <!-- Hero Section -->
 <section id="hero" class="hero bg-blue-600 text-white flex items-center justify-center">
@@ -142,7 +140,7 @@
             <!-- Image Placeholder -->
             <div class="md:w-1/2 md:pl-8 mt-8 md:mt-0">
                 <div class="bg-white rounded-lg overflow-hidden">
-                    <img src="/images/features.jpeg" alt="Car Image" class="w-full h-full object-cover">
+                    <img src="../images/features.jpeg" alt="Car Image" class="w-full h-full object-cover">
                 </div>
             </div>
         </div>
@@ -413,7 +411,8 @@
 </footer>
 
 
-<script src="/js/main.js"></script>
+    <script type="module" src="js/main.js"></script>
+
 
 </body>
 </html>

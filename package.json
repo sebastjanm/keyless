@@ -4,7 +4,10 @@
   "description": "Keyless car rental service application",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server/server.js",
+    "gulp": "NODE_OPTIONS='--max-old-space-size=4096' gulp",
+    "build": "tailwindcss -i ./src/styles/styles.css -o ./public/css/styles.css",
+    "watch": "tailwindcss -i ./src/styles/styles.css -o ./public/css/styles.css"
   },
   "repository": {
     "type": "git",
@@ -13,16 +16,17 @@
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
-    "@tailwindcss/aspect-ratio": "^0.4.2",
-    "axios": "^1.7.2",
+    "autoprefixer": "^10.4.19",
     "dotenv": "^16.4.5",
     "express": "^4.17.1",
-    "inquirer": "^8.2.4",
+    "gulp": "^5.0.0",
+    "gulp-postcss": "^10.0.0",
     "pg": "^8.12.0",
-    "tailwindcss": "^3.4.6"
+    "tailwindcss": "^3.4.7"
   },
   "type": "module",
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   }
 }
+

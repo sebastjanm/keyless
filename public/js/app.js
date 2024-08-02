@@ -1,3 +1,54 @@
+// main.js
+
+document.addEventListener('DOMContentLoaded', function () {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuButton.addEventListener('click', function () {
+        mobileMenu.classList.toggle('hidden');
+    });
+});
+
+// Function to handle the scroll event
+function handleScroll() {
+    const header = document.getElementById('top-menu');
+    const logoText = document.getElementById('logo-text');
+    const navLinks = document.getElementById('nav-links').getElementsByTagName('a');
+    const menuLinks = document.getElementById('menu-links').getElementsByTagName('a');
+
+    if (window.scrollY > 50) {
+        header.classList.add('bg-white');
+        header.classList.remove('bg-black', 'bg-opacity-80');
+        logoText.classList.remove('text-white');
+        logoText.classList.add('text-black');
+        
+        for (let link of navLinks) {
+            link.classList.remove('text-white');
+            link.classList.add('text-black');
+        }
+
+        for (let link of menuLinks) {
+            link.classList.remove('text-white');
+            link.classList.add('text-black');
+        }
+    } else {
+        header.classList.add('bg-black', 'bg-opacity-80');
+        header.classList.remove('bg-white');
+        logoText.classList.add('text-white');
+        logoText.classList.remove('text-black');
+        
+        for (let link of navLinks) {
+            link.classList.add('text-white');
+            link.classList.remove('text-black');
+        }
+
+        for (let link of menuLinks) {
+            link.classList.add('text-white');
+            link.classList.remove('text-black');
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchFilters();
     fetchCars();
@@ -123,3 +174,4 @@ function showError(message) {
         errorDiv.remove();
     }, 5000);
 }
+
