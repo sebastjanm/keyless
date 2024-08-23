@@ -1,8 +1,10 @@
-// src/public/js/main.js
-import { fetchCars } from './fetchCars.js';
+import { fetchPopularCars } from './fetchPopularCars.js'; // New function for index.html
+import { fetchAllCars } from './fetchAllCars.js';         // New function for cars.html
 import { fetchFilters } from './fetchFilters.js';
 
 document.addEventListener('DOMContentLoaded', function () {
+    console.log("DOM fully loaded and parsed");
+
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
 
@@ -12,9 +14,25 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    fetchFilters().then(() => {
-        fetchCars();
-    });
+    // Detect the page context and call the correct function
+    if (document.getElementById('popular-cars')) {
+        // This is index.html
+        fetchPopularCars().then(() => {
+            console.log("Popular cars fetched and populated successfully");
+        }).catch(error => {
+            console.error("Error fetching popular cars:", error);
+        });
+    } else if (document.getElementById('vehicleList')) {
+        // This is cars.html
+        fetchFilters().then(() => {
+            console.log("Filters fetched successfully");
+            return fetchAllCars();  // Fetch cars after filters load
+        }).then(() => {
+            console.log("All cars fetched and populated successfully");
+        }).catch(error => {
+            console.error("Error fetching filters or all cars:", error);
+        });
+    }
 
     const resetFiltersButton = document.getElementById('resetFilters');
     if (resetFiltersButton) {
@@ -24,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const filterForm = document.getElementById('filterForm');
     if (filterForm) {
         filterForm.querySelectorAll('select').forEach(element => {
-            element.addEventListener('change', fetchCars);
+            element.addEventListener('change', () => fetchAllCars());
         });
     }
 
@@ -41,7 +59,7 @@ function handleScroll() {
     if (header && logoText && navLinks.length > 0 && menuLinks.length > 0) {
         if (window.scrollY > 50) {
             header.classList.add('bg-white');
-            header.classList.remove('bg-black', 'bg-opacity-80');
+            header.classList.remove('bg-orange', 'bg-opacity-80');
             logoText.classList.remove('text-white');
             logoText.classList.add('text-black');
 
@@ -77,6 +95,8 @@ function resetFilters() {
     const filterForm = document.getElementById('filterForm');
     if (filterForm) {
         filterForm.reset();
-        fetchCars();
+        fetchAllCars();  // Refresh car list with cleared filters
     }
 }
+
+

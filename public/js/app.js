@@ -17,7 +17,7 @@ function handleScroll() {
     const menuLinks = document.getElementById('menu-links').getElementsByTagName('a');
 
     if (window.scrollY > 50) {
-        header.classList.add('bg-white');
+        header.classList.add('bg-orange');
         header.classList.remove('bg-black', 'bg-opacity-80');
         logoText.classList.remove('text-white');
         logoText.classList.add('text-black');

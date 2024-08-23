@@ -67,6 +67,9 @@ main {
   background-color: #0067b6;
 }
 
+.mt-custom {
+    margin-top: 80px; /* Adjust the value as needed */
+}
 
 @layer utilities {
   .relative {

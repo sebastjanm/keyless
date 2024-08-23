@@ -1,21 +1,8 @@
-// src/server/routes/filters.js
-import express from 'express';
-import { preloadedData } from '../preloadData.js';
+import { Router } from 'express';
+import { getFilters } from '../controllers/filterController.js';
 
-const router = express.Router();
+const router = Router();
 
-router.get('/', (req, res) => {
-    try {
-        console.log('Received request for /filters');
-        res.json(preloadedData.filters);
-    } catch (err) {
-        handleError(res, err, 'Error fetching filters');
-    }
-});
-
-function handleError(res, err, message) {
-    console.error(message, err);
-    res.status(500).json({ error: `${message}: ${err.message}` });
-}
+router.get('/', getFilters);
 
 export default router;

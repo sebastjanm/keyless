@@ -1,13 +1,9 @@
-// src/public/js/fetchCars.js
-export async function fetchCars() {
-    const carCardsContainer = document.getElementById('car-cards-container');
+export async function fetchAllCars() {
     const vehicleList = document.getElementById('vehicleList');
 
     try {
-        const filterValues = getFilterValues();
-        console.log('Filter Values:', filterValues);
+        const filterValues = getFilterValues(); // Collect filter values from the form
         const queryParams = new URLSearchParams(filterValues).toString();
-        console.log('Query Params:', queryParams);
         const response = await fetch(`/cars?${queryParams}`);
 
         if (!response.ok) {
@@ -15,21 +11,12 @@ export async function fetchCars() {
         }
 
         const cars = await response.json();
-        console.log('Fetched Cars:', cars);
-
-        if (carCardsContainer) {
-            carCardsContainer.innerHTML = '';
-        }
-        if (vehicleList) {
-            vehicleList.innerHTML = '';
-        }
+        vehicleList.innerHTML = ''; // Clear existing content
 
         if (cars.length === 0) {
-            if (vehicleList) {
-                vehicleList.innerHTML = '<p>No results found. Try different filters.</p>';
-            }
+            vehicleList.innerHTML = '<p>No cars found. Try different filters.</p>';
         } else {
-            cars.slice(0, 4).forEach(car => {
+            cars.forEach(car => {
                 const carCard = document.createElement('a');
                 carCard.href = `car-details.html?carId=${car.car_id}`;
                 carCard.classList.add('block', 'border', 'bg-white', 'border-gray-300', 'rounded-lg', 'p-4', 'hover:shadow-lg');
@@ -43,20 +30,12 @@ export async function fetchCars() {
                     <p class="text-gray-600">Status: ${car.status}</p>
                     <p class="text-blue-500 font-bold">Price: ${car.price} € per month</p>
                 `;
-                if (carCardsContainer) {
-                    carCardsContainer.appendChild(carCard);
-                }
-                if (vehicleList) {
-                    vehicleList.appendChild(carCard.cloneNode(true));
-                }
+                vehicleList.appendChild(carCard);
             });
         }
     } catch (error) {
-        console.error('Error fetching cars:', error);
-        if (carCardsContainer) {
-            carCardsContainer.innerHTML = '<p class="text-red-500">Failed to load car data. Please try again later.</p>';
-        }
-        showError('Error fetching cars. Please try again later.');
+        console.error('Error fetching all cars:', error);
+        vehicleList.innerHTML = '<p class="text-red-500">Failed to load car data. Please try again later.</p>';
     }
 }
 
@@ -72,6 +51,7 @@ function getFilterValues() {
     }
     return filterValues;
 }
+
 
 function showError(message) {
     const errorDiv = document.createElement('div');

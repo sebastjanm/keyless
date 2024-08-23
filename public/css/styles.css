@@ -1,6 +1,6 @@
 /* styles.css */
 
-/* ! tailwindcss v3.4.7 | MIT License | https://tailwindcss.com */
+/* ! tailwindcss v3.4.10 | MIT License | https://tailwindcss.com */
 
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -1129,10 +1129,16 @@ main {
 .custom-footer-bg {
   background-color: #0067b6;
 }
+
+.mt-custom {
+    margin-top: 80px; /* Adjust the value as needed */
+}
+
 .hover\:text-blue-600:hover {
   --tw-text-opacity: 1;
   color: rgb(37 99 235 / var(--tw-text-opacity));
 }
+
 @media (min-width: 768px) {
 
   .md\:mb-0 {
@@ -1157,10 +1163,6 @@ main {
 
   .md\:w-1\/5 {
     width: 20%;
-  }
-
-  .md\:w-2\/3 {
-    width: 66.666667%;
   }
 
   .md\:w-4\/5 {
@@ -1207,6 +1209,7 @@ main {
     padding-right: 2rem;
   }
 }
+
 @media (min-width: 1024px) {
 
   .lg\:mx-4 {
