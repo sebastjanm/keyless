@@ -3,44 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Avant2go Car subscription - Car Details</title>
-<link rel="stylesheet" href="/css/styles.css">
+    <title>Avant2go Car Subscription - Car Details</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body class="bg-gray-100">
-<!-- Top Menu -->
-<!-- Top Menu -->
-<header id="top-menu" class="fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out bg-opacity-80">
-    <div class="container mx-auto px-4 py-4 bg-transparent md:px-12 md:py-8">
-        <div class="flex items-center justify-between">
-            <a href="index.html" class="text-xl font-bold text-white" id="logo-text">Subscribe2Go - Car Subscription</a>
-            <nav class="hidden md:flex space-x-4" id="nav-links">
-                <a href="cars.html" class="text-white">Find a car</a>
-                <a href="#" class="text-white">Business customers</a>
-                <a href="#" class="text-white">Top offers</a>
-            </nav>
-            <div class="hidden md:flex space-x-4" id="menu-links">
-                <a href="#" class="text-white">FAQ</a>
-                <a href="#" class="text-white">Cart</a>
-                <a href="#" class="text-white">Profile</a>
+    <!-- Top Menu -->
+    <header id="top-menu" class="fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out bg-opacity-80">
+        <div class="container mx-auto px-4 py-4 bg-transparent md:px-12 md:py-8">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-xl font-bold text-white" id="logo-text">Subscribe2Go - Car Subscription</a>
+                <nav class="hidden md:flex space-x-4" id="nav-links">
+                    <a href="cars.html" class="text-white">Find a car</a>
+                    <a href="#" class="text-white">Business customers</a>
+                    <a href="#" class="text-white">Top offers</a>
+                </nav>
+                <div class="hidden md:flex space-x-4" id="menu-links">
+                    <a href="#" class="text-white">FAQ</a>
+                    <a href="#" class="text-white">Cart</a>
+                    <a href="#" class="text-white">Profile</a>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-white" id="mobile-menu-button">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
             </div>
-            <!-- Mobile Menu Button -->
-            <button class="md:hidden text-white" id="mobile-menu-button">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
+            <!-- Mobile Menu -->
+            <div class="hidden md:hidden mt-4 space-y-2" id="mobile-menu">
+                <a href="index.html" class="block text-white">Find a car</a>
+                <a href="#" class="block text-white">Business</a>
+                <a href="#" class="block text-white">Top offers</a>
+                <a href="#" class="block text-white">FAQ</a>
+                <a href="#" class="block text-white">Cart</a>
+                <a href="#" class="block text-white">Profile</a>
+            </div>
         </div>
-        <!-- Mobile Menu -->
-        <div class="hidden md:hidden mt-4 space-y-2" id="mobile-menu">
-            <a href="index.html" class="block text-white">Find a car</a>
-            <a href="#" class="block text-white">Business</a>
-            <a href="#" class="block text-white">Top offers</a>
-            <a href="#" class="block text-white">FAQ</a>
-            <a href="#" class="block text-white">Cart</a>
-            <a href="#" class="block text-white">Profile</a>
-        </div>
-    </div>
-</header>
+    </header>
 
     <main class="container mx-auto px-6 py-8">
         <nav class="mb-4" aria-label="Breadcrumb">
@@ -62,7 +61,7 @@
                 <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
                     <h2 class="text-3xl font-bold mb-4" id="car-title"></h2>
                     <div id="car-images">
-                     <!-- Car images will be populated here -->
+                        <!-- Car images will be populated here -->
                     </div>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
@@ -199,15 +198,20 @@
             }
 
             try {
-                const carDetailsResponse = await fetch(`/car-details/${carId}`);
-                const subscriptionOptionsResponse = await fetch('/subscription-options');
+                // Fetch car details and subscription options
+                const [carDetailsResponse, subscriptionOptionsResponse] = await Promise.all([
+                    fetch(`/car-details/${carId}`),
+                    fetch('/subscription-options')
+                ]);
+
                 if (!carDetailsResponse.ok || !subscriptionOptionsResponse.ok) {
                     throw new Error('Network response was not ok');
                 }
+
                 const car = await carDetailsResponse.json();
                 const subscriptionOptions = await subscriptionOptionsResponse.json();
-                console.log("Car Details: ", car);
-                console.log("Subscription Options: ", subscriptionOptions);
+
+                // Populate the UI with car details and subscription options
                 populateCarDetails(car);
                 populateSubscriptionOptions(subscriptionOptions);
                 updateBreadcrumb(car);
@@ -216,25 +220,29 @@
             }
         });
 
+        // Populate the car details section
         function populateCarDetails(car) {
-            
-            document.getElementById('car-images').innerHTML = `
-                <img src="${car.image}" alt="${car.model}" class="h-auto max-w-full rounded bg-cover">
-            `;
-            document.getElementById('car-title').textContent = `${car.manufacturer} ${car.model}`;
+            document.getElementById('car-title').textContent = `${car.manufacturer} ${car.model_name}`;
 
+            // Populate car images (use multiple images if available)
+            const carImagesContainer = document.getElementById('car-images');
+            carImagesContainer.innerHTML = car.images.map(image => `
+                <img src="${image}" alt="${car.model_name}" class="h-auto max-w-full rounded bg-cover mb-4">
+            `).join('');
+
+            // Populate technical data and environment data
             const technicalData = document.getElementById('technical-data');
             const environmentData = document.getElementById('environment-data');
 
             technicalData.innerHTML = `
-                <p class="flex items-center">Transmission: ${car.transmission || 'N/A'}</p>
-                <p class="flex items-center">Drive: ${car.drive || 'N/A'}</p>
-                <p class="flex items-center">Fuel Type: ${car.fuel_type || 'N/A'}</p>
-                <p class="flex items-center">Category: ${car.category_type || 'N/A'}</p>
+                <p class="flex items-center">Transmission: ${car.transmission_name || 'N/A'}</p>
+                <p class="flex items-center">Drive: ${car.drive_type_name || 'N/A'}</p>
+                <p class="flex items-center">Fuel Type: ${car.fuel_type_name || 'N/A'}</p>
+                <p class="flex items-center">Category: ${car.category_name || 'N/A'}</p>
                 <p class="flex items-center">Horse Power: ${car.horse_power || 'N/A'}</p>
                 <p class="flex items-center">Seats: ${car.seats || 'N/A'}</p>
                 <p class="flex items-center">Displacement: ${car.displacement || 'N/A'} L</p>
-                <p class="flex items-center">Trailer Hitch: ${car.trailer_hitch !== undefined ? (car.trailer_hitch ? 'Yes' : 'No') : 'N/A'}</p>
+                <p class="flex items-center">Trailer Hitch: ${car.trailer_hitch ? 'Yes' : 'No'}</p>
                 <p class="flex items-center">Battery Capacity: ${car.battery_capacity || 'N/A'} kWh</p>
                 <p class="flex items-center">Max Charging: ${car.max_charging || 'N/A'} kW</p>
                 <p class="flex items-center">Doors: ${car.doors || 'N/A'}</p>
@@ -248,66 +256,61 @@
                 <p class="flex items-center">Energy Efficiency: ${car.efficiency_rating || 'N/A'}</p>
             `;
 
-            // Populate car colors
-            const colorSelect = document.getElementById('color');
-            colorSelect.innerHTML = car.colors.map(color => `<option value="${color}">${color}</option>`).join('');
-
-            // Display the administration and monthly fee
-            document.getElementById('adminFee').textContent = car.administration_fee !== undefined ? car.administration_fee : 'N/A';
-            document.getElementById('extraKmCost').textContent = car.additional_cost_per_km !== undefined ? car.additional_cost_per_km : 'N/A';
-            document.getElementById('monthlyFee').textContent = car.price !== undefined ? car.price : 'N/A';
-            document.getElementById('deposit').textContent = car.deposit !== undefined ? car.deposit : 'N/A';
-
-            // Convert the attributes to HTML list items
-            const basisList = car.basis.map(item => `<li>${item}</li>`).join('');
-            const safetyList = car.safety.map(item => `<li>${item}</li>`).join('');
-            const entertainmentList = car.entertainment.map(item => `<li>${item}</li>`).join('');
-            const comfortList = car.comfort.map(item => `<li>${item}</li>`).join('');
-
-            document.getElementById('basis-details').innerHTML = basisList;
-            document.getElementById('safety-details').innerHTML = safetyList;
-            document.getElementById('entertainment-details').innerHTML = entertainmentList;
-            document.getElementById('comfort-details').innerHTML = comfortList;
+            // Populate basis, safety, entertainment, and comfort details
+            populateDetailsList('basis-details', car.config_basis);
+            populateDetailsList('safety-details', car.config_safety);
+            populateDetailsList('entertainment-details', car.config_entertainment);
+            populateDetailsList('comfort-details', car.config_comfort);
         }
 
+        // Helper function to populate details lists
+        function populateDetailsList(elementId, items) {
+            const element = document.getElementById(elementId);
+            if (items && items.length > 0) {
+                element.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+            } else {
+                element.innerHTML = '<li>No data available</li>';
+            }
+        }
+
+        // Populate subscription options
         function populateSubscriptionOptions(options) {
-            const deliverySelect = document.getElementById('delivery');
-            deliverySelect.innerHTML = options.locations.map(location => `<option value="${location}">Pick-up at ${location}</option>`).join('') + '<option value="home">Home delivery (100€ one-time charge)</option>';
-
-            const insuranceSelect = document.getElementById('insurancePackage');
-            insuranceSelect.innerHTML = options.insurancePackages.map(package => `<option value="${package}">${package}</option>`).join('');
-
-            const termSelect = document.getElementById('minTerm');
-            termSelect.innerHTML = options.subscriptionLengths.map(length => `<option value="${length}">${length} Months</option>`).join('');
-
-            const mileageSelect = document.getElementById('kmPerMonth');
-            mileageSelect.innerHTML = options.subscriptionMileages.map(mileage => `<option value="${mileage}">${mileage} km</option>`).join('');
+            populateSelect('color', options.colors);
+            populateSelect('insurancePackage', options.insurancePackages);
+            populateSelect('minTerm', options.subscriptionLengths.map(length => `${length} Months`));
+            populateSelect('kmPerMonth', options.subscriptionMileages.map(mileage => `${mileage} km`));
+            populateSelect('delivery', options.locations.map(location => `Pick-up at ${location}`));
+            
+            document.getElementById('adminFee').textContent = options.administrationFee !== undefined ? options.administrationFee : 'N/A';
+            document.getElementById('deposit').textContent = options.deposit !== undefined ? options.deposit : 'N/A';
+            document.getElementById('monthlyFee').textContent = options.monthlyFee !== undefined ? options.monthlyFee : 'N/A';
+            document.getElementById('extraKmCost').textContent = options.excessMileageFee !== undefined ? options.excessMileageFee : 'N/A';
         }
 
+        // Helper function to populate select dropdowns
+        function populateSelect(selectId, items) {
+            const selectElement = document.getElementById(selectId);
+            if (selectElement) {
+                selectElement.innerHTML = items.map(item => `<option value="${item}">${item}</option>`).join('');
+            }
+        }
+
+        // Update breadcrumb navigation
         function updateBreadcrumb(car) {
             const breadcrumbLink = document.getElementById('breadcrumb-car-link');
             breadcrumbLink.href = `car-details.html?carId=${car.car_id}`;
-            breadcrumbLink.textContent = `${car.manufacturer} ${car.model}`;
+            breadcrumbLink.textContent = `${car.manufacturer} ${car.model_name}`;
         }
 
+        // Save subscription options to localStorage
         function saveSubscriptionOptions() {
-            const color = document.getElementById('color').value;
-            const packageType = document.getElementById('packageType').value;
-            const minTerm = document.getElementById('minTerm').value;
-            const kmPerMonth = document.getElementById('kmPerMonth').value;
-            const insurancePackage = document.getElementById('insurancePackage').value;
-            const delivery = document.getElementById('delivery').value;
-
-            // Clear existing localStorage
-            localStorage.removeItem('subscriptionOptions');
-
             const subscriptionOptions = {
-                color,
-                packageType,
-                minTerm,
-                kmPerMonth,
-                insurancePackage,
-                delivery
+                color: document.getElementById('color').value,
+                packageType: document.getElementById('packageType').value,
+                minTerm: document.getElementById('minTerm').value,
+                kmPerMonth: document.getElementById('kmPerMonth').value,
+                insurancePackage: document.getElementById('insurancePackage').value,
+                delivery: document.getElementById('delivery').value
             };
 
             localStorage.setItem('subscriptionOptions', JSON.stringify(subscriptionOptions));
@@ -315,8 +318,5 @@
         }
     </script>
     <script type="module" src="js/main.js"></script>
-
-
-
 </body>
 </html>

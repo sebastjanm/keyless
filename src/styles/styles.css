@@ -88,3 +88,14 @@ main {
     left: 0;
   }
 }
+
+#popular-cars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+#popular-cars a {
+    flex: 1 1 calc(33% - 20px);
+}
+

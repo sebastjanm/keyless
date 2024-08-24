@@ -6,6 +6,8 @@ export async function fetchFilters() {
             throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
         }
         const filters = await response.json();
+        
+        // Ensure the correct mapping between API fields and dropdowns
         populateSelect('brand', filters.brands);
         populateSelect('vehicleType', filters.vehicleTypes);
         populateSelect('fuel', filters.fuelTypes);

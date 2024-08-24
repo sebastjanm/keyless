@@ -1134,6 +1134,16 @@ main {
     margin-top: 80px; /* Adjust the value as needed */
 }
 
+#popular-cars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+#popular-cars a {
+    flex: 1 1 calc(33% - 20px);
+}
+
 .hover\:text-blue-600:hover {
   --tw-text-opacity: 1;
   color: rgb(37 99 235 / var(--tw-text-opacity));
@@ -1252,3 +1262,4 @@ main {
     padding-right: 3rem;
   }
 }
+

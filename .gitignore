@@ -3928,3 +3928,5 @@ dist
 /node_modules/axios/lib/helpers/AxiosTransformStream.js
 /node_modules/axios/lib/env/README.md
 /node_modules/axios/lib/env/data.js
+/supabase/seed.sql
+/supabase/config.toml
