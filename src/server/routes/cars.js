@@ -1,10 +1,9 @@
+// In cars.js (routes)
 import express from 'express';
 import { getCars, getCarDetails, getPopularCars } from '../controllers/carController.js';
 
 const router = express.Router();
 
-router.get('/', getCars);
-router.get('/car-details/:carId', getCarDetails);
-router.get('/popular', getPopularCars);
+router.get('/:carId', getCarDetails);
 
 export default router;
