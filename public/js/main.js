@@ -7,6 +7,8 @@ import { fetchFilters } from './fetchFilters.js';
 import { fetchCarDetails } from './fetchCarDetails.js';
 import { fetchSubscriptionOptions } from './fetchSubscriptionOptions.js';
 
+
+
 document.addEventListener('DOMContentLoaded', function () {
     console.log("DOM fully loaded and parsed");
 
@@ -237,39 +239,26 @@ async function loadCarDetails() {
         return;
     }
 
-    // Fetch and populate subscription options
-    const subscriptionOptions = await fetchSubscriptionOptions();
-    
-    // Debugging: Log the entire subscriptionOptions object
-    console.log('Subscription options received:', subscriptionOptions);
+    // Fetch and populate subscription options with carId
+    try {
+        const subscriptionOptions = await fetchSubscriptionOptions(carId);
+        console.log('Subscription options received:', subscriptionOptions);
 
-    // Ensure subscriptionOptions and pricing data are valid
-    if (subscriptionOptions && Array.isArray(subscriptionOptions.pricing) && subscriptionOptions.pricing.length > 0) {
-        const defaultPricing = subscriptionOptions.pricing[0];
-        console.log('Default pricing found:', defaultPricing);
-        updatePricingUI(defaultPricing);
-    } else {
-        console.error('No valid pricing data found.');
-        updatePricingUI(null); // Pass null to trigger fallback
-    }
+        if (subscriptionOptions && Array.isArray(subscriptionOptions.pricing) && subscriptionOptions.pricing.length > 0) {
+            const defaultPricing = subscriptionOptions.pricing[0];
+            console.log('Default pricing found:', defaultPricing);
+            updatePricingUI(defaultPricing);
+        } else {
+            console.error('No valid pricing data found.');
+            updatePricingUI(null); // Pass null to trigger fallback
+        }
 
-    // Populate the rest of the subscription options
-    populateSubscriptionOptions(subscriptionOptions);
-}
-
-function updatePricingUI(pricing) {
-    if (pricing) {
-        document.getElementById('monthlyFee').textContent = `${pricing.price} €`;
-        document.getElementById('deposit').textContent = `${pricing.deposit} €`;
-        document.getElementById('adminFee').textContent = `${pricing.administration_fee} €`;
-        document.getElementById('excessMileageFee').textContent = `${pricing.excess_mileage_fee} €/km`;
-    } else {
-        document.getElementById('monthlyFee').textContent = 'N/A';
-        document.getElementById('deposit').textContent = 'N/A';
-        document.getElementById('adminFee').textContent = 'N/A';
-        document.getElementById('excessMileageFee').textContent = 'N/A';
+        populateSubscriptionOptions(subscriptionOptions);
+    } catch (error) {
+        console.error('Error loading car details:', error.message);
     }
 }
+
 
 
 
@@ -563,6 +552,24 @@ function calculatePricing() {
     }
 }
 
+function updatePricingUI(pricing) {
+    try {
+        if (pricing) {
+            document.getElementById('monthlyFee').textContent = `${pricing.price} €`;
+            document.getElementById('deposit').textContent = `${pricing.deposit} €`;
+            document.getElementById('adminFee').textContent = `${pricing.administration_fee} €`;
+            document.getElementById('excessMileageFee').textContent = `${pricing.excess_mileage_fee} €/km`;
+        } else {
+            console.warn('Pricing data is not available. Displaying fallback values.');
+            document.getElementById('monthlyFee').textContent = 'N/A';
+            document.getElementById('deposit').textContent = 'N/A';
+            document.getElementById('adminFee').textContent = 'N/A';
+            document.getElementById('excessMileageFee').textContent = 'N/A';
+        }
+    } catch (error) {
+        console.error('Error updating pricing UI:', error.message);
+    }
+}
 
 /* ==========================
    MISCELLANEOUS LOGIC

@@ -11,7 +11,13 @@ export async function getSubscriptionOptions(req, res) {
     try {
         const client = await pool.connect();
 
-        // Fetch all subscription-related options
+        const carId = req.query.carId;
+        if (!carId) {
+            console.error('No carId provided in request.');
+            return res.status(400).json({ error: 'Car ID is required.' });
+        }
+
+        // Proceed with fetching data if carId is valid
         const colorsQuery = `SELECT color_name FROM colors;`;
         const colorsResult = await client.query(colorsQuery);
 
@@ -30,8 +36,6 @@ export async function getSubscriptionOptions(req, res) {
         const deliveryOptionsQuery = `SELECT option_id, option_name, price_modifier FROM delivery_options;`;
         const deliveryOptionsResult = await client.query(deliveryOptionsQuery);
 
-        // Fetch default pricing based on carId
-        const carId = req.params.carId;
         const pricingQuery = `
             SELECT 
                 p.monthly_payment AS price, 
@@ -53,10 +57,12 @@ export async function getSubscriptionOptions(req, res) {
         `;
         const pricingResult = await client.query(pricingQuery, [carId]);
 
-        // Debugging: Ensure pricing data is retrieved
-        console.log("Pricing result for carId", carId, ":", pricingResult.rows);
+        console.log(`Pricing result for carId ${carId}:`, pricingResult.rows);
 
-        // Aggregate all data
+        if (pricingResult.rows.length === 0) {
+            console.warn(`No default pricing found for carId: ${carId}`);
+        }
+
         const subscriptionOptions = {
             colors: colorsResult.rows,
             subscriptionDurations: durationsResult.rows,
@@ -64,7 +70,7 @@ export async function getSubscriptionOptions(req, res) {
             mileagePlans: mileagePlansResult.rows,
             packageTypes: packageTypesResult.rows,
             deliveryOptions: deliveryOptionsResult.rows,
-            pricing: pricingResult.rows,  // Include pricing data
+            pricing: pricingResult.rows,
         };
 
         console.log("Subscription options being sent:", subscriptionOptions);
@@ -76,7 +82,6 @@ export async function getSubscriptionOptions(req, res) {
         res.status(500).json({ error: 'Failed to fetch subscription options', details: error.message });
     }
 }
-
 
 
 
