@@ -576,6 +576,18 @@ video {
 .z-50 {
   z-index: 50;
 }
+.col-span-1 {
+  grid-column: span 1 / span 1;
+}
+.col-span-3 {
+  grid-column: span 3 / span 3;
+}
+.row-span-1 {
+  grid-row: span 1 / span 1;
+}
+.row-span-2 {
+  grid-row: span 2 / span 2;
+}
 .mx-1 {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
@@ -698,9 +710,6 @@ video {
 .max-w-6xl {
   max-width: 72rem;
 }
-.max-w-full {
-  max-width: 100%;
-}
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -725,6 +734,12 @@ video {
 .grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.grid-rows-2 {
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
 .flex-col {
   flex-direction: column;
 }
@@ -742,6 +757,9 @@ video {
 }
 .justify-between {
   justify-content: space-between;
+}
+.gap-2 {
+  gap: 0.5rem;
 }
 .gap-4 {
   gap: 1rem;
@@ -865,9 +883,6 @@ video {
 }
 .bg-opacity-80 {
   --tw-bg-opacity: 0.8;
-}
-.bg-cover {
-  background-size: cover;
 }
 .object-contain {
   -o-object-fit: contain;
@@ -1142,6 +1157,29 @@ main {
 
 #popular-cars a {
     flex: 1 1 calc(33% - 20px);
+}
+
+#car-images {
+    display: grid;
+    grid-template-columns: 3fr 1fr; /* 3/4 of space for the large image, 1/4 for the smaller images */
+    grid-template-rows: 1fr 1fr; /* Two rows of equal height */
+    gap: 0.5rem; /* Space between images */
+}
+
+#car-images img {
+    border-radius: 0.5rem;
+    -o-object-fit: cover;
+       object-fit: cover; /* Ensures images fill their space without distortion */
+}
+
+
+/* Optional: Custom CSS if additional tweaks are needed */
+#car-images img {
+    transition: transform 0.3s ease-in-out; /* Smooth zoom on hover */
+}
+
+#car-images img:hover {
+    transform: scale(1.05); /* Slightly zoom in on hover */
 }
 
 .hover\:text-blue-600:hover {

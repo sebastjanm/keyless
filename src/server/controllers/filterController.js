@@ -7,8 +7,7 @@ const pool = new Pool(config.db);
 export async function getFilters(req, res) {
     try {
         const client = await pool.connect();
-
-        // Updated queries to match the new schema
+        
         const queries = {
             brands: 'SELECT DISTINCT manufacturer FROM car_models',
             models: 'SELECT DISTINCT model_name FROM car_models',
@@ -48,14 +47,16 @@ export async function getFilters(req, res) {
         const filterData = {};
 
         for (const [key, query] of Object.entries(queries)) {
+            console.log(`Executing query for ${key}: ${query}`);
             const result = await client.query(query);
             filterData[key] = result.rows.map(row => Object.values(row)[0]);
+            console.log(`Results for ${key}:`, filterData[key]);
         }
 
         res.json(filterData);
         client.release();
     } catch (err) {
-        console.error('Error fetching filters:', err);
-        res.status(500).json({ error: 'Database query failed' });
+        console.error('Error fetching filters:', err.message);
+        res.status(500).json({ error: 'Database query failed', details: err.message });
     }
 }

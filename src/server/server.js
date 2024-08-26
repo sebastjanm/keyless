@@ -4,6 +4,8 @@ import { fileURLToPath } from 'url';
 import config from './config.js';
 import carsRoutes from './routes/cars.js';  // Adjust path if necessary
 import filterRoutes from './routes/filters.js';
+import subscriptionsRoutes from './routes/subscriptions.js';  
+
 
 const app = express();
 const port = config.app.port;
@@ -17,9 +19,13 @@ app.use(express.json());
 
 app.use('/cars', carsRoutes);  // Ensure this is correctly set
 app.use('/filters', filterRoutes);
+app.use('/subscription-options', subscriptionsRoutes); 
+
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
+
+
 
 

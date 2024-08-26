@@ -1,5 +1,4 @@
 // fetchPopularCars.js
-// fetchPopularCars.js
 export async function fetchPopularCars() {
     try {
         const response = await fetch('/cars/popular');
@@ -13,6 +12,3 @@ export async function fetchPopularCars() {
         throw error;
     }
 }
-
-
-

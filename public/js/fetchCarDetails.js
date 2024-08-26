@@ -1,13 +1,13 @@
-export async function fetchCarDetailsAndOptions(carId) {
+// fetchCarDetails.js
+export async function fetchCarDetails(carId) {
     try {
-        const response = await fetch(`/api/car-details/${carId}`);
+        const response = await fetch(`/cars/${carId}`);
         if (!response.ok) {
-            throw new Error(`Failed to fetch car details: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
-        console.error('Error fetching car details and subscription options:', error);
-        return null;
+        console.error('Error fetching car details:', error);
+        throw error;
     }
 }

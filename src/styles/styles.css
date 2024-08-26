@@ -99,3 +99,25 @@ main {
     flex: 1 1 calc(33% - 20px);
 }
 
+#car-images {
+    display: grid;
+    grid-template-columns: 3fr 1fr; /* 3/4 of space for the large image, 1/4 for the smaller images */
+    grid-template-rows: 1fr 1fr; /* Two rows of equal height */
+    gap: 0.5rem; /* Space between images */
+}
+
+#car-images img {
+    border-radius: 0.5rem;
+    object-fit: cover; /* Ensures images fill their space without distortion */
+}
+
+
+/* Optional: Custom CSS if additional tweaks are needed */
+#car-images img {
+    transition: transform 0.3s ease-in-out; /* Smooth zoom on hover */
+}
+
+#car-images img:hover {
+    transform: scale(1.05); /* Slightly zoom in on hover */
+}
+

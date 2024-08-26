@@ -1,13 +1,11 @@
+// fetchAllCars.js
 export async function fetchAllCars(filters = {}) {
     try {
-        // Construct query string from filters
         const queryString = new URLSearchParams(filters).toString();
         const response = await fetch(`/cars?${queryString}`);
-
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
         const cars = await response.json();
         return cars;
     } catch (error) {

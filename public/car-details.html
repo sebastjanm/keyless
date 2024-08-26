@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avant2go Car Subscription - Car Details</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body class="bg-gray-100">
     <!-- Top Menu -->
@@ -56,130 +56,160 @@
             </ol>
         </nav>
 
-        <div class="flex justify-between items-start space-x-8">
-            <section class="w-2/3" id="car-details-section">
-                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
-                    <h2 class="text-3xl font-bold mb-4" id="car-title"></h2>
-                    <div id="car-images">
-                        <!-- Car images will be populated here -->
-                    </div>
+<div class="flex justify-between items-start space-x-8">
+    <section class="w-2/3" id="car-details-section">
+        <!-- Car Images and Title Section -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h2 class="text-3xl font-bold mb-4" id="car-title">Tesla Model S Plaid</h2>
+            <div id="car-images-new" class="grid grid-cols-4 grid-rows-2 gap-2">
+                <div class="col-span-3 row-span-2">
+                    <img id="image-large-new" src="https://picsum.photos/800/600?random=1" alt="Main car image" class="w-full h-full object-cover rounded-lg">
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
-                    <h3 class="text-2xl font-bold mb-4">Technical Data</h3>
-                    <div class="grid grid-cols-2 gap-4" id="technical-data">
-                        <!-- Technical Data specifications will be populated here -->
-                    </div>
+                <div class="col-span-1 row-span-1">
+                    <img id="image-small-1-new" src="https://picsum.photos/400/300?random=2" alt="Side car image 1" class="w-full h-full object-cover rounded-lg">
                 </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
-                    <h3 class="text-2xl font-bold mb-4">Environment</h3>
-                    <div class="grid grid-cols-2 gap-4" id="environment-data">
-                        <!-- Environment specifications will be populated here -->
-                    </div>
+                <div class="col-span-1 row-span-1">
+                    <img id="image-small-2-new" src="https://picsum.photos/400/300?random=3" alt="Side car image 2" class="w-full h-full object-cover rounded-lg">
                 </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
-                    <h3 class="text-2xl font-bold mb-4">Basis</h3>
-                    <ul class="list-disc list-inside" id="basis-details">
-                        <!-- Basis details will be populated here -->
-                    </ul>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
-                    <h3 class="text-2xl font-bold mb-4">Safety</h3>
-                    <ul class="list-disc list-inside" id="safety-details">
-                        <!-- Safety details will be populated here -->
-                    </ul>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
-                    <h3 class="text-2xl font-bold mb-4">Entertainment</h3>
-                    <ul class="list-disc list-inside" id="entertainment-details">
-                        <!-- Entertainment details will be populated here -->
-                    </ul>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
-                    <h3 class="text-2xl font-bold mb-4">Comfort</h3>
-                    <ul class="list-disc list-inside" id="comfort-details">
-                        <!-- Comfort details will be populated here -->
-                    </ul>
-                </div>
-            </section>
-
-            <div class="w-1/3 flex flex-col space-y-6">
-                <section class="bg-white p-6 rounded-lg shadow-lg" id="subscription-options">
-                    <h3 class="text-2xl font-bold mb-2">Subscription Options</h3>
-                    <small class="block text-gray-600 mb-4">Create your clever car subscription with Avant2GO+</small>
-                    
-                    <form>
-                        <div class="mb-4">
-                            <label for="color" class="block font-semibold mb-2">Choose your colour</label>
-                            <select id="color" class="w-full input-field p-2 rounded">
-                                <!-- Car colors will be populated here -->
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label for="packageType" class="block font-semibold">Package Type</label>
-                            <small class="block text-gray-600 mb-4">In FLEX, you have a contract that renews monthly with a notice period of one month.</small>
-                            <select id="packageType" class="w-full input-field p-2 rounded">
-                                <option value="fixed">Fixed</option>
-                                <option value="flexible">Flex</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label for="minTerm" class="block font-semibold mb-2">Subscription duration</label>
-                            <select id="minTerm" class="w-full input-field p-2 rounded">
-                                <!-- Minimum term options will be populated here -->
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label for="kmPerMonth" class="block font-semibold mb-2">Pick your mileage plan</label>
-                             <small class="block text-gray-600 mb-4">Exceeding the included kilometres will cost <span id="extraKmCost"></span>€ and will be calculated at the end of your subscription.</small>
-                            <select id="kmPerMonth" class="w-full input-field p-2 rounded">
-                                <!-- Kilometer options will be populated here -->
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label for="insurancePackage" class="block font-semibold mb-2">Choose your car insurance</label>
-                            <select id="insurancePackage" class="w-full input-field p-2 rounded">
-                                <!-- Insurance package options will be populated here -->
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label for="delivery" class="block font-semibold">Delivery or pickup?</label>
-                            <small class="block text-gray-600 mb-2">Select the desired type of handover for your car.</small>
-                            <select id="delivery" class="w-full input-field p-2 rounded">
-                                <!-- Delivery options will be populated here -->
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <p class="block font-semibold">Administration Fee: <span id="adminFee"></span>€</p>
-                        </div>
-
-                        <div class="mb-4">
-                            <p class="block font-semibold">First Payment (deposit): <span id="deposit"></span>€</p>
-                        </div>
-                        <div class="mb-4">
-                            <p class="block font-semibold">Monthly Fee: <span id="monthlyFee"></span>€</p>
-                        </div>
-                        <button type="button" onclick="saveSubscriptionOptions()" class="w-full button-primary text-white p-2 rounded">Start booking</button>
-                    </form>
-                </section>
-
-                <section class="bg-white p-6 rounded-lg shadow-lg" id="all-inclusive">
-                    <h3 class="text-2xl font-bold mb-4">All Inclusive</h3>
-                    <ul class="list-disc list-inside">
-                        <li>All-inclusive price</li>
-                        <li>Service & Maintenance</li>
-                        <li>Including insurance, tax & TÜV</li>
-                        <li>Free door delivery</li>
-                        <li>Highway Vignette</li>
-                        <li>24/7 Breakdown Assistance with replacement car</li>
-                    </ul>
-                </section>
             </div>
         </div>
+
+        <!-- Description Data Section -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h3 class="text-2xl font-bold mb-4">Description</h3>
+            <div id="car-description" class="text-gray-700">
+                <!-- Description will be populated here -->
+            </div>
+        </div>
+
+
+        <!-- Technical Data Section -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h3 class="text-2xl font-bold mb-4">Technical Data</h3>
+            <div class="grid grid-cols-2 gap-4" id="technical-data">
+                <!-- Technical Data specifications will be populated here -->
+            </div>
+        </div>
+
+        <!-- Environment Data Section -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h3 class="text-2xl font-bold mb-4">Environment</h3>
+            <div class="grid grid-cols-2 gap-4" id="environment-data">
+                <!-- Environment specifications will be populated here -->
+            </div>
+        </div>
+
+        <!-- Basis Details Section -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h3 class="text-2xl font-bold mb-4">Basis</h3>
+            <ul class="list-disc list-inside" id="basis-details">
+                <!-- Basis details will be populated here -->
+            </ul>
+        </div>
+
+        <!-- Safety Details Section -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h3 class="text-2xl font-bold mb-4">Safety</h3>
+            <ul class="list-disc list-inside" id="safety-details">
+                <!-- Safety details will be populated here -->
+            </ul>
+        </div>
+
+        <!-- Entertainment Details Section -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h3 class="text-2xl font-bold mb-4">Entertainment</h3>
+            <ul class="list-disc list-inside" id="entertainment-details">
+                <!-- Entertainment details will be populated here -->
+            </ul>
+        </div>
+
+        <!-- Comfort Details Section -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h3 class="text-2xl font-bold mb-4">Comfort</h3>
+            <ul class="list-disc list-inside" id="comfort-details">
+                <!-- Comfort details will be populated here -->
+            </ul>
+        </div>
+
+    </section>
+
+
+
+<div class="w-1/3 flex flex-col space-y-6">
+    <section class="bg-white p-6 rounded-lg shadow-lg" id="subscription-options">
+        <h3 class="text-2xl font-bold mb-2">Subscription Options</h3>
+            <small class="block text-gray-600 mb-4">Create your clever car subscription with Avant2GO+</small>
+                    
+            <!-- Updated car-details.html -->
+            <form>
+                <div class="mb-4">
+                    <label for="color" class="block font-semibold mb-2">Choose your colour</label>
+                    <select id="color" class="w-full input-field p-2 rounded">
+                        <!-- Car colors will be populated here -->
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="packageType" class="block font-semibold">Package Type</label>
+                    <small class="block text-gray-600 mb-4">In FLEX, you have a contract that renews monthly with a notice period of one month.</small>
+                    <select id="packageType" class="w-full input-field p-2 rounded">
+                        <!-- packageType options will be populated here -->
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="minTerm" class="block font-semibold mb-2">Subscription duration</label>
+                    <select id="minTerm" class="w-full input-field p-2 rounded">
+                        <!-- Minimum term options will be populated here -->
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="mileagePlans" class="block font-semibold mb-2">Pick your mileage plan</label>
+                    <small class="block text-gray-600 mb-4">Exceeding the included kilometres will cost <span id="excessMileageFee"></span>€ and will be calculated at the end of your subscription.</small>
+                    <select id="mileagePlans" class="w-full input-field p-2 rounded">
+                        <!-- Kilometer options will be populated here -->
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="insurancePackages" class="block font-semibold mb-2">Choose your car insurance</label>
+                    <select id="insurancePackages" class="w-full input-field p-2 rounded">
+                        <!-- Insurance package options will be populated here -->
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="delivery" class="block font-semibold">Delivery or pickup?</label>
+                    <small class="block text-gray-600 mb-2">Select the desired type of handover for your car.</small>
+                    <select id="delivery" class="w-full input-field p-2 rounded">
+                        <!-- Delivery options will be populated here -->
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <p class="block font-semibold">Administration Fee: <span id="adminFee"></span></p>
+                </div>
+                <div class="mb-4">
+                    <p class="block font-semibold">First Payment (deposit): <span id="deposit"></span></p>
+                </div>
+                <div class="mb-4">
+                    <p class="block font-semibold">Monthly Fee: <span id="monthlyFee"></span>€</p>
+                </div>
+                <button type="button" onclick="saveSubscriptionOptions()" class="w-full button-primary text-white p-2 rounded">Start booking</button>
+            </form>
+
+    </section>
+
+    <section class="bg-white p-6 rounded-lg shadow-lg" id="all-inclusive">
+        <h3 class="text-2xl font-bold mb-4">All Inclusive</h3>
+            <ul class="list-disc list-inside">
+                <li>All-inclusive price</li>
+                <li>Service & Maintenance</li>
+                <li>Including insurance, tax & TÜV</li>
+                <li>Free door delivery</li>
+                <li>Highway Vignette</li>
+                <li>24/7 Breakdown Assistance with replacement car</li>
+            </ul>
+    </section>
+    
+    </div>
+    </div>
+
     </main>
 
     <footer class="bg-gray-800 text-white py-4">
@@ -188,134 +218,7 @@
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const carId = urlParams.get('carId');
-            if (!carId) {
-                console.error('Car ID not found in the URL.');
-                return;
-            }
-
-            try {
-                // Fetch car details and subscription options
-                const [carDetailsResponse, subscriptionOptionsResponse] = await Promise.all([
-                    fetch(`/car-details/${carId}`),
-                    fetch('/subscription-options')
-                ]);
-
-                if (!carDetailsResponse.ok || !subscriptionOptionsResponse.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const car = await carDetailsResponse.json();
-                const subscriptionOptions = await subscriptionOptionsResponse.json();
-
-                // Populate the UI with car details and subscription options
-                populateCarDetails(car);
-                populateSubscriptionOptions(subscriptionOptions);
-                updateBreadcrumb(car);
-            } catch (error) {
-                console.error('Error fetching details:', error);
-            }
-        });
-
-        // Populate the car details section
-        function populateCarDetails(car) {
-            document.getElementById('car-title').textContent = `${car.manufacturer} ${car.model_name}`;
-
-            // Populate car images (use multiple images if available)
-            const carImagesContainer = document.getElementById('car-images');
-            carImagesContainer.innerHTML = car.images.map(image => `
-                <img src="${image}" alt="${car.model_name}" class="h-auto max-w-full rounded bg-cover mb-4">
-            `).join('');
-
-            // Populate technical data and environment data
-            const technicalData = document.getElementById('technical-data');
-            const environmentData = document.getElementById('environment-data');
-
-            technicalData.innerHTML = `
-                <p class="flex items-center">Transmission: ${car.transmission_name || 'N/A'}</p>
-                <p class="flex items-center">Drive: ${car.drive_type_name || 'N/A'}</p>
-                <p class="flex items-center">Fuel Type: ${car.fuel_type_name || 'N/A'}</p>
-                <p class="flex items-center">Category: ${car.category_name || 'N/A'}</p>
-                <p class="flex items-center">Horse Power: ${car.horse_power || 'N/A'}</p>
-                <p class="flex items-center">Seats: ${car.seats || 'N/A'}</p>
-                <p class="flex items-center">Displacement: ${car.displacement || 'N/A'} L</p>
-                <p class="flex items-center">Trailer Hitch: ${car.trailer_hitch ? 'Yes' : 'No'}</p>
-                <p class="flex items-center">Battery Capacity: ${car.battery_capacity || 'N/A'} kWh</p>
-                <p class="flex items-center">Max Charging: ${car.max_charging || 'N/A'} kW</p>
-                <p class="flex items-center">Doors: ${car.doors || 'N/A'}</p>
-                <p class="flex items-center">Shopping Bags: ${car.shopping_bags || 'N/A'}</p>
-                <p class="flex items-center">Odometer: ${car.mileage !== undefined ? `${car.mileage} km` : 'N/A'}</p>
-            `;
-
-            environmentData.innerHTML = `
-                <p class="flex items-center">Fuel Consumption: ${car.fuel_consumption !== undefined ? `${car.fuel_consumption}` : 'N/A'} L/100km</p>
-                <p class="flex items-center">CO2 Emissions: ${car.co2_emissions || 'N/A'} g/km</p>
-                <p class="flex items-center">Energy Efficiency: ${car.efficiency_rating || 'N/A'}</p>
-            `;
-
-            // Populate basis, safety, entertainment, and comfort details
-            populateDetailsList('basis-details', car.config_basis);
-            populateDetailsList('safety-details', car.config_safety);
-            populateDetailsList('entertainment-details', car.config_entertainment);
-            populateDetailsList('comfort-details', car.config_comfort);
-        }
-
-        // Helper function to populate details lists
-        function populateDetailsList(elementId, items) {
-            const element = document.getElementById(elementId);
-            if (items && items.length > 0) {
-                element.innerHTML = items.map(item => `<li>${item}</li>`).join('');
-            } else {
-                element.innerHTML = '<li>No data available</li>';
-            }
-        }
-
-        // Populate subscription options
-        function populateSubscriptionOptions(options) {
-            populateSelect('color', options.colors);
-            populateSelect('insurancePackage', options.insurancePackages);
-            populateSelect('minTerm', options.subscriptionLengths.map(length => `${length} Months`));
-            populateSelect('kmPerMonth', options.subscriptionMileages.map(mileage => `${mileage} km`));
-            populateSelect('delivery', options.locations.map(location => `Pick-up at ${location}`));
-            
-            document.getElementById('adminFee').textContent = options.administrationFee !== undefined ? options.administrationFee : 'N/A';
-            document.getElementById('deposit').textContent = options.deposit !== undefined ? options.deposit : 'N/A';
-            document.getElementById('monthlyFee').textContent = options.monthlyFee !== undefined ? options.monthlyFee : 'N/A';
-            document.getElementById('extraKmCost').textContent = options.excessMileageFee !== undefined ? options.excessMileageFee : 'N/A';
-        }
-
-        // Helper function to populate select dropdowns
-        function populateSelect(selectId, items) {
-            const selectElement = document.getElementById(selectId);
-            if (selectElement) {
-                selectElement.innerHTML = items.map(item => `<option value="${item}">${item}</option>`).join('');
-            }
-        }
-
-        // Update breadcrumb navigation
-        function updateBreadcrumb(car) {
-            const breadcrumbLink = document.getElementById('breadcrumb-car-link');
-            breadcrumbLink.href = `car-details.html?carId=${car.car_id}`;
-            breadcrumbLink.textContent = `${car.manufacturer} ${car.model_name}`;
-        }
-
-        // Save subscription options to localStorage
-        function saveSubscriptionOptions() {
-            const subscriptionOptions = {
-                color: document.getElementById('color').value,
-                packageType: document.getElementById('packageType').value,
-                minTerm: document.getElementById('minTerm').value,
-                kmPerMonth: document.getElementById('kmPerMonth').value,
-                insurancePackage: document.getElementById('insurancePackage').value,
-                delivery: document.getElementById('delivery').value
-            };
-
-            localStorage.setItem('subscriptionOptions', JSON.stringify(subscriptionOptions));
-            window.location.href = `personal_data.html?carId=${new URLSearchParams(window.location.search).get('carId')}`;
-        }
+    
     </script>
     <script type="module" src="js/main.js"></script>
 </body>

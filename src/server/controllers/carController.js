@@ -5,7 +5,6 @@ const { Pool } = pkg;
 const pool = new Pool(config.db);
 
 // getPopularCars
-
 export async function getPopularCars(req, res) {
     try {
         const client = await pool.connect();
@@ -39,13 +38,13 @@ export async function getPopularCars(req, res) {
         res.json(result.rows);
         client.release();
     } catch (err) {
-        console.error('Error fetching popular cars:', err);
-        res.status(500).json({ error: 'Database query failed' });
+        console.error('Error fetching popular cars:', err.message);
+        res.status(500).json({ error: 'Database query failed', details: err.message });
     }
 }
 
 
-// getCars
+// carController.js
 export async function getCars(req, res) {
     const { brand, vehicleType, fuel, transmission, drive, color, availability, limit } = req.query;
 
@@ -108,52 +107,76 @@ export async function getCars(req, res) {
         res.json(result.rows);
         client.release();
     } catch (err) {
-        console.error('Error fetching cars:', err);
-        res.status(500).json({ error: 'Database query failed' });
+        console.error('Error fetching cars:', err.message);
+        res.status(500).json({ error: 'Database query failed', details: err.message });
     }
 }
 
 
-
-//getCarDetails
-
-// Example endpoint: /api/car-details/:carId
+// Get Car Details
 export async function getCarDetails(req, res) {
     const carId = req.params.carId;
 
     try {
         const client = await pool.connect();
-
-        const carDetailsQuery = `
+        const query = `
             SELECT 
-                c.car_id, cm.model_name, cm.manufacturer, p.monthly_payment, c.mileage, col.color_name,
-                ft.fuel_type_name, tt.transmission_name, dt.drive_type_name, cm.seats, cs.status_name,
-                p.administration_fee, p.deposit, p.insurance_package, p.mileage_plan, p.monthly_payment
+                c.car_id, 
+                cm.model_name, 
+                cm.manufacturer, 
+                cm.description,
+                col.color_name AS color, 
+                cm.trailer_hitch, 
+                tt.transmission_name, 
+                dt.drive_type_name, 
+                cm.seats, 
+                cm.doors, 
+                ft.fuel_type_name, 
+                vt.vehicle_type_name, 
+                cm.is_electric, 
+                es.battery_capacity, 
+                es.max_charging, 
+                fs.fuel_tank_capacity, 
+                fs.fuel_consumption, 
+                fs.horse_power, 
+                fs.engine_size, 
+                fs.co2_emissions, 
+                images.images,  -- Aggregated images from subquery
+                cm.config_basis, 
+                cm.config_safety,  
+                cm.config_entertainment,  
+                cm.config_comfort  
             FROM cars c
             JOIN car_models cm ON c.model_id = cm.model_id
-            LEFT JOIN car_pricing cp ON c.car_id = cp.car_id
-            LEFT JOIN pricing p ON cp.pricing_id = p.pricing_id
             LEFT JOIN colors col ON c.color_id = col.color_id
-            LEFT JOIN fuel_types ft ON cm.fuel_type_id = ft.fuel_type_id
             LEFT JOIN transmission_types tt ON cm.transmission_type_id = tt.transmission_type_id
             LEFT JOIN drive_types dt ON cm.drive_type_id = dt.drive_type_id
-            LEFT JOIN car_status_types cs ON c.status_id = cs.status_id
+            LEFT JOIN fuel_types ft ON cm.fuel_type_id = ft.fuel_type_id
+            LEFT JOIN vehicle_types vt ON cm.vehicle_type_id = vt.vehicle_type_id
+            LEFT JOIN electric_specs es ON cm.model_id = es.model_id
+            LEFT JOIN fuel_specs fs ON cm.model_id = fs.model_id
+            LEFT JOIN (
+                SELECT model_id, array_agg(image_url) AS images
+                FROM car_model_images
+                GROUP BY model_id
+            ) images ON cm.model_id = images.model_id
             WHERE c.car_id = $1;
         `;
-
-        const result = await client.query(carDetailsQuery, [carId]);
-        const car = result.rows[0];
-
-        const carImagesQuery = `SELECT image_url FROM car_model_images WHERE model_id = $1;`;
-        const imagesResult = await client.query(carImagesQuery, [car.model_id]);
-
-        car.images = imagesResult.rows.map(row => row.image_url);
-
-        res.json(car);
+        const result = await client.query(query, [carId]);
         client.release();
+
+        if (result.rows.length > 0) {
+            res.json(result.rows[0]);
+        } else {
+            res.status(404).json({ error: 'Car not found' });
+        }
     } catch (error) {
-        console.error('Error fetching car details:', error);
-        res.status(500).json({ error: 'Database query failed' });
+        console.error('Error fetching car details:', error.message);
+        res.status(500).json({ error: 'Failed to fetch car details', details: error.message });
     }
 }
+
+
+
+
 

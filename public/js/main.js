@@ -1,7 +1,11 @@
+// src/public/js/main.js
+
+// Import necessary functions from other modules
 import { fetchPopularCars } from './fetchPopularCars.js';
 import { fetchAllCars } from './fetchAllCars.js';
 import { fetchFilters } from './fetchFilters.js';
-import { fetchCarDetailsAndOptions } from './fetchCarDetails.js';
+import { fetchCarDetails } from './fetchCarDetails.js';
+import { fetchSubscriptionOptions } from './fetchSubscriptionOptions.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     console.log("DOM fully loaded and parsed");
@@ -26,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else if (document.getElementById('vehicleList')) {
         loadFiltersAndCars();
     } else if (window.location.pathname.includes('car-details.html')) {
-        loadCarDetails();
+        loadCarDetails();  // New function for loading car details
     }
 
     // Reset filters button functionality
@@ -60,8 +64,16 @@ async function loadPopularCars() {
     try {
         const cachedCars = sessionStorage.getItem('popularCars');
         if (cachedCars) {
-            displayPopularCars(JSON.parse(cachedCars));
+            const parsedCars = JSON.parse(cachedCars);
+            if (Array.isArray(parsedCars) && parsedCars.length > 0) {
+                console.log('Using cached popular cars:', parsedCars);
+                displayPopularCars(parsedCars);
+            } else {
+                console.warn('Cached popular cars data is invalid, refetching from server...');
+                await fetchAndCachePopularCars();
+            }
         } else {
+            console.log('No cached popular cars found, fetching from server...');
             await fetchAndCachePopularCars();
         }
     } catch (error) {
@@ -73,11 +85,14 @@ async function loadPopularCars() {
 async function fetchAndCachePopularCars() {
     try {
         const cars = await fetchPopularCars();
-        if (cars) {
+        console.log('Fetched popular cars:', cars);
+
+        if (Array.isArray(cars) && cars.length > 0) {
             sessionStorage.setItem('popularCars', JSON.stringify(cars));
+            console.log('Popular cars cached successfully');
             displayPopularCars(cars);
         } else {
-            throw new Error('Fetched popular cars data is invalid.');
+            throw new Error('Fetched popular cars data is invalid or empty.');
         }
     } catch (error) {
         console.error('Error fetching popular cars:', error);
@@ -115,6 +130,7 @@ function displayPopularCars(cars) {
         console.error("Car cards container element not found in the DOM.");
     }
 }
+
 
 /* ==========================
    FILTERS AND CARS LOGIC
@@ -201,87 +217,348 @@ function displayCars(cars) {
    CAR DETAILS LOGIC
 ========================== */
 
-// Load car details from session storage or fetch if not available
 async function loadCarDetails() {
     const urlParams = new URLSearchParams(window.location.search);
     const carId = urlParams.get('carId');
 
     if (!carId) {
-        showError('Car ID not found in the URL.');
+        console.error('Car ID not found in the URL.');
         return;
     }
 
-    const cachedCarData = sessionStorage.getItem(`carDetails_${carId}`);
-    let carData;
-
-    if (cachedCarData) {
-        carData = JSON.parse(cachedCarData);
+    const carData = await fetchCarDetails(carId);
+    if (carData) {
+        sessionStorage.setItem(`carDetails_${carId}`, JSON.stringify(carData));
+        populateCarDetails(carData);
     } else {
-        carData = await fetchCarDetailsAndOptions(carId);
-        if (carData) {
-            sessionStorage.setItem(`carDetails_${carId}`, JSON.stringify(carData));
+        console.error('Failed to load car details.');
+        return;
+    }
+
+    // Fetch and populate subscription options
+    const subscriptionOptions = await fetchSubscriptionOptions();
+    if (subscriptionOptions && subscriptionOptions.pricing) {
+        const defaultPricing = subscriptionOptions.pricing[0];
+        document.getElementById('monthlyFee').textContent = `${defaultPricing.price} €`;
+        document.getElementById('deposit').textContent = `${defaultPricing.deposit} €`;
+        document.getElementById('adminFee').textContent = `${defaultPricing.administration_fee} €`;
+        document.getElementById('excessMileageFee').textContent = `${defaultPricing.excess_mileage_fee} €/km`;
+    }
+    populateSubscriptionOptions(subscriptionOptions);
+}
+
+
+
+
+/* ==========================
+   populateCarDetails LOGIC
+========================== */
+
+function populateCarDetails(car) {
+    const defaultImage = "https://picsum.photos/600/360?random=3"; // Default image URL
+
+    if (!car) {
+        console.error('Car data is missing.');
+        showError('Failed to load car details. Please try again later.');
+        return;
+    }
+
+    // Set car title and description
+    const carTitle = document.getElementById('car-title');
+    if (carTitle) {
+        carTitle.textContent = `${car.manufacturer} ${car.model_name}`;
+    }
+
+    const carDescription = document.getElementById('car-description');
+    if (carDescription) {
+        carDescription.textContent = car.description || 'No description available.';
+    }
+
+    // Set car images with fallback to at least three images
+    const carImagesContainer = document.getElementById('car-images');
+    if (carImagesContainer) {
+        const imageUrls = (car.images && car.images.length > 0)
+            ? car.images
+            : [defaultImage, defaultImage, defaultImage]; // Ensure at least three images
+
+        carImagesContainer.innerHTML = imageUrls.slice(0, 3).map(url => `
+            <img src="${url}" alt="${car.model_name}" class="h-auto max-w-full rounded bg-cover mb-4">
+        `).join('');
+    }
+
+    // Populate technical data
+    const technicalData = document.getElementById('technical-data');
+    if (technicalData) {
+        technicalData.innerHTML = `
+            <p>Color: ${car.color || 'N/A'}</p>
+            <p>Trailer Hitch: ${car.trailer_hitch ? 'Yes' : 'No'}</p>
+            <p>Transmission: ${car.transmission_name || 'N/A'}</p>
+            <p>Drive: ${car.drive_type_name || 'N/A'}</p>
+            <p>Fuel Type: ${car.fuel_type_name || 'N/A'}</p>
+            <p>Seats: ${car.seats || 'N/A'}</p>
+            <p>Doors: ${car.doors || 'N/A'}</p>
+            <p>Vehicle Type: ${car.vehicle_type_name || 'N/A'}</p>
+        `;
+    }
+
+    // Populate environment data based on whether the car is electric or fuel-based
+    const environmentData = document.getElementById('environment-data');
+    if (environmentData) {
+        if (car.is_electric) {
+            environmentData.innerHTML = `
+                <p>Battery Capacity: ${car.battery_capacity || 'N/A'} kWh</p>
+                <p>Max Charging: ${car.max_charging || 'N/A'} kW</p>
+            `;
         } else {
-            showError('Failed to load car details. Please try again later.');
-            return;
+            environmentData.innerHTML = `
+                <p>Fuel Tank Capacity: ${car.fuel_tank_capacity || 'N/A'} liters</p>
+                <p>Fuel Consumption: ${car.fuel_consumption || 'N/A'} L/100km</p>
+                <p>Horse Power: ${car.horse_power || 'N/A'} HP</p>
+                <p>Engine Size: ${car.engine_size || 'N/A'} L</p>
+                <p>CO2 Emissions: ${car.co2_emissions || 'N/A'} g/km</p>
+            `;
         }
     }
 
-    populateCarDetails(carData);
-    populateSubscriptionOptions(carData);
+    // Populate other details
+    populateDetailsList('basis-details', car.config_basis || []);
+    populateDetailsList('safety-details', car.config_safety || []);
+    populateDetailsList('entertainment-details', car.config_entertainment || []);
+    populateDetailsList('comfort-details', car.config_comfort || []);
 }
 
-// Populate car details in the UI
-function populateCarDetails(car) {
-    document.getElementById('car-title').textContent = `${car.manufacturer} ${car.model_name}`;
-
-    const carImagesContainer = document.getElementById('car-images');
-    carImagesContainer.innerHTML = car.images.map(image => `
-        <img src="${image}" alt="${car.model_name}" class="h-auto max-w-full rounded bg-cover mb-4">
-    `).join('');
-
-    const technicalData = document.getElementById('technical-data');
-    technicalData.innerHTML = `
-        <p>Transmission: ${car.transmission_name || 'N/A'}</p>
-        <p>Drive: ${car.drive_type_name || 'N/A'}</p>
-        <p>Fuel Type: ${car.fuel_type_name || 'N/A'}</p>
-        <p>Horse Power: ${car.horse_power || 'N/A'}</p>
-        <p>Seats: ${car.seats || 'N/A'}</p>
-    `;
-
-    const environmentData = document.getElementById('environment-data');
-    environmentData.innerHTML = `
-        <p>Fuel Consumption: ${car.fuel_consumption || 'N/A'} L/100km</p>
-        <p>CO2 Emissions: ${car.co2_emissions || 'N/A'} g/km</p>
-    `;
-
-    populateDetailsList('basis-details', car.config_basis);
-    populateDetailsList('safety-details', car.config_safety);
-    populateDetailsList('entertainment-details', car.config_entertainment);
-    populateDetailsList('comfort-details', car.config_comfort);
-}
-
-// Populate subscription options in the UI
-function populateSubscriptionOptions(car) {
-    document.getElementById('mileage-plan').textContent = car.subscription_options.mileage_plan || 'N/A';
-    document.getElementById('car-insurance').textContent = `${car.subscription_options.insurance_package || 'N/A'} €`;
-    document.getElementById('admin-fee').textContent = `${car.subscription_options.administration_fee || 'N/A'} €`;
-    document.getElementById('first-payment').textContent = `${car.subscription_options.deposit || 'N/A'} €`;
-    document.getElementById('monthly-fee').textContent = `${car.subscription_options.monthly_payment || 'N/A'} € per month`;
-}
-
-// Helper to populate car detail lists (basis, safety, etc.)
 function populateDetailsList(elementId, items) {
     const element = document.getElementById(elementId);
-    element.innerHTML = items.length > 0 ? items.map(item => `<li>${item}</li>`).join('') : '<li>No data available</li>';
+    if (element) {
+        element.innerHTML = items.length > 0
+            ? items.map(item => `<li>${item}</li>`).join('')
+            : '<li>No data available</li>';
+    } else {
+        console.error(`Element with ID ${elementId} not found.`);
+    }
 }
 
-// Display an error message on the car details page
-function showError(message) {
-    const errorContainer = document.createElement('div');
-    errorContainer.classList.add('bg-red-500', 'text-white', 'p-4', 'rounded', 'mb-4');
-    errorContainer.textContent = message;
-    document.body.prepend(errorContainer);
+function populateMileagePlans(mileagePlans) {
+    const mileageSelect = document.getElementById('mileagePlans');
+    mileageSelect.innerHTML = ''; // Clear existing options
+
+    mileagePlans.forEach(plan => {
+        const option = document.createElement('option');
+        option.value = plan.plan_id;
+        option.textContent = `${plan.kilometers} KM`;
+        if (plan.price_modifier > 0) {
+            option.textContent += ` (+${plan.price_modifier} CHF)`;
+        }
+        mileageSelect.appendChild(option);
+    });
 }
+
+function populateSubscriptionDurations(durations) {
+    const durationSelect = document.getElementById('subscriptionDurations');
+    durationSelect.innerHTML = ''; // Clear existing options
+
+    durations.forEach(duration => {
+        const option = document.createElement('option');
+        option.value = duration.duration_id;
+        option.textContent = `Min. ${duration.months} Months`;
+        if (duration.price_modifier > 0) {
+            option.textContent += ` (+${duration.price_modifier} €)`;
+        }
+        durationSelect.appendChild(option);
+    });
+}
+
+function populateInsurancePackages(packages) {
+    const insuranceSelect = document.getElementById('insurancePackages');
+    insuranceSelect.innerHTML = ''; // Clear existing options
+
+    packages.forEach(pkg => {
+        const option = document.createElement('option');
+        option.value = pkg.insurance_package_id;
+        option.textContent = `${pkg.package_name}`;
+        if (pkg.price_modifier > 0) {
+            option.textContent += ` (+${pkg.price_modifier} CHF)`;
+        }
+        insuranceSelect.appendChild(option);
+    });
+}
+
+/* ==========================
+   SUBSCRIPTION LOGIC
+========================== */
+
+async function populateSubscriptionOptions(options) {
+    if (!options) {
+        console.error('Subscription options data is missing.');
+        return;
+    }
+
+    // Store options in session storage for future use
+    sessionStorage.setItem('subscriptionOptions', JSON.stringify(options));
+
+    // Populate color options
+    const colorSelect = document.getElementById('color');
+    if (colorSelect && options.colors) {
+        colorSelect.innerHTML = '';
+        options.colors.forEach(color => {
+            const opt = document.createElement('option');
+            opt.value = color.color_name;
+            opt.textContent = color.color_name;
+            colorSelect.appendChild(opt);
+        });
+    }
+
+    // Populate package type options
+    const packageTypeSelect = document.getElementById('packageType');
+    if (packageTypeSelect && options.packageTypes) {
+        packageTypeSelect.innerHTML = '';
+        options.packageTypes.forEach(packageType => {
+            const opt = document.createElement('option');
+            opt.value = packageType.package_type_id;
+            const priceModifierText = packageType.price_modifier > 0 
+                ? ` (+${packageType.price_modifier} €)` 
+                : '';
+            opt.textContent = `${packageType.package_name}${priceModifierText}`;
+            packageTypeSelect.appendChild(opt);
+        });
+    }
+
+    // Populate subscription duration options
+    const minTermSelect = document.getElementById('minTerm');
+    if (minTermSelect && options.subscriptionDurations) {
+        minTermSelect.innerHTML = '';
+        options.subscriptionDurations.forEach(duration => {
+            const opt = document.createElement('option');
+            opt.value = duration.duration_id;
+            const priceModifierText = duration.price_modifier > 0 
+                ? ` (+${duration.price_modifier} €)` 
+                : '';
+            opt.textContent = `${duration.months} months${priceModifierText}`;
+            minTermSelect.appendChild(opt);
+        });
+    }
+
+    // Populate mileage plans
+    const mileagePlansSelect = document.getElementById('mileagePlans');
+    if (mileagePlansSelect && options.mileagePlans) {
+        mileagePlansSelect.innerHTML = '';
+        options.mileagePlans.forEach(plan => {
+            const opt = document.createElement('option');
+            opt.value = plan.plan_id;
+            const priceModifierText = plan.price_modifier > 0 
+                ? ` (+${plan.price_modifier} €)` 
+                : '';
+            opt.textContent = `${plan.kilometers} km/month${priceModifierText}`;
+            mileagePlansSelect.appendChild(opt);
+        });
+    }
+
+    // Populate insurance packages
+    const insurancePackagesSelect = document.getElementById('insurancePackages');
+    if (insurancePackagesSelect && options.insurancePackages) {
+        insurancePackagesSelect.innerHTML = '';
+        options.insurancePackages.forEach(insurancePkg => {
+            const opt = document.createElement('option');
+            opt.value = insurancePkg.insurance_package_id;
+            const priceModifierText = insurancePkg.price_modifier > 0 
+                ? ` (+${insurancePkg.price_modifier} €)` 
+                : '';
+            opt.textContent = `${insurancePkg.package_name}${priceModifierText}`;
+            insurancePackagesSelect.appendChild(opt);
+        });
+    }
+
+    // Populate delivery or pickup options
+    const deliverySelect = document.getElementById('delivery');
+    if (deliverySelect && options.deliveryOptions) {
+        deliverySelect.innerHTML = '';
+        options.deliveryOptions.forEach(deliveryOption => {
+            const opt = document.createElement('option');
+            opt.value = deliveryOption.option_id;
+            const priceModifierText = deliveryOption.price_modifier > 0 
+                ? ` (+${deliveryOption.price_modifier} €)` 
+                : '';
+            opt.textContent = `${deliveryOption.option_name}${priceModifierText}`;
+            deliverySelect.appendChild(opt);
+        });
+    }
+
+    // Calculate and display the fees
+    calculatePricing(); // Call unified function
+}
+
+/* ==========================
+   PRICING LOGIC
+========================== */
+
+function calculatePricing() {
+    const options = JSON.parse(sessionStorage.getItem('subscriptionOptions'));
+
+    if (!options) {
+        console.error('No subscription options found in session storage.');
+        return;
+    }
+
+    // Get selected values
+    const packageType = document.getElementById('packageType').selectedOptions[0].text.split(' ')[0];
+    const durationMonths = parseInt(document.getElementById('minTerm').selectedOptions[0].text.split(' ')[0], 10);
+    const kilometers = parseInt(document.getElementById('mileagePlans').selectedOptions[0].text.split(' ')[0], 10);
+    const insurancePackage = document.getElementById('insurancePackages').selectedOptions[0].text.split(' ')[0];
+
+    console.log("Selected values:", {
+        packageType,
+        durationMonths,
+        kilometers,
+        insurancePackage
+    });
+
+    // Initialize fee variables
+    let baseFee = 0;
+    let deposit = 0;
+    let adminFee = 0;
+    let excessMileageFee = 0;
+
+    // Find the matching pricing option based on the selected values
+    const matchingPricing = options.pricing.find(pricing => {
+        console.log("Checking pricing:", pricing);
+        return (
+            pricing.subscription_duration == durationMonths &&
+            pricing.kilometers == kilometers &&
+            pricing.insurance_package_name == insurancePackage &&
+            pricing.package_type == packageType
+        );
+    });
+
+    if (matchingPricing) {
+        baseFee = matchingPricing.price;
+        deposit = matchingPricing.deposit;
+        adminFee = matchingPricing.administration_fee;
+        excessMileageFee = matchingPricing.excess_mileage_fee;
+    } else {
+        console.error('No matching pricing found for the selected options.');
+    }
+
+    // Log the final calculated fees
+    console.log("Calculated fees:", {
+        baseFee,
+        deposit,
+        adminFee,
+        excessMileageFee
+    });
+
+    // Update the fee elements on the UI
+    document.getElementById('monthlyFee').textContent = `${baseFee} €`;
+    document.getElementById('deposit').textContent = `${deposit} €`;
+    document.getElementById('adminFee').textContent = `${adminFee} €`;
+    document.getElementById('excessMileageFee').textContent = `${excessMileageFee} €/km`;
+}
+
+// Add event listeners to trigger pricing calculation on change
+document.getElementById('packageType').addEventListener('change', calculatePricing);
+document.getElementById('minTerm').addEventListener('change', calculatePricing);
+document.getElementById('mileagePlans').addEventListener('change', calculatePricing);
+document.getElementById('insurancePackages').addEventListener('change', calculatePricing);
+document.getElementById('delivery').addEventListener('change', calculatePricing);
 
 /* ==========================
    MISCELLANEOUS LOGIC
