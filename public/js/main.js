@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     sessionStorage.removeItem('popularCars');
     sessionStorage.removeItem('cars');
     sessionStorage.removeItem('carDetails');
+    sessionStorage.removeItem('subscriptionOptions');
 
     // Mobile menu toggle
     const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -226,6 +227,7 @@ async function loadCarDetails() {
         return;
     }
 
+    // Fetch car details
     const carData = await fetchCarDetails(carId);
     if (carData) {
         sessionStorage.setItem(`carDetails_${carId}`, JSON.stringify(carData));
@@ -237,14 +239,36 @@ async function loadCarDetails() {
 
     // Fetch and populate subscription options
     const subscriptionOptions = await fetchSubscriptionOptions();
-    if (subscriptionOptions && subscriptionOptions.pricing) {
+    
+    // Debugging: Log the entire subscriptionOptions object
+    console.log('Subscription options received:', subscriptionOptions);
+
+    // Ensure subscriptionOptions and pricing data are valid
+    if (subscriptionOptions && Array.isArray(subscriptionOptions.pricing) && subscriptionOptions.pricing.length > 0) {
         const defaultPricing = subscriptionOptions.pricing[0];
-        document.getElementById('monthlyFee').textContent = `${defaultPricing.price} €`;
-        document.getElementById('deposit').textContent = `${defaultPricing.deposit} €`;
-        document.getElementById('adminFee').textContent = `${defaultPricing.administration_fee} €`;
-        document.getElementById('excessMileageFee').textContent = `${defaultPricing.excess_mileage_fee} €/km`;
+        console.log('Default pricing found:', defaultPricing);
+        updatePricingUI(defaultPricing);
+    } else {
+        console.error('No valid pricing data found.');
+        updatePricingUI(null); // Pass null to trigger fallback
     }
+
+    // Populate the rest of the subscription options
     populateSubscriptionOptions(subscriptionOptions);
+}
+
+function updatePricingUI(pricing) {
+    if (pricing) {
+        document.getElementById('monthlyFee').textContent = `${pricing.price} €`;
+        document.getElementById('deposit').textContent = `${pricing.deposit} €`;
+        document.getElementById('adminFee').textContent = `${pricing.administration_fee} €`;
+        document.getElementById('excessMileageFee').textContent = `${pricing.excess_mileage_fee} €/km`;
+    } else {
+        document.getElementById('monthlyFee').textContent = 'N/A';
+        document.getElementById('deposit').textContent = 'N/A';
+        document.getElementById('adminFee').textContent = 'N/A';
+        document.getElementById('excessMileageFee').textContent = 'N/A';
+    }
 }
 
 
@@ -443,15 +467,22 @@ async function populateSubscriptionOptions(options) {
     if (mileagePlansSelect && options.mileagePlans) {
         mileagePlansSelect.innerHTML = '';
         options.mileagePlans.forEach(plan => {
+            console.log('Mileage Plan:', plan); // Log the entire plan object
+
             const opt = document.createElement('option');
             opt.value = plan.plan_id;
-            const priceModifierText = plan.price_modifier > 0 
-                ? ` (+${plan.price_modifier} €)` 
+
+            // Ensure price_modifier is treated as a number
+            const priceModifier = parseFloat(plan.price_modifier);
+            const priceModifierText = priceModifier > 0 
+                ? ` (+${priceModifier} €)` 
                 : '';
+
             opt.textContent = `${plan.kilometers} km/month${priceModifierText}`;
             mileagePlansSelect.appendChild(opt);
         });
-    }
+}
+
 
     // Populate insurance packages
     const insurancePackagesSelect = document.getElementById('insurancePackages');
@@ -512,15 +543,9 @@ function calculatePricing() {
         insurancePackage
     });
 
-    // Initialize fee variables
-    let baseFee = 0;
-    let deposit = 0;
-    let adminFee = 0;
-    let excessMileageFee = 0;
-
     // Find the matching pricing option based on the selected values
     const matchingPricing = options.pricing.find(pricing => {
-        console.log("Checking pricing:", pricing);
+        console.log("Checking pricing option:", pricing);
         return (
             pricing.subscription_duration == durationMonths &&
             pricing.kilometers == kilometers &&
@@ -530,35 +555,14 @@ function calculatePricing() {
     });
 
     if (matchingPricing) {
-        baseFee = matchingPricing.price;
-        deposit = matchingPricing.deposit;
-        adminFee = matchingPricing.administration_fee;
-        excessMileageFee = matchingPricing.excess_mileage_fee;
+        console.log('Matching pricing found:', matchingPricing);
+        updatePricingUI(matchingPricing);
     } else {
         console.error('No matching pricing found for the selected options.');
+        updatePricingUI(null); // Pass null to trigger fallback
     }
-
-    // Log the final calculated fees
-    console.log("Calculated fees:", {
-        baseFee,
-        deposit,
-        adminFee,
-        excessMileageFee
-    });
-
-    // Update the fee elements on the UI
-    document.getElementById('monthlyFee').textContent = `${baseFee} €`;
-    document.getElementById('deposit').textContent = `${deposit} €`;
-    document.getElementById('adminFee').textContent = `${adminFee} €`;
-    document.getElementById('excessMileageFee').textContent = `${excessMileageFee} €/km`;
 }
 
-// Add event listeners to trigger pricing calculation on change
-document.getElementById('packageType').addEventListener('change', calculatePricing);
-document.getElementById('minTerm').addEventListener('change', calculatePricing);
-document.getElementById('mileagePlans').addEventListener('change', calculatePricing);
-document.getElementById('insurancePackages').addEventListener('change', calculatePricing);
-document.getElementById('delivery').addEventListener('change', calculatePricing);
 
 /* ==========================
    MISCELLANEOUS LOGIC

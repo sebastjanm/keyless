@@ -30,7 +30,7 @@ export async function getSubscriptionOptions(req, res) {
         const deliveryOptionsQuery = `SELECT option_id, option_name, price_modifier FROM delivery_options;`;
         const deliveryOptionsResult = await client.query(deliveryOptionsQuery);
 
-        // Fetch default pricing options based on carId
+        // Fetch default pricing based on carId
         const carId = req.params.carId;
         const pricingQuery = `
             SELECT 
@@ -48,10 +48,13 @@ export async function getSubscriptionOptions(req, res) {
             JOIN mileage_plans mp ON p.mileage_plan_id = mp.plan_id
             JOIN package_types pt ON p.package_type_id = pt.package_type_id
             WHERE p.car_id = $1
-            ORDER BY p.default_option DESC
+            AND p.default_pricing = TRUE
             LIMIT 1;
         `;
         const pricingResult = await client.query(pricingQuery, [carId]);
+
+        // Debugging: Ensure pricing data is retrieved
+        console.log("Pricing result for carId", carId, ":", pricingResult.rows);
 
         // Aggregate all data
         const subscriptionOptions = {
@@ -61,8 +64,10 @@ export async function getSubscriptionOptions(req, res) {
             mileagePlans: mileagePlansResult.rows,
             packageTypes: packageTypesResult.rows,
             deliveryOptions: deliveryOptionsResult.rows,
-            pricing: pricingResult.rows,  // Include default pricing data
+            pricing: pricingResult.rows,  // Include pricing data
         };
+
+        console.log("Subscription options being sent:", subscriptionOptions);
 
         client.release();
         res.json(subscriptionOptions);
@@ -71,11 +76,6 @@ export async function getSubscriptionOptions(req, res) {
         res.status(500).json({ error: 'Failed to fetch subscription options', details: error.message });
     }
 }
-
-
-
-
-
 
 
 

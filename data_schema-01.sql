@@ -207,3 +207,10 @@ CREATE TABLE payments (
     payment_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     stripe_payment_id VARCHAR(100) UNIQUE NOT NULL  -- Stripe payment identifier
 );
+
+ALTER TABLE pricing 
+ADD COLUMN default_pricing BOOLEAN DEFAULT FALSE;
+
+CREATE UNIQUE INDEX unique_default_pricing_per_car 
+ON pricing (car_id) 
+WHERE default_pricing = TRUE;
