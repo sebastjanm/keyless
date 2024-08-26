@@ -96,15 +96,15 @@ export async function calculatePricing(req, res) {
         const pricingQuery = `
             SELECT 
                 p.monthly_payment AS "Base Monthly Payment",
-                sd.price_modifier AS "Subscription Modifier",
-                mp.price_modifier AS "Mileage Modifier",
-                ip.price_modifier AS "Insurance Modifier",
-                pt.price_modifier AS "Package Modifier",
-                p.monthly_payment + 
-                sd.price_modifier + 
-                mp.price_modifier + 
-                ip.price_modifier + 
-                pt.price_modifier AS "Final Monthly Payment",
+                COALESCE(sd.price_modifier, 0) AS "Subscription Modifier",
+                COALESCE(mp.price_modifier, 0) AS "Mileage Modifier",
+                COALESCE(ip.price_modifier, 0) AS "Insurance Modifier",
+                COALESCE(pt.price_modifier, 0) AS "Package Modifier",
+                (p.monthly_payment + 
+                COALESCE(sd.price_modifier, 0) + 
+                COALESCE(mp.price_modifier, 0) + 
+                COALESCE(ip.price_modifier, 0) + 
+                COALESCE(pt.price_modifier, 0)) AS "Final Monthly Payment",
                 p.deposit,
                 p.excess_mileage_fee,
                 p.administration_fee

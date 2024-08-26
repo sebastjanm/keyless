@@ -229,9 +229,13 @@ async function loadCarDetails() {
         return;
     }
 
+    // Store carId in sessionStorage for later use
+    sessionStorage.setItem('selectedCarId', carId);
+
     // Fetch car details
     const carData = await fetchCarDetails(carId);
     if (carData) {
+        // Store car details in sessionStorage
         sessionStorage.setItem(`carDetails_${carId}`, JSON.stringify(carData));
         populateCarDetails(carData);
     } else {
@@ -258,9 +262,6 @@ async function loadCarDetails() {
         console.error('Error loading car details:', error.message);
     }
 }
-
-
-
 
 
 /* ==========================
@@ -434,6 +435,9 @@ async function populateSubscriptionOptions(options) {
             opt.textContent = `${packageType.package_name}${priceModifierText}`;
             packageTypeSelect.appendChild(opt);
         });
+
+        // Add event listener to update pricing when package type changes
+        packageTypeSelect.addEventListener('change', calculatePricing);
     }
 
     // Populate subscription duration options
@@ -449,6 +453,9 @@ async function populateSubscriptionOptions(options) {
             opt.textContent = `${duration.months} months${priceModifierText}`;
             minTermSelect.appendChild(opt);
         });
+
+        // Add event listener to update pricing when subscription duration changes
+        minTermSelect.addEventListener('change', calculatePricing);
     }
 
     // Populate mileage plans
@@ -470,8 +477,10 @@ async function populateSubscriptionOptions(options) {
             opt.textContent = `${plan.kilometers} km/month${priceModifierText}`;
             mileagePlansSelect.appendChild(opt);
         });
-}
 
+        // Add event listener to update pricing when mileage plan changes
+        mileagePlansSelect.addEventListener('change', calculatePricing);
+    }
 
     // Populate insurance packages
     const insurancePackagesSelect = document.getElementById('insurancePackages');
@@ -486,6 +495,9 @@ async function populateSubscriptionOptions(options) {
             opt.textContent = `${insurancePkg.package_name}${priceModifierText}`;
             insurancePackagesSelect.appendChild(opt);
         });
+
+        // Add event listener to update pricing when insurance package changes
+        insurancePackagesSelect.addEventListener('change', calculatePricing);
     }
 
     // Populate delivery or pickup options
@@ -520,10 +532,25 @@ function calculatePricing() {
     }
 
     // Get selected values
-    const packageType = document.getElementById('packageType').selectedOptions[0].text.split(' ')[0];
-    const durationMonths = parseInt(document.getElementById('minTerm').selectedOptions[0].text.split(' ')[0], 10);
-    const kilometers = parseInt(document.getElementById('mileagePlans').selectedOptions[0].text.split(' ')[0], 10);
-    const insurancePackage = document.getElementById('insurancePackages').selectedOptions[0].text.split(' ')[0];
+    const packageTypeElement = document.getElementById('packageType');
+    const minTermElement = document.getElementById('minTerm');
+    const mileagePlansElement = document.getElementById('mileagePlans');
+    const insurancePackagesElement = document.getElementById('insurancePackages');
+
+    if (!packageTypeElement || !minTermElement || !mileagePlansElement || !insurancePackagesElement) {
+        console.error('One or more select elements are missing.');
+        return;
+    }
+
+    const packageType = packageTypeElement.selectedOptions[0]?.text.split(' ')[0];
+    const durationMonths = parseInt(minTermElement.selectedOptions[0]?.text.split(' ')[0], 10);
+    const kilometers = parseInt(mileagePlansElement.selectedOptions[0]?.text.split(' ')[0], 10);
+    const insurancePackage = insurancePackagesElement.selectedOptions[0]?.text.split(' ')[0];
+
+    if (!packageType || isNaN(durationMonths) || isNaN(kilometers) || !insurancePackage) {
+        console.error('One or more selected values are invalid.');
+        return;
+    }
 
     console.log("Selected values:", {
         packageType,
@@ -532,25 +559,31 @@ function calculatePricing() {
         insurancePackage
     });
 
-    // Find the matching pricing option based on the selected values
-    const matchingPricing = options.pricing.find(pricing => {
-        console.log("Checking pricing option:", pricing);
-        return (
-            pricing.subscription_duration == durationMonths &&
-            pricing.kilometers == kilometers &&
-            pricing.insurance_package_name == insurancePackage &&
-            pricing.package_type == packageType
-        );
-    });
+    // Calculate the final price based on the base price and modifiers
+    const basePrice = parseFloat(options.pricing[0]?.price) || 0;
+    const packageTypeModifier = parseFloat(options.packageTypes.find(pt => pt.package_name === packageType)?.price_modifier) || 0;
+    const durationModifier = parseFloat(options.subscriptionDurations.find(d => d.months === durationMonths)?.price_modifier) || 0;
+    const kilometersModifier = parseFloat(options.mileagePlans.find(mp => mp.kilometers === kilometers)?.price_modifier) || 0;
+    const insuranceModifier = parseFloat(options.insurancePackages.find(ip => ip.package_name === insurancePackage)?.price_modifier) || 0;
 
-    if (matchingPricing) {
-        console.log('Matching pricing found:', matchingPricing);
-        updatePricingUI(matchingPricing);
-    } else {
-        console.error('No matching pricing found for the selected options.');
-        updatePricingUI(null); // Pass null to trigger fallback
-    }
+    const finalPrice = basePrice + packageTypeModifier + durationModifier + kilometersModifier + insuranceModifier;
+
+    console.log('Calculated final price:', finalPrice);
+
+    // Update the UI with the calculated price
+    updatePricingUI({
+        price: finalPrice.toFixed(2),
+        deposit: options.pricing[0]?.deposit || 'N/A',
+        administration_fee: options.pricing[0]?.administration_fee || 'N/A',
+        excess_mileage_fee: options.pricing[0]?.excess_mileage_fee || 'N/A'
+    });
 }
+
+
+
+/* ==========================
+   Update Pricing UI Logic
+========================== */
 
 function updatePricingUI(pricing) {
     try {
@@ -570,6 +603,161 @@ function updatePricingUI(pricing) {
         console.error('Error updating pricing UI:', error.message);
     }
 }
+
+/* ==========================
+   SAVE SUBSCRIPTION LOGIC
+========================== */
+
+function saveSubscriptionOptions() {
+    const carId = sessionStorage.getItem('selectedCarId');
+    const carDetails = JSON.parse(sessionStorage.getItem(`carDetails_${carId}`));
+
+    if (!carId || !carDetails) {
+        console.error('Car ID or car details are missing.');
+        return;
+    }
+
+    const selectedDurationId = document.getElementById('minTerm').value;
+    const selectedMileagePlanId = document.getElementById('mileagePlans').value;
+    const selectedInsurancePackageId = document.getElementById('insurancePackages').value;
+    const selectedDeliveryOptionId = document.getElementById('delivery').value;
+
+    const selectedSubscriptionData = {
+        carId: carId,
+        carDetails: carDetails,
+        subscriptionOptions: JSON.parse(sessionStorage.getItem('subscriptionOptions')),
+        selectedDurationId: selectedDurationId,
+        selectedMileagePlanId: selectedMileagePlanId,
+        selectedInsurancePackageId: selectedInsurancePackageId,
+        selectedDeliveryOptionId: selectedDeliveryOptionId,
+        calculatedPricing: {
+            monthlyFee: document.getElementById('monthlyFee').textContent,
+            deposit: document.getElementById('deposit').textContent,
+            adminFee: document.getElementById('adminFee').textContent,
+            excessMileageFee: document.getElementById('excessMileageFee').textContent
+        }
+    };
+
+    sessionStorage.setItem('selectedSubscription', JSON.stringify(selectedSubscriptionData));
+
+    // Redirect to personal_data.html
+    window.location.href = 'personal_data.html';
+}
+
+
+
+/* ==========================
+   POPULATE ORDER LOGIC
+========================== */
+
+function populateOrderOverview() {
+    const savedSubscription = JSON.parse(sessionStorage.getItem('selectedSubscription'));
+
+    if (savedSubscription) {
+        // Populate car image
+        const carImageElement = document.getElementById('carImage');
+        if (carImageElement) {
+            const carImages = savedSubscription.carDetails?.images;
+            carImageElement.src = Array.isArray(carImages) && carImages.length > 0 ? carImages[0] : 'https://picsum.photos/600/360?random=3';
+        }
+
+        // Populate car model and manufacturer
+        const carModelElement = document.getElementById('carModel');
+        if (carModelElement) {
+            carModelElement.textContent = `${savedSubscription.carDetails.manufacturer} ${savedSubscription.carDetails.model_name}`;
+        }
+
+        const carManufacturerElement = document.getElementById('carManufacturer');
+        if (carManufacturerElement) {
+            carManufacturerElement.textContent = savedSubscription.carDetails.manufacturer;
+        }
+
+        // Populate subscription details
+        const selectedDuration = savedSubscription.subscriptionOptions.subscriptionDurations.find(duration => duration.duration_id === parseInt(savedSubscription.selectedDurationId, 10));
+        const selectedMileagePlan = savedSubscription.subscriptionOptions.mileagePlans.find(plan => plan.plan_id === parseInt(savedSubscription.selectedMileagePlanId, 10));
+        const selectedInsurancePackage = savedSubscription.subscriptionOptions.insurancePackages.find(pkg => pkg.insurance_package_id === parseInt(savedSubscription.selectedInsurancePackageId, 10));
+        const selectedDeliveryOption = savedSubscription.subscriptionOptions.deliveryOptions.find(option => option.option_id === parseInt(savedSubscription.selectedDeliveryOptionId, 10));
+
+        const minTermElement = document.getElementById('minTerm');
+        if (minTermElement) {
+            minTermElement.textContent = selectedDuration ? `${selectedDuration.months} months` : 'Not specified';
+        }
+
+        const mileagePlansElement = document.getElementById('mileagePlans');
+        if (mileagePlansElement) {
+            mileagePlansElement.textContent = selectedMileagePlan ? `${selectedMileagePlan.kilometers} km/month` : 'Not specified';
+        }
+
+        const insurancePackagesElement = document.getElementById('insurancePackages');
+        if (insurancePackagesElement) {
+            insurancePackagesElement.textContent = selectedInsurancePackage ? selectedInsurancePackage.package_name : 'Not specified';
+        }
+
+        const deliveryElement = document.getElementById('delivery');
+        if (deliveryElement) {
+            deliveryElement.textContent = selectedDeliveryOption ? selectedDeliveryOption.option_name : 'Not specified';
+        }
+
+        // Populate pricing details
+        const adminFeeElement = document.getElementById('adminFee');
+        if (adminFeeElement) {
+            adminFeeElement.textContent = savedSubscription.calculatedPricing.adminFee;
+        }
+
+        const depositElement = document.getElementById('deposit');
+        if (depositElement) {
+            depositElement.textContent = savedSubscription.calculatedPricing.deposit;
+        }
+
+        const monthlyFeeElement = document.getElementById('monthlyFee');
+        if (monthlyFeeElement) {
+            monthlyFeeElement.textContent = savedSubscription.calculatedPricing.monthlyFee;
+        }
+    } else {
+        console.error('No subscription data found in session storage.');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.location.pathname.includes('personal_data.html')) {
+        populateOrderOverview();
+    }
+});
+
+
+/* ==========================
+   PERSONAL LOGIC
+========================== */
+
+function savePersonalInfo() {
+    // Collect personal data from the form
+    const personalData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        birthdate: document.getElementById('birthdate').value,
+        residenceStatus: document.getElementById('residenceStatus').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        postalCode: document.getElementById('postalCode').value,
+        country: document.getElementById('country').value
+    };
+
+    // Validate data (optional)
+    if (!personalData.firstName || !personalData.lastName || !personalData.email) {
+        alert('Please fill in all required fields.');
+        return;
+    }
+
+    // Save personal data to sessionStorage
+    sessionStorage.setItem('personalData', JSON.stringify(personalData));
+
+    // Redirect to the payment page
+    window.location.href = 'payment.html';
+}
+
+
 
 /* ==========================
    MISCELLANEOUS LOGIC
@@ -626,3 +814,6 @@ function resetFilters() {
     sessionStorage.removeItem('filterValues');
     fetchAllCars(); // Refresh car list with default filters
 }
+
+// At the end of main.js
+window.saveSubscriptionOptions = saveSubscriptionOptions;

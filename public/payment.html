@@ -188,106 +188,12 @@
         </div>
     </main>
 
-<!-- Footer -->
-<footer class="custom-footer-bg text-white py-10">
-    <div class="container mx-auto text-center">
-        <p>&copy; 2024 Subscribe2Go Car Subscription. All rights reserved.</p>
-        <div class="flex justify-center space-x-4 mt-4">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Contact Us</a>
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2023 Avant2go Keyless. All rights reserved.</p>
         </div>
-    </div>
-</footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const carId = urlParams.get('carId');
-            if (!carId) {
-                console.error('Car ID not found in the URL.');
-                return;
-            }
-
-            try {
-                const carDetailsResponse = await fetch(`/car-details/${carId}`);
-                if (!carDetailsResponse.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const car = await carDetailsResponse.json();
-                populateOrderOverview(car);
-                populateAllInclusive(car);
-                populatePersonalInfo();
-                updateBreadcrumb(car);
-            } catch (error) {
-                console.error('Error fetching details:', error);
-            }
-        });
-
-        function populateOrderOverview(car) {
-            const subscriptionOptions = JSON.parse(localStorage.getItem('subscriptionOptions'));
-            if (!subscriptionOptions) {
-                console.error('Subscription options not found.');
-                return;
-            }
-
-            document.getElementById('car-title').textContent = `${car.manufacturer} ${car.model}`;
-            document.getElementById('car-image').src = car.image;
-            document.getElementById('car-type').textContent = `Car Type: ${car.category_type}`;
-            document.getElementById('preferred-color').textContent = `Preferred Colour: ${subscriptionOptions.color}`;
-            document.getElementById('transmission').textContent = `Transmission: ${car.transmission}`;
-            document.getElementById('kilometer-options').textContent = `Kilometer Options: ${subscriptionOptions.kmPerMonth} km`;
-            document.getElementById('insurance-package').textContent = `Insurance Package: ${subscriptionOptions.insurancePackage}`;
-            document.getElementById('cost-extra-km').textContent = `Cost/extra KM: €${car.additional_cost_per_km !== undefined ? car.additional_cost_per_km : 'N/A'}`;
-            document.getElementById('delivery').textContent = `Delivery: ${subscriptionOptions.delivery}`;
-        }
-
-        function populateAllInclusive(car) {
-            const subscriptionOptions = JSON.parse(localStorage.getItem('subscriptionOptions'));
-            if (!subscriptionOptions) {
-                console.error('Subscription options not found.');
-                return;
-            }
-
-            const allInclusiveDetails = document.getElementById('all-inclusive-details');
-            allInclusiveDetails.innerHTML = `
-                <p>Min. Duration: ${subscriptionOptions.minTerm} months</p>
-                <p>Kilometers/Month: ${subscriptionOptions.kmPerMonth} km</p>
-                <p>Insurance Package: ${subscriptionOptions.insurancePackage}</p>
-                <p>Cost/extra KM: €${car.additional_cost_per_km !== undefined ? car.additional_cost_per_km : 'N/A'}</p>
-                <p>Delivery: ${subscriptionOptions.delivery}</p>
-                <p>Monthly Price: €${car.price !== undefined ? car.price : 'N/A'}</p>
-            `;
-        }
-
-        function populatePersonalInfo() {
-            const personalInfo = JSON.parse(localStorage.getItem('personalInfo'));
-            if (!personalInfo) {
-                console.error('Personal info not found.');
-                return;
-            }
-
-            document.getElementById('title').textContent = personalInfo.title;
-            document.getElementById('first-name').textContent = personalInfo.firstName;
-            document.getElementById('last-name').textContent = personalInfo.lastName;
-            document.getElementById('email').textContent = personalInfo.email;
-            document.getElementById('phone').textContent = personalInfo.phone;
-            document.getElementById('dob').textContent = personalInfo.dob;
-            document.getElementById('residence-status').textContent = personalInfo.residenceStatus;
-            document.getElementById('street-address').textContent = personalInfo.streetAddress;
-            document.getElementById('street-number').textContent = personalInfo.streetNumber;
-            document.getElementById('postcode').textContent = personalInfo.postcode;
-            document.getElementById('city').textContent = personalInfo.city;
-        }
-
-        function updateBreadcrumb(car) {
-            const breadcrumbLink = document.getElementById('breadcrumb-car-link');
-            breadcrumbLink.href = `car-details.html?carId=${car.car_id}`;
-            breadcrumbLink.textContent = `${car.manufacturer} ${car.model}`;
-        }
-    </script>
-    <script type="module" src="js/main.js"></script>
-
+    </footer>
 
 </body>
+<script src="js/main.js" type="module"></script>
 </html>
