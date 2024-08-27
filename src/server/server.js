@@ -2,29 +2,51 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import config from './config.js';
-import carsRoutes from './routes/cars.js';  // Adjust path if necessary
+import carsRoutes from './routes/cars.js';
 import filterRoutes from './routes/filters.js';
 import subscriptionsRoutes from './routes/subscriptions.js';  
+import cors from 'cors';
+import Stripe from 'stripe';
 
-
-const app = express();
-const port = config.app.port;
-
+// Create __dirname using fileURLToPath and import.meta.url
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const app = express();
+const port = config.app.port || 3000;
+const stripe = new Stripe('sk_test_JTsR7sNb71As1Q5mrrhVkw4h00J1mWXsFd');  // Replace with your actual Stripe secret key
+
+// Middleware
 app.use(express.static(path.join(__dirname, '../../public')));
-
 app.use(express.json());
+app.use(cors());
 
-app.use('/cars', carsRoutes);  // Ensure this is correctly set
+// Routes
+app.use('/cars', carsRoutes);
 app.use('/filters', filterRoutes);
-app.use('/subscription-options', subscriptionsRoutes); 
+app.use('/subscription-options', subscriptionsRoutes);
 
-
+// Stripe Payment Intent Route
+app.post('/create-payment-intent', async (req, res) => {
+    try {
+        const { amount } = req.body;
+        console.log('Amount received:', amount); // Debugging line
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amount,
+            currency: 'eur',
+        });
+        res.send({ clientSecret: paymentIntent.client_secret });
+    } catch (error) {
+        console.error('Error creating payment intent:', error); // Debugging line
+        res.status(500).send({ error: error.message });
+    }
+});
+// Server Initialization
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
+
+
 
 
 

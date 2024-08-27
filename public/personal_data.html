@@ -112,10 +112,6 @@
                         <label for="country" class="block font-semibold">Country:</label>
                         <input type="text" id="country" class="w-full border border-gray-300 p-2 rounded" required>
                     </div>
-
-                    <div class="mb-4">
-                        <button type="button" onclick="savePersonalInfo()" class="w-full mt-4 bg-blue-500 text-white p-2 rounded">Payment</button>
-                    </div>
                 </form>
 
            </section>
@@ -126,22 +122,22 @@
 
                     <div id="order-overview" class="order-overview-container">
                         <img id="carImage" src="" alt="Car Image">
-                        <h2 id="carModel"></h2>
-                        <p>Manufacturer: <span id="carManufacturer"></span></p>
-                        <hr>
+                        <h2 class="block font-semibold" id="carModel"></h2>
+                        <hr class="mb-4">
                         <p>Subscription duration: <span id="minTerm"></span></p>
                         <p>Mileage plan: <span id="mileagePlans"></span></p>
                         <p>Car insurance: <span id="insurancePackages"></span></p>
                         <p>Delivery Type: <span id="delivery"></span></p>
-                        <hr>
+                        <hr class="mt-4">
                         <p>Administration Fee (once): <span id="adminFee"></span></p>
-                        <p>Down Payment (once): <span id="deposit"></span></p>
-                        <hr>
-                        <p>Monthly Fee: <span id="monthlyFee"></span></p>
+                        <p >Down Payment (once): <span id="deposit"></span></p>
+                        <hr class="mb-4">
+                        <p>Total Monthly Subscription: <span id="monthlyFee"></span></p>
                     </div>
 
-                    <div class="mt-4">
-                        <button type="button" onclick="savePersonalInfo()" class="w-full bg-blue-500 text-white p-2 rounded">Payment</button>
+                    <div class="mb-4">
+                        <button type="button" onclick="savePersonalInfo()" class="w-full mt-4 bg-blue-500 text-white p-2 rounded">Payment</button>
+
                     </div>
                 </div>
             </div>
@@ -154,7 +150,6 @@
         </div>
     </footer>
 
+    <script src="js/main.js" type="module"></script>
 </body>
-<script src="js/main.js" type="module"></script>
-</html>
 </html>

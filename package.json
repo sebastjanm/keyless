@@ -17,11 +17,13 @@
   "license": "MIT",
   "dependencies": {
     "autoprefixer": "^10.4.19",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.17.1",
+    "express": "^4.19.2",
     "gulp": "^5.0.0",
     "gulp-postcss": "^10.0.0",
     "pg": "^8.12.0",
+    "stripe": "^16.8.0",
     "tailwindcss": "^3.4.7"
   },
   "type": "module",
@@ -29,4 +31,3 @@
     "node": "20.x"
   }
 }
-

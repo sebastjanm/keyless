@@ -27,13 +27,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+
     // Detect page context and call the appropriate function
     if (document.getElementById('popular-cars')) {
         loadPopularCars();
     } else if (document.getElementById('vehicleList')) {
         loadFiltersAndCars();
     } else if (window.location.pathname.includes('car-details.html')) {
-        loadCarDetails();  // New function for loading car details
+        loadCarDetails();  // Car details page
+    } else if (window.location.pathname.includes('personal_data.html')) {
+        populateOrderOverview();  // Personal data page
+    } else if (window.location.pathname.includes('payment.html')) {
+        populatePaymentPage();  // Payment page
     }
 
     // Reset filters button functionality
@@ -726,7 +731,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 /* ==========================
-   PERSONAL LOGIC
+   SAVE PERSONAL INFO  LOGIC
 ========================== */
 
 function savePersonalInfo() {
@@ -744,19 +749,186 @@ function savePersonalInfo() {
         country: document.getElementById('country').value
     };
 
-    // Validate data (optional)
+    // Validate required fields (you can adjust based on your needs)
     if (!personalData.firstName || !personalData.lastName || !personalData.email) {
-        alert('Please fill in all required fields.');
+        alert('Please fill in all required fields: First Name, Last Name, and Email.');
         return;
     }
 
-    // Save personal data to sessionStorage
+    // Save the personal information to session storage
     sessionStorage.setItem('personalData', JSON.stringify(personalData));
 
-    // Redirect to the payment page
+    // Optionally, navigate to the payment page or the next step
     window.location.href = 'payment.html';
 }
 
+
+/* ==========================
+   PAYMENT LOGIC
+========================== */
+
+async function populatePaymentPage() {
+    const savedSubscription = JSON.parse(sessionStorage.getItem('selectedSubscription'));
+    const savedPersonalInfo = JSON.parse(sessionStorage.getItem('personalData'));
+
+    if (savedSubscription && savedPersonalInfo) {
+        // Populate car details
+        const carDetails = savedSubscription.carDetails;
+
+        const setTextContent = (id, content) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = content;
+            } else {
+                console.error(`Element with ID '${id}' not found`);
+            }
+        };
+
+        // Populate car details section
+        setTextContent('car-title', `${carDetails.manufacturer} ${carDetails.model_name}`);
+        setTextContent('car-type', carDetails.vehicle_type_name || 'N/A');
+        setTextContent('preferred-color', carDetails.color);
+        setTextContent('transmission', carDetails.transmission_name);
+        setTextContent('cost-extra-km', savedSubscription.calculatedPricing.excessMileageFee);
+        setTextContent('admin-fee', savedSubscription.calculatedPricing.adminFee);
+        setTextContent('first-payment', savedSubscription.calculatedPricing.deposit);
+        setTextContent('monthly-price', `${savedSubscription.calculatedPricing.monthlyFee} €`); // Total Monthly Subscription
+
+        // Retrieve and set formatted values for subscription details
+        const selectedDuration = savedSubscription.subscriptionOptions.subscriptionDurations.find(duration => duration.duration_id === parseInt(savedSubscription.selectedDurationId, 10));
+        const selectedMileagePlan = savedSubscription.subscriptionOptions.mileagePlans.find(plan => plan.plan_id === parseInt(savedSubscription.selectedMileagePlanId, 10));
+        const selectedInsurancePackage = savedSubscription.subscriptionOptions.insurancePackages.find(pkg => pkg.insurance_package_id === parseInt(savedSubscription.selectedInsurancePackageId, 10));
+        const selectedDeliveryOption = savedSubscription.subscriptionOptions.deliveryOptions.find(option => option.option_id === parseInt(savedSubscription.selectedDeliveryOptionId, 10));
+
+        setTextContent('subscription-duration', selectedDuration ? `${selectedDuration.months} months` : 'Not specified');
+        setTextContent('kilometer-options', selectedMileagePlan ? `${selectedMileagePlan.kilometers} km/month` : 'Not specified');
+        setTextContent('insurance-package', selectedInsurancePackage ? selectedInsurancePackage.package_name : 'Not specified');
+        setTextContent('delivery', selectedDeliveryOption ? selectedDeliveryOption.option_name : 'Not specified');
+
+        // Populate personal information section
+        const setValue = (id, value) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value || '';
+            } else {
+                console.error(`Element with ID '${id}' not found`);
+            }
+        };
+
+        const formatDateOfBirth = (dateString) => {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        };
+
+        setValue('firstName', savedPersonalInfo.firstName);
+        setValue('lastName', savedPersonalInfo.lastName);
+        setValue('email', savedPersonalInfo.email);
+        setValue('phone', savedPersonalInfo.phone);
+        setValue('birthdate', formatDateOfBirth(savedPersonalInfo.birthdate));
+        setValue('residenceStatus', savedPersonalInfo.residenceStatus);
+        setValue('address', savedPersonalInfo.address);
+        setValue('city', savedPersonalInfo.city);
+        setValue('postalCode', savedPersonalInfo.postalCode);
+        setValue('country', savedPersonalInfo.country);
+
+        // Load car images
+        if (carDetails.images && carDetails.images.length > 0) {
+            const largeImage = document.getElementById('image-large-new');
+            const smallImage1 = document.getElementById('image-small-1-new');
+            const smallImage2 = document.getElementById('image-small-2-new');
+
+            if (largeImage) largeImage.src = carDetails.images[0] || 'https://picsum.photos/800/600?random=1';
+            if (smallImage1) smallImage1.src = carDetails.images[1] || 'https://picsum.photos/400/300?random=2';
+            if (smallImage2) smallImage2.src = carDetails.images[2] || 'https://picsum.photos/400/300?random=3';
+        }
+
+        // Calculate the amount in cents
+        const monthlyFeeInCents = parseFloat(savedSubscription.calculatedPricing.monthlyFee) * 100; // Convert EUR to cents
+
+        // Display the subscription amount on the page
+        const subscriptionAmount = `${savedSubscription.calculatedPricing.monthlyFee} €`;
+        document.getElementById('subscription-amount').textContent = subscriptionAmount;
+
+        // Handle Stripe Payment
+        createPaymentIntent(monthlyFeeInCents, savedPersonalInfo);
+    } else {
+        console.error('No subscription or personal information found in session storage.');
+    }
+}
+
+/* ==========================
+   PAYMENT INTENT LOGIC 
+========================== */
+
+// Create Payment Intent with Stripe
+async function createPaymentIntent(amount, personalInfo) {
+    try {
+        const response = await fetch('/create-payment-intent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount })
+        });
+
+        const { clientSecret } = await response.json();
+
+        const stripe = Stripe('pk_test_7WLRdJPqXCD1EYQmZW3xCzKJ00Ivo5YzjO');
+        const elements = stripe.elements();
+        const cardElement = elements.create('card');
+        let isCardElementMounted = false;
+
+        // Mount only if not already mounted
+        if (!isCardElementMounted) {
+            cardElement.mount('#card-element');
+            isCardElementMounted = true;
+        }
+
+        const form = document.getElementById('payment-form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            // Ensure the element is still mounted and available in the DOM
+            if (!isCardElementMounted || !document.getElementById('card-element')) {
+                console.error('Card Element is not properly mounted.');
+                return;
+            }
+
+            // Convert country name to ISO alpha-2 code
+            const countryCodes = {
+                "Slovenia": "SI",
+                "United States": "US",
+                // Add more countries as needed
+            };
+            const countryCode = countryCodes[personalInfo.country] || personalInfo.country;
+
+            const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: `${personalInfo.firstName} ${personalInfo.lastName}`,
+                        email: personalInfo.email,
+                        address: {
+                            city: personalInfo.city || null,
+                            country: countryCode || null,
+                            postal_code: personalInfo.postalCode || null,
+                        },
+                    },
+                },
+            });
+
+            if (error) {
+                console.error('Payment failed:', error.message);
+                alert(`Payment failed: ${error.message}`);
+            } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+                alert('Payment successful!');
+            }
+        });
+    } catch (error) {
+        console.error('Error creating payment intent:', error);
+    }
+}
 
 
 /* ==========================
@@ -766,9 +938,14 @@ function savePersonalInfo() {
 // Handle header behavior on scroll
 function handleScroll() {
     const header = document.getElementById('top-menu');
+    if (!header) return;
+
     const logoText = document.getElementById('logo-text');
-    const navLinks = document.getElementById('nav-links').getElementsByTagName('a');
-    const menuLinks = document.getElementById('menu-links').getElementsByTagName('a');
+    if (!logoText) return;
+
+    const navLinks = document.getElementById('nav-links')?.getElementsByTagName('a') || [];
+    const menuLinks = document.getElementById('menu-links')?.getElementsByTagName('a') || [];
+
 
     if (header && logoText && navLinks.length > 0 && menuLinks.length > 0) {
         if (window.scrollY > 50) {
