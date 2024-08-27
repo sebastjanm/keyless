@@ -84,9 +84,6 @@ export async function getSubscriptionOptions(req, res) {
 }
 
 
-
-
-
 export async function calculatePricing(req, res) {
     const { carModel, manufacturer, minTerm, mileagePlan, insurancePackage, packageType } = req.body;
 

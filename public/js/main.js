@@ -62,21 +62,11 @@ function setupEventListeners() {
             }
         } else if (window.location.pathname.includes('payment.html')) {
             console.log("Payment page detected.");
-            populatePaymentPage();  // Payment page
+            populatePaymentPage();  // Handle the payment page initialization
 
-            // Attach the submit payment button event listener
-            const submitButton = document.getElementById('submit-button');
-            if (submitButton) {
-                submitButton.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    console.log("Submit button clicked.");
-                    // Payment logic is handled within populatePaymentPage()
-                });
-            } else {
-                console.error("Submit Payment button not found on payment.html.");
-            }
+            // No need to attach event listener here. Let stripe.js handle it.
         }
-
+        
         // Reset filters button functionality
         const resetFiltersButton = document.getElementById('resetFilters');
         if (resetFiltersButton) {
@@ -150,7 +140,10 @@ async function fetchAndCachePopularCars() {
     }
 }
 
-// Display popular cars in the UI
+/* ==========================
+   POPULAR CAR DISPLAY LOGIC
+========================== */
+// This function is responsible for displaying popular cars in the UI
 function displayPopularCars(cars) {
     const carCardsContainer = document.getElementById('car-cards-container');
     const defaultImage = "https://picsum.photos/600/360?random";
@@ -181,6 +174,49 @@ function displayPopularCars(cars) {
         console.error("Car cards container element not found in the DOM.");
     }
 }
+
+/* ==========================
+   CAR DISPLAY LOGIC
+========================== */
+// This function is responsible for displaying cars in the UI
+function displayCars(cars) {
+    console.log(cars); // Check if price is available here
+    const vehicleList = document.getElementById('vehicleList');
+    const defaultImage = "https://picsum.photos/600/360?random=3"; // Fallback image URL
+
+    if (vehicleList) {
+        vehicleList.innerHTML = ''; // Clear previous content
+
+        if (cars.length > 0) {
+            cars.forEach(car => {
+                const carCard = document.createElement('a');
+                carCard.href = `car-details.html?carId=${car.car_id}`;
+                carCard.classList.add('block', 'border', 'bg-white', 'border-gray-300', 'rounded-lg', 'p-4', 'hover:shadow-lg');
+
+                // Use car.image_url from the database, with fallback to defaultImage
+                const imageUrl = car.image_url ? car.image_url : defaultImage;
+
+                carCard.innerHTML = `
+                    <img src="${imageUrl}" alt="${car.manufacturer} ${car.model_name}" class="w-full h-auto rounded mb-4">
+                    <h3 class="text-xl font-bold">${car.manufacturer} ${car.model_name}</h3>
+                    <p class="text-gray-600">Fuel Type: ${car.fuel_type_name || 'N/A'}</p>
+                    <p class="text-gray-600">Transmission: ${car.transmission_name || 'N/A'}</p>
+                    <p class="text-gray-600">Drive: ${car.drive_type_name || 'N/A'}</p>
+                    <p class="text-gray-600">Seats: ${car.seats || 'N/A'}</p>
+                    <p class="text-gray-600">Status: ${car.status_name || 'N/A'}</p>
+                    <p class="text-blue-500 font-bold">from: ${car.price ? `${car.price} € per month` : 'N/A'}</p>
+                `;
+                vehicleList.appendChild(carCard);
+            });
+        } else {
+            vehicleList.innerHTML = '<p class="text-red-500">No cars available at the moment. Please try different filters.</p>';
+        }
+    } else {
+        console.error("Vehicle list element not found in the DOM.");
+    }
+}
+
+
 
 
 /* ==========================
@@ -232,37 +268,6 @@ function getFilterValues() {
     return filterValues;
 }
 
-// Display cars in the UI
-function displayCars(cars) {
-    const vehicleList = document.getElementById('vehicleList');
-    const defaultImage = "https://picsum.photos/600/360?random=3";
-    if (vehicleList) {
-        vehicleList.innerHTML = ''; // Clear previous content
-        if (cars.length > 0) {
-            cars.forEach(car => {
-                const carCard = document.createElement('a');
-                carCard.href = `car-details.html?carId=${car.car_id}`;
-                carCard.classList.add('block', 'border', 'bg-white', 'border-gray-300', 'rounded-lg', 'p-4', 'hover:shadow-lg');
-                const imageUrl = car.images && car.images.length > 0 ? car.images[0] : defaultImage;
-                carCard.innerHTML = `
-                    <img src="${imageUrl}" alt="${car.manufacturer} ${car.model_name}" class="w-full h-auto rounded mb-4">
-                    <h3 class="text-xl font-bold">${car.manufacturer} ${car.model_name}</h3>
-                    <p class="text-gray-600">Fuel Type: ${car.fuel_type_name || 'N/A'}</p>
-                    <p class="text-gray-600">Transmission: ${car.transmission_name || 'N/A'}</p>
-                    <p class="text-gray-600">Drive: ${car.drive_type_name || 'N/A'}</p>
-                    <p class="text-gray-600">Seats: ${car.seats || 'N/A'}</p>
-                    <p class="text-gray-600">Status: ${car.status_name || 'N/A'}</p>
-                    <p class="text-blue-500 font-bold">Price: ${car.price ? `${car.price} € per month` : 'N/A'}</p>
-                `;
-                vehicleList.appendChild(carCard);
-            });
-        } else {
-            vehicleList.innerHTML = '<p class="text-red-500">No cars available at the moment. Please try different filters.</p>';
-        }
-    } else {
-        console.error("Vehicle list element not found in the DOM.");
-    }
-}
 
 /* ==========================
    CAR DETAILS LOGIC
@@ -336,17 +341,37 @@ function populateCarDetails(car) {
         carDescription.textContent = car.description || 'No description available.';
     }
 
-    // Set car images with fallback to at least three images
-    const carImagesContainer = document.getElementById('car-images');
+    // Set car images with fallback to default image
+    const carImagesContainer = document.getElementById('car-images-new');
     if (carImagesContainer) {
-        const imageUrls = (car.images && car.images.length > 0)
+        // Ensure car.images is an array and has at least three images
+        const imageUrls = Array.isArray(car.images) && car.images.length >= 3
             ? car.images
             : [defaultImage, defaultImage, defaultImage]; // Ensure at least three images
 
-        carImagesContainer.innerHTML = imageUrls.slice(0, 3).map(url => `
-            <img src="${url}" alt="${car.model_name}" class="h-auto max-w-full rounded bg-cover mb-4">
-        `).join('');
+        console.log('Image URLs:', imageUrls); // Debug to check the URLs
+
+        // Update the large main image
+        const mainImage = document.getElementById('image-large-new');
+        if (mainImage) {
+            mainImage.src = imageUrls[0];
+            mainImage.alt = car.model_name;
+        }
+
+        // Update the smaller images
+        const smallImage1 = document.getElementById('image-small-1-new');
+        if (smallImage1) {
+            smallImage1.src = imageUrls[1];
+            smallImage1.alt = car.model_name;
+        }
+
+        const smallImage2 = document.getElementById('image-small-2-new');
+        if (smallImage2) {
+            smallImage2.src = imageUrls[2];
+            smallImage2.alt = car.model_name;
+        }
     }
+
 
     // Populate technical data
     const technicalData = document.getElementById('technical-data');
@@ -897,76 +922,76 @@ async function populatePaymentPage() {
     }
 }
 
-/* ==========================
-   PAYMENT INTENT LOGIC 
-========================== */
+// /* ==========================
+//    PAYMENT INTENT LOGIC 
+// ========================== */
 
-// Create Payment Intent with Stripe
-async function createPaymentIntent(amount, personalInfo) {
-    try {
-        const response = await fetch('/create-payment-intent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount })
-        });
+// // Create Payment Intent with Stripe
+// async function createPaymentIntent(amount, personalInfo) {
+//     try {
+//         const response = await fetch('/create-payment-intent', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ amount })
+//         });
 
-        const { clientSecret } = await response.json();
+//         const { clientSecret } = await response.json();
 
-        const stripe = Stripe('pk_test_7WLRdJPqXCD1EYQmZW3xCzKJ00Ivo5YzjO');
-        const elements = stripe.elements();
-        const cardElement = elements.create('card');
-        let isCardElementMounted = false;
+//         const stripe = Stripe('pk_test_7WLRdJPqXCD1EYQmZW3xCzKJ00Ivo5YzjO');
+//         const elements = stripe.elements();
+//         const cardElement = elements.create('card');
+//         let isCardElementMounted = false;
 
-        // Mount only if not already mounted
-        if (!isCardElementMounted) {
-            cardElement.mount('#card-element');
-            isCardElementMounted = true;
-        }
+//         // Mount only if not already mounted
+//         if (!isCardElementMounted) {
+//             cardElement.mount('#card-element');
+//             isCardElementMounted = true;
+//         }
 
-        const form = document.getElementById('payment-form');
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
+//         const form = document.getElementById('payment-form');
+//         form.addEventListener('submit', async (event) => {
+//             event.preventDefault();
 
-            // Ensure the element is still mounted and available in the DOM
-            if (!isCardElementMounted || !document.getElementById('card-element')) {
-                console.error('Card Element is not properly mounted.');
-                return;
-            }
+//             // Ensure the element is still mounted and available in the DOM
+//             if (!isCardElementMounted || !document.getElementById('card-element')) {
+//                 console.error('Card Element is not properly mounted.');
+//                 return;
+//             }
 
-            // Convert country name to ISO alpha-2 code
-            const countryCodes = {
-                "Slovenia": "SI",
-                "United States": "US",
-                // Add more countries as needed
-            };
-            const countryCode = countryCodes[personalInfo.country] || personalInfo.country;
+//             // Convert country name to ISO alpha-2 code
+//             const countryCodes = {
+//                 "Slovenia": "SI",
+//                 "United States": "US",
+//                 // Add more countries as needed
+//             };
+//             const countryCode = countryCodes[personalInfo.country] || personalInfo.country;
 
-            const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
-                payment_method: {
-                    card: cardElement,
-                    billing_details: {
-                        name: `${personalInfo.firstName} ${personalInfo.lastName}`,
-                        email: personalInfo.email,
-                        address: {
-                            city: personalInfo.city || null,
-                            country: countryCode || null,
-                            postal_code: personalInfo.postalCode || null,
-                        },
-                    },
-                },
-            });
+//             const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
+//                 payment_method: {
+//                     card: cardElement,
+//                     billing_details: {
+//                         name: `${personalInfo.firstName} ${personalInfo.lastName}`,
+//                         email: personalInfo.email,
+//                         address: {
+//                             city: personalInfo.city || null,
+//                             country: countryCode || null,
+//                             postal_code: personalInfo.postalCode || null,
+//                         },
+//                     },
+//                 },
+//             });
 
-            if (error) {
-                console.error('Payment failed:', error.message);
-                alert(`Payment failed: ${error.message}`);
-            } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-                alert('Payment successful!');
-            }
-        });
-    } catch (error) {
-        console.error('Error creating payment intent:', error);
-    }
-}
+//             if (error) {
+//                 console.error('Payment failed:', error.message);
+//                 alert(`Payment failed: ${error.message}`);
+//             } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+//                 alert('Payment successful!');
+//             }
+//         });
+//     } catch (error) {
+//         console.error('Error creating payment intent:', error);
+//    }
+//}
 
 
 /* ==========================

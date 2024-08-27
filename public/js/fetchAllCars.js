@@ -1,13 +1,20 @@
 // fetchAllCars.js
+// fetchAllCars.js
 export async function fetchAllCars(filters = {}) {
     try {
         const queryString = new URLSearchParams(filters).toString();
         const response = await fetch(`/cars?${queryString}`);
+        
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const cars = await response.json();
-        return cars;
+
+        const json = await response.json();
+        if (json.error) {
+            throw new Error(json.details || 'Unexpected error');
+        }
+
+        return json;
     } catch (error) {
         console.error('Error fetching all cars:', error);
         throw error;

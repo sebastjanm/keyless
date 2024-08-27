@@ -85,7 +85,7 @@
 
         <!-- Technical Data Section -->
         <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
-            <h3 class="text-2xl font-bold mb-4">Technical Data</h3>
+            <h3 class="text-2xl font-bold mb-4">Specifications</h3>
             <div class="grid grid-cols-2 gap-4" id="technical-data">
                 <!-- Technical Data specifications will be populated here -->
             </div>
@@ -143,7 +143,8 @@
             <!-- Updated car-details.html -->
             <form>
                 <div class="mb-4">
-                    <label for="color" class="block font-semibold mb-2">Choose your colour</label>
+                    <label for="color" class="block font-semibold">Your preferred colour</label>
+                    <small class="block text-gray-600 mb-4">We will do our best to find the perfect color for you</small>
                     <select id="color" class="w-full input-field p-2 rounded">
                         <!-- Car colors will be populated here -->
                     </select>
@@ -156,39 +157,43 @@
                     </select>
                 </div>
                 <div class="mb-4">
-                    <label for="minTerm" class="block font-semibold mb-2">Subscription duration</label>
+                    <label for="minTerm" class="block font-semibold">Minimum Subscription duration</label>
+                    <small class="block text-gray-600 mb-4">Flexible terms to suit your needs.</small>
                     <select id="minTerm" class="w-full input-field p-2 rounded">
                         <!-- Minimum term options will be populated here -->
                     </select>
                 </div>
                 <div class="mb-4">
-                    <label for="mileagePlans" class="block font-semibold mb-2">Pick your mileage plan</label>
+                    <label for="mileagePlans" class="block font-semibold">Pick your mileage plan</label>
                     <small class="block text-gray-600 mb-4">Exceeding the included kilometres will cost <span id="excessMileageFee"></span>€ and will be calculated at the end of your subscription.</small>
                     <select id="mileagePlans" class="w-full input-field p-2 rounded">
                         <!-- Kilometer options will be populated here -->
                     </select>
                 </div>
                 <div class="mb-4">
-                    <label for="insurancePackages" class="block font-semibold mb-2">Choose your car insurance</label>
+                    <label for="insurancePackages" class="block font-semibold">Choose your car insurance</label>
+                    <small class="block text-gray-600 mb-4">Select the appropriate deductible (per claim).</small>
                     <select id="insurancePackages" class="w-full input-field p-2 rounded">
                         <!-- Insurance package options will be populated here -->
                     </select>
                 </div>
-                <div class="mb-4">
-                    <label for="delivery" class="block font-semibold">Delivery or pickup?</label>
-                    <small class="block text-gray-600 mb-2">Select the desired type of handover for your car.</small>
-                    <select id="delivery" class="w-full input-field p-2 rounded">
-                        <!-- Delivery options will be populated here -->
-                    </select>
+
+
+                <div class="mb-4 text-sm">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                         <h5 class="font-semibold mb-2">Non-Recurring Costs  (one-time charge)</h5>
+                         <label for="delivery" class="block font-semibold">Delivery</label>
+                        <p class="block text-gray-600 mb-2">Select the desired type of handover for your car.</p>
+                             <select id="delivery" class="w-full input-field p-2 rounded">
+                            <!-- Delivery options will be populated here -->
+                            </select>
+                        <p class="font-semibold mt-4 italic text-gray-700 mb-2">Administration Fee:<span id="adminFee"></span></p>
+                        <p class="font-semibold italic text-gray-700 mb-2">First Payment (Deposit):<span id="deposit"></span></p>
+                    </div>
                 </div>
+
                 <div class="mb-4">
-                    <p class="block font-semibold">Administration Fee: <span id="adminFee"></span></p>
-                </div>
-                <div class="mb-4">
-                    <p class="block font-semibold">First Payment (deposit): <span id="deposit"></span></p>
-                </div>
-                <div class="mb-4">
-                    <p class="block font-semibold">Monthly Fee: <span id="monthlyFee"></span></p>
+                    <p class="block text-lg font-semibold">Monthly Fee: <span id="monthlyFee"></span></p>
                 </div>
                 <!-- car-details.html -->
 <button type="button" id="startSubscriptionButton" class="w-full button-primary text-white p-2 rounded">
@@ -198,17 +203,20 @@
 
     </section>
 
-    <section class="bg-white p-6 rounded-lg shadow-lg" id="all-inclusive">
-        <h3 class="text-2xl font-bold mb-4">All Inclusive</h3>
-            <ul class="list-disc list-inside">
-                <li>All-inclusive price</li>
-                <li>Service & Maintenance</li>
-                <li>Including insurance, tax & TÜV</li>
-                <li>Free door delivery</li>
-                <li>Highway Vignette</li>
-                <li>24/7 Breakdown Assistance with replacement car</li>
-            </ul>
-    </section>
+<section class="bg-white p-6 rounded-lg shadow-lg" id="all-inclusive">
+    <h3 class="text-2xl font-bold mb-4">All-Inclusive Service</h3>
+    <ul class="list-disc list-inside">
+        <li>All-inclusive price</li>
+        <li>Service & Maintenance</li>
+        <li>Including insurance, tax & TÜV</li>
+        <li>Matriculation & Taxes</li>
+        <li>Highway Vignette</li>
+        <li>Free door delivery</li>
+        <li>24/7 Breakdown Assistance with replacement car</li>
+        <li>Customizable Insurance</li>
+    </ul>
+</section>
+
     
     </div>
     </div>
