@@ -9,7 +9,7 @@ async function createPaymentIntent(amount, personalInfo) {
 
         const { clientSecret } = await response.json();
 
-        const stripe = Stripe('your-publishable-key');
+        const stripe = Stripe('pk_test_7WLRdJPqXCD1EYQmZW3xCzKJ00Ivo5YzjO');
         const elements = stripe.elements();
         const cardElement = elements.create('card');
 

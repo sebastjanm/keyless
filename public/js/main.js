@@ -1,4 +1,4 @@
-// src/public/js/main.js
+/// src/public/js/main.js
 
 // Import necessary functions from other modules
 import { fetchPopularCars } from './fetchPopularCars.js';
@@ -7,61 +7,104 @@ import { fetchFilters } from './fetchFilters.js';
 import { fetchCarDetails } from './fetchCarDetails.js';
 import { fetchSubscriptionOptions } from './fetchSubscriptionOptions.js';
 
-
-
 document.addEventListener('DOMContentLoaded', function () {
     console.log("DOM fully loaded and parsed");
-
-    // Clear session storage on load to prevent old data issues
-    sessionStorage.removeItem('popularCars');
-    sessionStorage.removeItem('cars');
-    sessionStorage.removeItem('carDetails');
-    sessionStorage.removeItem('subscriptionOptions');
-
-    // Mobile menu toggle
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    if (mobileMenuButton && mobileMenu) {
-        mobileMenuButton.addEventListener('click', function () {
-            mobileMenu.classList.toggle('hidden');
-        });
-    }
-
-
-    // Detect page context and call the appropriate function
-    if (document.getElementById('popular-cars')) {
-        loadPopularCars();
-    } else if (document.getElementById('vehicleList')) {
-        loadFiltersAndCars();
-    } else if (window.location.pathname.includes('car-details.html')) {
-        loadCarDetails();  // Car details page
-    } else if (window.location.pathname.includes('personal_data.html')) {
-        populateOrderOverview();  // Personal data page
-    } else if (window.location.pathname.includes('payment.html')) {
-        populatePaymentPage();  // Payment page
-    }
-
-    // Reset filters button functionality
-    const resetFiltersButton = document.getElementById('resetFilters');
-    if (resetFiltersButton) {
-        resetFiltersButton.addEventListener('click', resetFilters);
-    }
-
-    // Apply filter changes immediately
-    const filterForm = document.getElementById('filterForm');
-    if (filterForm) {
-        filterForm.querySelectorAll('select').forEach(element => {
-            element.addEventListener('change', () => {
-                updateSessionStorageFilters();
-                fetchAllCars();
-            });
-        });
-    }
-
-    // Handle header scroll behavior
-    handleScroll();
-    window.addEventListener('scroll', handleScroll);
+    setupEventListeners();  // Set up event listeners when the DOM is fully loaded
 });
+
+function setupEventListeners() {
+    console.log("Setting up event listeners...");
+    
+    try {
+        // Clear session storage on load to prevent old data issues
+        sessionStorage.removeItem('popularCars');
+        sessionStorage.removeItem('cars');
+        sessionStorage.removeItem('carDetails');
+        sessionStorage.removeItem('subscriptionOptions');
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function () {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Detect page context and call the appropriate function
+        if (document.getElementById('popular-cars')) {
+            console.log("Popular cars section detected.");
+            loadPopularCars();
+        } else if (document.getElementById('vehicleList')) {
+            console.log("Vehicle list section detected.");
+            loadFiltersAndCars();
+        } else if (window.location.pathname.includes('car-details.html')) {
+            console.log("Car details page detected.");
+            loadCarDetails();  // Car details page
+
+            // Attach the start subscription button event listener
+            const startSubscriptionButton = document.getElementById('startSubscriptionButton');
+            if (startSubscriptionButton) {
+                startSubscriptionButton.addEventListener('click', saveSubscriptionOptions);
+            } else {
+                console.error("Start Subscription button not found on car-details.html.");
+            }
+        } else if (window.location.pathname.includes('personal_data.html')) {
+            console.log("Personal data page detected.");
+            populateOrderOverview();  // Personal data page
+
+            // Attach the save personal info button event listener
+            const saveButton = document.getElementById('save-personal-info');
+            if (saveButton) {
+                saveButton.addEventListener('click', savePersonalInfo);
+            } else {
+                console.error("Save Personal Info button not found on personal_data.html.");
+            }
+        } else if (window.location.pathname.includes('payment.html')) {
+            console.log("Payment page detected.");
+            populatePaymentPage();  // Payment page
+
+            // Attach the submit payment button event listener
+            const submitButton = document.getElementById('submit-button');
+            if (submitButton) {
+                submitButton.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    console.log("Submit button clicked.");
+                    // Payment logic is handled within populatePaymentPage()
+                });
+            } else {
+                console.error("Submit Payment button not found on payment.html.");
+            }
+        }
+
+        // Reset filters button functionality
+        const resetFiltersButton = document.getElementById('resetFilters');
+        if (resetFiltersButton) {
+            resetFiltersButton.addEventListener('click', resetFilters);
+        }
+
+        // Apply filter changes immediately
+        const filterForm = document.getElementById('filterForm');
+        if (filterForm) {
+            filterForm.querySelectorAll('select').forEach(element => {
+                element.addEventListener('change', () => {
+                    updateSessionStorageFilters();
+                    fetchAllCars();
+                });
+            });
+        }
+
+        // Handle header scroll behavior
+        handleScroll();
+        window.addEventListener('scroll', handleScroll);
+    } catch (error) {
+        console.error("An error occurred during event listener setup:", error);
+    }
+}
+
+// Ensure the saveSubscriptionOptions function is globally available
+window.saveSubscriptionOptions = saveSubscriptionOptions;
+
 
 /* ==========================
    POPULAR CARS LOGIC
@@ -733,8 +776,6 @@ document.addEventListener('DOMContentLoaded', function () {
 /* ==========================
    SAVE PERSONAL INFO  LOGIC
 ========================== */
-
-document.getElementById('save-personal-info').addEventListener('click', savePersonalInfo);
 
 function savePersonalInfo() {
     const personalData = {
