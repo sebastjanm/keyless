@@ -734,8 +734,9 @@ document.addEventListener('DOMContentLoaded', function () {
    SAVE PERSONAL INFO  LOGIC
 ========================== */
 
+document.getElementById('save-personal-info').addEventListener('click', savePersonalInfo);
+
 function savePersonalInfo() {
-    // Collect personal data from the form
     const personalData = {
         firstName: document.getElementById('firstName').value,
         lastName: document.getElementById('lastName').value,
@@ -749,16 +750,12 @@ function savePersonalInfo() {
         country: document.getElementById('country').value
     };
 
-    // Validate required fields (you can adjust based on your needs)
     if (!personalData.firstName || !personalData.lastName || !personalData.email) {
-        alert('Please fill in all required fields: First Name, Last Name, and Email.');
+        alert('Please fill in all required fields.');
         return;
     }
 
-    // Save the personal information to session storage
     sessionStorage.setItem('personalData', JSON.stringify(personalData));
-
-    // Optionally, navigate to the payment page or the next step
     window.location.href = 'payment.html';
 }
 
