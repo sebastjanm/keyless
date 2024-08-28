@@ -6,6 +6,7 @@ export async function fetchPopularCars() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const cars = await response.json();
+        console.log('Fetched popular cars:', cars); // Log to confirm the data
         return cars;
     } catch (error) {
         console.error('Error fetching popular cars:', error);
