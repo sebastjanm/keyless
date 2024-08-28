@@ -6,48 +6,71 @@ const { Pool } = pkg;
 const pool = new Pool(config.db);
 
 
-// getPopularCars
 export async function getPopularCars(req, res) {
+    let client;
     try {
-        const client = await pool.connect();
+        client = await pool.connect();
+
+        // Initialize params as an empty array
+        const params = [];
+
         const query = `
-SELECT 
-    c.car_id, 
-    cm.model_name, 
-    cm.manufacturer, 
-    p.monthly_payment AS price, 
-    c.mileage, 
-    col.color_name,
-    ft.fuel_type_name,
-    tt.transmission_name,
-    dt.drive_type_name,
-    cm.seats, 
-    cs.status_name,
-    cim.image_url  -- Include image_url from car_model_images
-FROM cars c
-JOIN car_models cm ON c.model_id = cm.model_id
-LEFT JOIN car_pricing cp ON c.car_id = cp.car_id
-LEFT JOIN pricing p ON cp.pricing_id = p.pricing_id
-LEFT JOIN colors col ON c.color_id = col.color_id
-LEFT JOIN fuel_types ft ON cm.fuel_type_id = ft.fuel_type_id
-LEFT JOIN transmission_types tt ON cm.transmission_type_id = tt.transmission_type_id
-LEFT JOIN drive_types dt ON cm.drive_type_id = dt.drive_type_id
-LEFT JOIN car_status_types cs ON c.status_id = cs.status_id
-LEFT JOIN (
-    SELECT DISTINCT ON (model_id) model_id, image_url  -- Select the first image URL per model
-    FROM car_model_images
-    ORDER BY model_id, image_id  -- Adjust ordering if necessary
-) cim ON cm.model_id = cim.model_id
-LIMIT 4;
+            SELECT 
+                c.car_id, 
+                cm.model_name, 
+                cm.manufacturer, 
+                COALESCE(p.monthly_payment, 0) AS price,
+                c.mileage, 
+                col.color_name,
+                ft.fuel_type_name, 
+                tt.transmission_name, 
+                dt.drive_type_name, 
+                cm.seats, 
+                cs.status_name,
+                cim.image_url
+            FROM cars c
+            JOIN car_models cm ON c.model_id = cm.model_id
+            LEFT JOIN pricing p ON c.car_id = p.car_id AND p.default_pricing = TRUE
+            LEFT JOIN colors col ON c.color_id = col.color_id
+            LEFT JOIN fuel_types ft ON cm.fuel_type_id = ft.fuel_type_id
+            LEFT JOIN transmission_types tt ON cm.transmission_type_id = tt.transmission_type_id
+            LEFT JOIN drive_types dt ON cm.drive_type_id = dt.drive_type_id
+            LEFT JOIN car_status_types cs ON c.status_id = cs.status_id
+            LEFT JOIN (
+                SELECT model_id, MIN(image_url) AS image_url
+                FROM car_model_images
+                GROUP BY model_id
+            ) cim ON cm.model_id = cim.model_id
+           LIMIT 4;
         `;
-        const result = await client.query(query);
+
+        // Execute the query with the params array (which is empty in this case)
+        const result = await client.query(query, params);
+        console.log('Popular cars fetched:', result.rows);  // Log the fetched data
+        
+        // Handle null prices as discussed before
+        result.rows.forEach(car => {
+            if (car.price === null) {
+                console.log(`Missing price for car_id ${car.car_id}`);  // Log any issues
+                car.price = 0;  // Set a default value if necessary
+            }
+        });
+
         res.json(result.rows);
-        client.release();
     } catch (err) {
-        console.error('Error fetching popular cars:', err.message);
+        console.error('Error fetching popular cars:', {
+            message: err.message,
+            stack: err.stack,
+        });
         res.status(500).json({ error: 'Database query failed', details: err.message });
+    } finally {
+        if (client) {
+            client.release(); // Ensure client release
+        }
     }
 }
+
+
 
 
 export async function getCars(req, res) {

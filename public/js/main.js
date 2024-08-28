@@ -163,7 +163,7 @@ function displayPopularCars(cars) {
                     <p class="text-gray-600">Drive: ${car.drive_type_name || 'N/A'}</p>
                     <p class="text-gray-600">Seats: ${car.seats || 'N/A'}</p>
                     <p class="text-gray-600">Status: ${car.status_name || 'N/A'}</p>
-                    <p class="text-blue-500 font-bold">Price: ${car.price ? `${car.price} € per month` : 'N/A'}</p>
+                    <p class="text-blue-500 font-bold">from: ${car.price ? `${car.price} € / month` : 'N/A'}</p>
                 `;
                 carCardsContainer.appendChild(carCard);
             });
@@ -191,21 +191,33 @@ function displayCars(cars) {
             cars.forEach(car => {
                 const carCard = document.createElement('a');
                 carCard.href = `car-details.html?carId=${car.car_id}`;
-                carCard.classList.add('block', 'border', 'bg-white', 'border-gray-300', 'rounded-lg', 'p-4', 'hover:shadow-lg');
+                carCard.classList.add('block', 'border', 'bg-white', 'border-gray-300', 'rounded-lg', 'p-6', 'hover:shadow-lg', 'transition-shadow', 'duration-200');
 
                 // Use car.image_url from the database, with fallback to defaultImage
                 const imageUrl = car.image_url ? car.image_url : defaultImage;
 
                 carCard.innerHTML = `
-                    <img src="${imageUrl}" alt="${car.manufacturer} ${car.model_name}" class="w-full h-auto rounded mb-4">
-                    <h3 class="text-xl font-bold">${car.manufacturer} ${car.model_name}</h3>
-                    <p class="text-gray-600">Fuel Type: ${car.fuel_type_name || 'N/A'}</p>
-                    <p class="text-gray-600">Transmission: ${car.transmission_name || 'N/A'}</p>
-                    <p class="text-gray-600">Drive: ${car.drive_type_name || 'N/A'}</p>
-                    <p class="text-gray-600">Seats: ${car.seats || 'N/A'}</p>
-                    <p class="text-gray-600">Status: ${car.status_name || 'N/A'}</p>
-                    <p class="text-blue-500 font-bold">from: ${car.price ? `${car.price} € per month` : 'N/A'}</p>
-                `;
+
+                <img src="${imageUrl}" alt="${car.manufacturer} ${car.model_name}" class="w-full h-auto rounded mb-4">
+                <h3 class="text-lg md:text-xl font-bold mb-2">${car.manufacturer} ${car.model_name}</h3>
+
+                <!-- Car Details Section -->
+                <div class="text-gray-600 text-xs font-extralight md:text-sm flex flex-wrap space-x-1 md:space-x-2 mb-4">
+                    <span>${car.fuel_type_name || 'N/A'}</span>
+                    <span>|</span>
+                    <span>${car.transmission_name || 'N/A'}</span>
+                    <span>|</span>
+                    <span>${car.drive_type_name || 'N/A'}</span>
+                </div>
+
+                <!-- Price Section -->
+                <div class="text-gray-600 text-xs md:text-sm">
+                    <span class="align-top">from</span>
+                    <span class="text-lg md:text-xl font-bold text-blue-900 align-middle">${car.price ? `${car.price}.` : 'N/A'}</span>
+                    <span class="text-lg md:text-xl text-blue-900 align-middle">–</span>
+                    <span class="text-xs md:text-sm text-gray-600 align-top">/mo.</span>
+                </div>
+            `;
                 vehicleList.appendChild(carCard);
             });
         } else {
