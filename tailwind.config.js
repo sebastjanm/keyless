@@ -10,8 +10,12 @@ module.exports = {
       colors: {
         'custom-blue': '#0067b6', // Custom color for your footer
       },
+      maxWidth: {
+        'custom-xl': '1140px',
+      },
     },
   },
   plugins: [],
 }
+
 

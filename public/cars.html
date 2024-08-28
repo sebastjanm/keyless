@@ -9,7 +9,7 @@
 <body class="bg-gray-100">
 <!-- Top Menu -->
 <header id="top-menu" class="fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out bg-opacity-80">
-    <div class="container mx-auto px-4 py-4 bg-transparent md:px-12 md:py-8">
+    <div class="container mx-auto px-4 py-4 bg-transparent md:px-8 md:py-4">
         <div class="flex items-center justify-between">
             <a href="index.html" class="text-xl font-bold text-white" id="logo-text">Subscribe2Go - Car Subscription</a>
             <nav class="hidden md:flex space-x-4" id="nav-links">
@@ -41,80 +41,91 @@
     </div>
 </header>
 
-    <main class="container mx-auto px-6 py-8">
-        <div class="flex flex-col lg:flex-row lg:space-x-8">
-            <!-- Filter Section -->
-            <section class="w-1/4 filter-section p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-bold mb-4">Car subscription</h2>
-                <form id="filterForm">
-    <div class="mb-4">
-        <label for="brand" class="block font-semibold">Brand</label>
-        <select id="brand" name="brand" class="w-full input-field p-2 rounded">
-            <option value="">Select a brand</option>
-        </select>
-    </div>
-    <div class="mb-4">
-        <label for="vehicleType" class="block font-semibold">Vehicle Type</label>
-        <select id="vehicleType" name="vehicleType" class="w-full input-field p-2 rounded">
-            <option value="">Select a type</option>
-        </select>
-    </div>
-    <div class="mb-4">
-        <label for="fuel" class="block font-semibold">Fuel Type</label>
-        <select id="fuel" name="fuel" class="w-full input-field p-2 rounded">
-            <option value="">Select a fuel type</option>
-        </select>
-    </div>
-    <div class="mb-4">
-        <label for="transmission" class="block font-semibold">Transmission</label>
-        <select id="transmission" name="transmission" class="w-full input-field p-2 rounded">
-            <option value="">Select a transmission</option>
-        </select>
-    </div>
-    <div class="mb-4">
-        <label for="drive" class="block font-semibold">Drive Train</label>
-        <select id="drive" name="drive" class="w-full input-field p-2 rounded">
-            <option value="">Select a drive train</option>
-        </select>
-    </div>
-    <div class="mb-4">
-        <label for="color" class="block font-semibold">Color</label>
-        <select id="color" name="color" class="w-full input-field p-2 rounded">
-            <option value="">Select a color</option>
-        </select>
-    </div>
-    <div class="mb-4">
-        <label for="availability" class="block font-semibold">Availability</label>
-        <select id="availability" name="availability" class="w-full input-field p-2 rounded">
-            <option value="">Select availability</option>
-        </select>
-    </div>
-    <button id="resetFilters" type="button" class="w-full button-primary text-white p-2 rounded">Reset Filters</button>
-</form>
+<!-- Main Content -->
+   
+    <div class="container mx-auto px-24 lg:px-16 xl:px-24 mt-20 md:mt-20 xl:max-w-custom-xl">
+ 
 
-            </section>
+    <div class="w-full flex flex-col gap-3 lg:px-16 xl:px-24 md:flex-row">
 
-            <!-- Vehicles Section -->
-            <section class="w-3/4">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold">Vehicles</h2>
-                    <select class="custom-select input-field p-2 rounded" id="sorting">
-                        <option value="-top_picks">Recommended</option>
-                        <option value="+base_price">Price - Low to High</option>
-                        <option value="-base_price">Price - High to Low</option>
-                        <option value="-approved_datetime">Date Added - New to Old</option>
-                        <option value="+approved_datetime">Date Added - Old to New</option>
-                        <option value="-rank">Search Relevance</option>
-                        <option value="-has_promo">Promotions</option>
+    <!-- Sidebar (Filter Section) -->
+    <aside class="md:w-1/3 lg:w-1/4 py-4 md:block ">
+        <div class="sticky top-12 flex flex-col gap-2 p-2 border rounded-xl rounded-lg shadow-lg filter-section">
+            <form id="filterForm">
+                <div class="mb-4">
+                    <label for="brand" class="block font-semibold">Brand</label>
+                    <select id="brand" name="brand" class="w-full input-field p-2 rounded">
+                        <option value="">Select a brand</option>
                     </select>
                 </div>
-                <div id="vehicleList" class="grid grid-cols-3 gap-4">
+                <div class="mb-4">
+                    <label for="vehicleType" class="block font-semibold">Vehicle Type</label>
+                    <select id="vehicleType" name="vehicleType" class="w-full input-field p-2 rounded">
+                        <option value="">Select a type</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="fuel" class="block font-semibold">Fuel Type</label>
+                    <select id="fuel" name="fuel" class="w-full input-field p-2 rounded">
+                        <option value="">Select a fuel type</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="transmission" class="block font-semibold">Transmission</label>
+                    <select id="transmission" name="transmission" class="w-full input-field p-2 rounded">
+                        <option value="">Select a transmission</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="drive" class="block font-semibold">Drive Train</label>
+                    <select id="drive" name="drive" class="w-full input-field p-2 rounded">
+                        <option value="">Select a drive train</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="color" class="block font-semibold">Color</label>
+                    <select id="color" name="color" class="w-full input-field p-2 rounded">
+                        <option value="">Select a color</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="availability" class="block font-semibold">Availability</label>
+                    <select id="availability" name="availability" class="w-full input-field p-2 rounded">
+                        <option value="">Select availability</option>
+                    </select>
+                </div>
+                <button id="resetFilters" type="button" class="w-full button-primary text-white p-2 rounded">Reset Filters</button>
+            </form>
+        </div>
+    </aside>
+
+
+
+
+    <!-- Vehicles Section -->
+    <main class="md:w-2/3 lg:w-3/4 w-full py-1 min-h-screen">
+        <div class="p-2 md:p-4">
+            <div class="p-2 md:p-4">
+            <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold">Vehicles</h2>
+            <select class="custom-select input-field p-2 rounded" id="sorting">
+                <option value="-top_picks">Recommended</option>
+                <option value="+base_price">Price - Low to High</option>
+                <option value="-base_price">Price - High to Low</option>
+                <option value="-approved_datetime">Date Added - New to Old</option>
+                <option value="+approved_datetime">Date Added - Old to New</option>
+                <option value="-rank">Search Relevance</option>
+                <option value="-has_promo">Promotions</option>
+            </select>
+        </div>
+            <div>
+                <div id="vehicleList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     <!-- Vehicle Cards will be populated here -->
                 </div>
-            </section>
-        </div>
+            </div>
     </main>
-
+    </div>
+</div>
     <footer class="bg-gray-800 text-white py-4">
         <div class="container mx-auto px-6 text-center">
             <p>&copy; 2023 Avant2go Keyless. All rights reserved.</p>
