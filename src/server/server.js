@@ -15,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = config.app.port || 3001;
+const port = config.app.port || 3000;
 const stripe = new Stripe('sk_test_JTsR7sNb71As1Q5mrrhVkw4h00J1mWXsFd');  // Replace with your actual Stripe secret key
 
 // Middleware
@@ -23,12 +23,24 @@ app.use(express.static(path.join(__dirname, '../../public')));
 app.use(express.json());
 
 // CORS configuration - adjust origin as needed
+const allowedOrigins = [
+    'http://localhost:3000',  // Local development
+    'https://your-frontend-app.com'  // Production frontend domain
+];
+
 app.use(cors({
-    origin: 'http://localhost:3000', // Allow only your frontend domain
+    origin: (origin, callback) => {
+        if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
+
 
 // Routes
 app.use('/cars', carsRoutes);
@@ -59,3 +71,5 @@ app.post('/create-payment-intent', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
+
+
