@@ -90,7 +90,7 @@ async function createPaymentIntent(amount) {
                             address: {
                                 city: personalData.city || '',
                                 country: countryCode || '',
-                                postal_code: personalData.postalCode || '',
+                                //postal_code: personalData.postalCode || '',
                             },
                         }
                     }

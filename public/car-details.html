@@ -41,12 +41,13 @@
             </div>
         </div>
     </header>
+
 <!-- Main Content -->
 <div class="container mx-auto px-24 lg:px-16 xl:px-24 mt-20 md:mt-20">
         <nav class="mb-4" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
                 <li class="inline-flex items-center">
-                    <a href="index.html" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">HOME</a>
+                    <a href="index.html" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">Home</a>
                 </li>
                 <li class="inline-flex items-center">
                     <svg class="w-3 h-3 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -54,13 +55,26 @@
                     </svg>
                     <a href="car-details.html?carId=${car.car_id}" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600" id="breadcrumb-car-link"></a>
                 </li>
+                <li class="inline-flex items-center">
+                    <a href="cars.html" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">All cars</a>
+                </li>
+                                <li class="inline-flex items-center">
+                    <svg class="w-3 h-3 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.293 14.707a1 1 0 010-1.414L12.586 10 9.293 6.707a1 1 0 011.414-1.414l4 4a 1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"></path>
+                    </svg>
+                    <a href="car-details.html?carId=${car.car_id}" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600" id="breadcrumb-car-link"></a>
+                </li>
+                <li class="inline-flex items-center">
+                    <a href="" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">Car detail</a>
+                </li>
             </ol>
         </nav>
+
 
 <div class="flex justify-between items-start space-x-8">
     <section class="w-2/3" id="car-details-section">
         <!-- Car Images and Title Section -->
-        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+        <div class="bg-white p-6 border rounded mb-6">
             <h2 class="text-3xl font-bold mb-4" id="car-title">Tesla Model S Plaid</h2>
             <div id="car-images-new" class="grid grid-cols-4 grid-rows-2 gap-2">
                 <div class="col-span-3 row-span-2">
@@ -76,7 +90,7 @@
         </div>
 
         <!-- Description Data Section -->
-        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+        <div class="bg-white p-6 border rounded mb-6">
             <h3 class="text-2xl font-bold mb-4">Description</h3>
             <div id="car-description" class="text-gray-700">
                 <!-- Description will be populated here -->
@@ -85,7 +99,7 @@
 
 
         <!-- Technical Data Section -->
-        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+        <div class="bg-white p-6 border rounded mb-6">
             <h3 class="text-2xl font-bold mb-4">Specifications</h3>
             <div class="grid grid-cols-2 gap-4" id="technical-data">
                 <!-- Technical Data specifications will be populated here -->
@@ -93,7 +107,7 @@
         </div>
 
         <!-- Environment Data Section -->
-        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+        <div class="bg-white p-6 border rounded mb-6">
             <h3 class="text-2xl font-bold mb-4">Environment</h3>
             <div class="grid grid-cols-2 gap-4" id="environment-data">
                 <!-- Environment specifications will be populated here -->
@@ -101,7 +115,7 @@
         </div>
 
         <!-- Basis Details Section -->
-        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+        <div class="bg-white p-6 border rounded mb-6">
             <h3 class="text-2xl font-bold mb-4">Basis</h3>
             <ul class="list-disc list-inside" id="basis-details">
                 <!-- Basis details will be populated here -->
@@ -109,7 +123,7 @@
         </div>
 
         <!-- Safety Details Section -->
-        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+        <div class="bg-white p-6 border rounded mb-6">
             <h3 class="text-2xl font-bold mb-4">Safety</h3>
             <ul class="list-disc list-inside" id="safety-details">
                 <!-- Safety details will be populated here -->
@@ -117,7 +131,7 @@
         </div>
 
         <!-- Entertainment Details Section -->
-        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+        <div class="bg-white p-6 border rounded mb-6">
             <h3 class="text-2xl font-bold mb-4">Entertainment</h3>
             <ul class="list-disc list-inside" id="entertainment-details">
                 <!-- Entertainment details will be populated here -->
@@ -125,7 +139,7 @@
         </div>
 
         <!-- Comfort Details Section -->
-        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+        <div class="bg-white p-6 border rounded mb-6">
             <h3 class="text-2xl font-bold mb-4">Comfort</h3>
             <ul class="list-disc list-inside" id="comfort-details">
                 <!-- Comfort details will be populated here -->
@@ -134,95 +148,92 @@
 
     </section>
 
-
-
-<div class="w-1/3 flex flex-col space-y-6">
-    <section class="bg-white p-6 rounded-lg shadow-lg" id="subscription-options">
-        <h3 class="text-2xl font-bold mb-2">Subscription Options</h3>
-            <small class="block text-gray-600 mb-4">Create your clever car subscription with Avant2GO+</small>
-                    
-            <!-- Updated car-details.html -->
-            <form>
-                <div class="mb-4">
-                    <label for="color" class="block font-semibold">Your preferred colour</label>
-                    <small class="block text-gray-600 mb-4">We will do our best to find the perfect color for you</small>
-                    <select id="color" class="w-full input-field p-2 rounded">
-                        <!-- Car colors will be populated here -->
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="packageType" class="block font-semibold">Package Type</label>
-                    <small class="block text-gray-600 mb-4">In FLEX, you have a contract that renews monthly with a notice period of one month.</small>
-                    <select id="packageType" class="w-full input-field p-2 rounded">
-                        <!-- packageType options will be populated here -->
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="minTerm" class="block font-semibold">Minimum Subscription duration</label>
-                    <small class="block text-gray-600 mb-4">Flexible terms to suit your needs.</small>
-                    <select id="minTerm" class="w-full input-field p-2 rounded">
-                        <!-- Minimum term options will be populated here -->
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="mileagePlans" class="block font-semibold">Pick your mileage plan</label>
-                    <small class="block text-gray-600 mb-4">Exceeding the included kilometres will cost <span id="excessMileageFee"></span>€ and will be calculated at the end of your subscription.</small>
-                    <select id="mileagePlans" class="w-full input-field p-2 rounded">
-                        <!-- Kilometer options will be populated here -->
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="insurancePackages" class="block font-semibold">Choose your car insurance</label>
-                    <small class="block text-gray-600 mb-4">Select the appropriate deductible (per claim).</small>
-                    <select id="insurancePackages" class="w-full input-field p-2 rounded">
-                        <!-- Insurance package options will be populated here -->
-                    </select>
-                </div>
-
-
-                <div class="mb-4 text-sm">
-                    <div class="bg-gray-100 p-4 rounded-lg">
-                         <h5 class="font-semibold mb-2">Non-Recurring Costs  (one-time charge)</h5>
-                         <label for="delivery" class="block font-semibold">Delivery</label>
-                        <p class="block text-gray-600 mb-2">Select the desired type of handover for your car.</p>
-                             <select id="delivery" class="w-full input-field p-2 rounded">
-                            <!-- Delivery options will be populated here -->
+        <div class="w-1/3 flex flex-col space-y-6">
+            <section class="bg-white p-6 rounded-lg shadow-lg" id="subscription-options">
+                <h3 class="text-2xl font-bold mb-2">Subscription Options</h3>
+                    <small class="block text-gray-600 mb-4">Create your clever car subscription with Avant2GO+</small>
+                            
+                    <!-- Updated car-details.html -->
+                    <form>
+                        <div class="mb-4">
+                            <label for="color" class="block font-semibold">Your preferred colour</label>
+                            <small class="block text-gray-600 mb-4">We will do our best to find the perfect color for you</small>
+                            <select id="color" class="w-full input-field p-2 rounded">
+                                <!-- Car colors will be populated here -->
                             </select>
-                        <p class="font-semibold mt-4 italic text-gray-700 mb-2">Administration Fee:<span id="adminFee"></span></p>
-                        <p class="font-semibold italic text-gray-700 mb-2">First Payment (Deposit):<span id="deposit"></span></p>
-                    </div>
-                </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="packageType" class="block font-semibold">Package Type</label>
+                            <small class="block text-gray-600 mb-4">In FLEX, you have a contract that renews monthly with a notice period of one month.</small>
+                            <select id="packageType" class="w-full input-field p-2 rounded">
+                                <!-- packageType options will be populated here -->
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="minTerm" class="block font-semibold">Minimum Subscription duration</label>
+                            <small class="block text-gray-600 mb-4">Flexible terms to suit your needs.</small>
+                            <select id="minTerm" class="w-full input-field p-2 rounded">
+                                <!-- Minimum term options will be populated here -->
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="mileagePlans" class="block font-semibold">Pick your mileage plan</label>
+                            <small class="block text-gray-600 mb-4">Exceeding the included kilometres will cost <span id="excessMileageFee"></span>€ and will be calculated at the end of your subscription.</small>
+                            <select id="mileagePlans" class="w-full input-field p-2 rounded">
+                                <!-- Kilometer options will be populated here -->
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="insurancePackages" class="block font-semibold">Choose your car insurance</label>
+                            <small class="block text-gray-600 mb-4">Select the appropriate deductible (per claim).</small>
+                            <select id="insurancePackages" class="w-full input-field p-2 rounded">
+                                <!-- Insurance package options will be populated here -->
+                            </select>
+                        </div>
 
-                <div class="mb-4">
-                    <p class="block text-lg font-semibold">Monthly Fee: <span id="monthlyFee"></span></p>
-                </div>
-                <!-- car-details.html -->
-<button type="button" id="startSubscriptionButton" class="w-full bg-orange-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-orange-600 transition-all duration-300">
-    Start Subscription
-</button>
-            </form>
 
+                        <div class="mb-4 text-sm">
+                            <div class="bg-gray-100 p-4 rounded-lg">
+                                 <h5 class="font-semibold mb-2">Non-Recurring Costs  (one-time charge)</h5>
+                                 <label for="delivery" class="block font-semibold">Delivery</label>
+                                <p class="block text-gray-600 mb-2">Select the desired type of handover for your car.</p>
+                                     <select id="delivery" class="w-full input-field p-2 rounded">
+                                    <!-- Delivery options will be populated here -->
+                                    </select>
+                                <p class="font-semibold mt-4 italic text-gray-700 mb-2">Administration Fee:<span id="adminFee"></span></p>
+                                <p class="font-semibold italic text-gray-700 mb-2">First Payment (Deposit):<span id="deposit"></span></p>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <p class="block text-lg font-semibold">Monthly Fee: <span id="monthlyFee"></span></p>
+                        </div>
+                        <!-- car-details.html -->
+                        <button type="button" id="startSubscriptionButton" class="w-full bg-orange-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-orange-600 transition-all duration-300">
+                            Start Subscription
+                        </button>
+                    </form>
     </section>
 
-<section class="bg-white p-6 rounded-lg shadow-lg" id="all-inclusive">
-    <h3 class="text-2xl font-bold mb-4">All-Inclusive Service</h3>
-    <ul class="list-disc list-inside">
-        <li>All-inclusive price</li>
-        <li>Service & Maintenance</li>
-        <li>Including insurance, tax & TÜV</li>
-        <li>Matriculation & Taxes</li>
-        <li>Highway Vignette</li>
-        <li>Free door delivery</li>
-        <li>24/7 Breakdown Assistance with replacement car</li>
-        <li>Customizable Insurance</li>
-    </ul>
-</section>
+        <section class="bg-white p-6 rounded-lg shadow-lg" id="all-inclusive">
+            <h3 class="text-2xl font-bold mb-4">All-Inclusive Service</h3>
+            <ul class="list-disc list-inside">
+                <li>All-inclusive price</li>
+                <li>Service & Maintenance</li>
+                <li>Including insurance, tax & TÜV</li>
+                <li>Matriculation & Taxes</li>
+                <li>Highway Vignette</li>
+                <li>Free door delivery</li>
+                <li>24/7 Breakdown Assistance with replacement car</li>
+                <li>Customizable Insurance</li>
+            </ul>
+        </section>
 
     
     </div>
     </div>
+</div>
 
-    </main>
 
 <!-- Footer -->
 <footer class="custom-footer-bg text-white py-10">

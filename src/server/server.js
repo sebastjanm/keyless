@@ -25,7 +25,7 @@ app.use(express.json());
 // CORS configuration - adjust origin as needed
 const allowedOrigins = [
     'http://localhost:3000',  // Local development
-    'https://your-frontend-app.com'  // Production frontend domain
+    'https://www.subscribe2go.com'  // Production frontend domain
 ];
 
 app.use(cors({

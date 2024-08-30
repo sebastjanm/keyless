@@ -187,22 +187,42 @@ function displayCars(cars) {
     if (vehicleList) {
         vehicleList.innerHTML = ''; // Clear previous content
 
-        if (cars.length > 0) {
-            cars.forEach(car => {
-                const carCard = document.createElement('a');
-                carCard.href = `car-details.html?carId=${car.car_id}`;
-                carCard.classList.add('block', 'border', 'bg-white', 'border-gray-300', 'rounded-lg', 'p-6', 'hover:shadow-lg', 'transition-shadow', 'duration-200');
 
-                // Use car.image_url from the database, with fallback to defaultImage
-                const imageUrl = car.image_url ? car.image_url : defaultImage;
 
-                carCard.innerHTML = `
+if (cars.length > 0) {
+    cars.forEach(car => {
+        const carCard = document.createElement('a');
+        carCard.href = `car-details.html?carId=${car.car_id}`;
+        carCard.classList.add('block', 'border', 'bg-white', 'border-gray-300', 'rounded-lg', 'hover:shadow-lg', 'transition-shadow', 'duration-200');
 
-                <img src="${imageUrl}" alt="${car.manufacturer} ${car.model_name}" class="w-full h-auto rounded mb-4">
+        // Use car.image_url from the database, with fallback to defaultImage
+        const imageUrl = car.image_url ? car.image_url : defaultImage;
+
+        carCard.innerHTML = `
+            <div class="relative bg-gray-100 min-h-[180px] rounded-lg overflow-hidden">
+                <!-- Carousel -->
+                <div id="carousel" class="relative w-full">
+                    <div class="carousel-inner relative overflow-hidden w-full">
+                        <!-- Active Carousel Item -->
+                        <div class="carousel-item active relative float-left w-full">
+                            <img src="${imageUrl}" alt="${car.manufacturer} ${car.model_name}" class="w-full h-auto object-cover">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Special Badge -->
+                <ul class="absolute top-2 left-2">
+                    <li class="bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded">Special deal</li>
+                </ul>
+            </div>
+
+            <div class="p-4 bg-white"> <!-- Adding padding for text content -->
+                <!-- Car Title -->
                 <h3 class="text-lg md:text-xl font-bold mb-2">${car.manufacturer} ${car.model_name}</h3>
 
                 <!-- Car Details Section -->
-                <div class="text-gray-600 text-xs font-extralight md:text-sm flex flex-wrap space-x-1 md:space-x-2 mb-4">
+                <div class="text-gray-600 text-xs font-light md:text-xs flex flex-wrap space-x-1 md:space-x-2 mb-4">
                     <span>${car.fuel_type_name || 'N/A'}</span>
                     <span>|</span>
                     <span>${car.transmission_name || 'N/A'}</span>
@@ -211,15 +231,29 @@ function displayCars(cars) {
                 </div>
 
                 <!-- Price Section -->
-                <div class="text-gray-600 text-xs md:text-sm">
+                <div class="text-gray-600 text-xs md:text-sm text-right">
                     <span class="align-top">from</span>
                     <span class="text-lg md:text-xl font-bold text-blue-900 align-middle">${car.price ? `${car.price}.` : 'N/A'}</span>
-                    <span class="text-lg md:text-xl text-blue-900 align-middle">–</span>
-                    <span class="text-xs md:text-sm text-gray-600 align-top">/mo.</span>
+<span class="text-lg md:text-xl text-blue-900 align-baseline">–</span>
+<span class="text-xs md:text-sm text-gray-600 align-baseline">/mo.</span>
+
                 </div>
-            `;
-                vehicleList.appendChild(carCard);
-            });
+
+                <!-- Availability Badge -->
+                <div class="bg-gray-100 text-center text-red-600 text-sm font-bold py-2 mt-4 rounded-b-lg">
+                    Available from ${car.availability_date || 'TBA'}
+                </div>
+            </div>
+        `;
+        vehicleList.appendChild(carCard);
+    });
+
+
+
+
+
+
+
         } else {
             vehicleList.innerHTML = '<p class="text-red-500">No cars available at the moment. Please try different filters.</p>';
         }
