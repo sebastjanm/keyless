@@ -18,6 +18,7 @@ function css() {
     ]))
     .on('error', (err) => {
       console.error('Error in postcss pipeline:', err);
+      this.emit('end');  // Continue running on errors
     })
     .pipe(gulp.dest('public/css'))
     .pipe(bs.stream({match: '**/*.css'}))
@@ -30,13 +31,13 @@ function css() {
 function watch() {
   console.log('Starting watch task...');
   bs.init({
-    server: {
-      baseDir: "./public",
-      index: "index.html"  // Assuming your main HTML file is named index.html
-    }
+    proxy: 'http://localhost:3000',  // Proxy requests to backend on port 3000
+    port: 3001,  // BrowserSync serves the frontend on port 3001
+    open: false,
+    notify: false,
   });
-  
-  gulp.watch(['src/styles/*.css', 'public/html/*.html', 'tailwind.config.js'], css)
+
+  gulp.watch(['src/styles/*.css', 'public/html/*.html', 'tailwind.config.js'], gulp.series(css))
     .on('change', (path, stats) => {
       console.log(`File ${path} was changed`);
       bs.reload();
@@ -46,8 +47,7 @@ function watch() {
     });
 }
 
-// Define the default task
+// Define the default task without serving backend
 const defaultTask = gulp.series(css, watch);
 
 export { css, watch, defaultTask as default };
-
