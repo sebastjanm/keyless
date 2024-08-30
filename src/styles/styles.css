@@ -4,14 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* Custom styles for better alignment with avant2go.si */
 
 .hero {
   background-size: cover;
   background-position: center;
   height: 60vh; /* Make the hero section full height */
-  
 }
 
 .custom-header {
@@ -172,4 +170,32 @@ input,
 
 #submit-button:hover {
   background-color: #5469d4;
+}
+
+/* Additional Custom styles for vertical dividers */
+.sideLine > div::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 1px;
+  background-color: #E5E5E5;
+}
+.sideLine > div:nth-of-type(even)::after {
+  display: none;
+}
+.sideLine > div:last-child::after {
+  display: none;
+}
+@media(min-width: 640px) {
+  .sideLine > div::after {
+    left: initial;
+    right: 0;
+    top: 50%;
+    width: 1px;
+    height: 100%;
+  }
 }

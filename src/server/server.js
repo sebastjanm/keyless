@@ -5,6 +5,8 @@ import config from './config.js';
 import carsRoutes from './routes/cars.js';
 import filterRoutes from './routes/filters.js';
 import subscriptionsRoutes from './routes/subscriptions.js';  
+import adminRoutes from './routes/adminRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';  
 import cors from 'cors';
 import Stripe from 'stripe';
 
@@ -19,12 +21,23 @@ const stripe = new Stripe('sk_test_JTsR7sNb71As1Q5mrrhVkw4h00J1mWXsFd');  // Rep
 // Middleware
 app.use(express.static(path.join(__dirname, '../../public')));
 app.use(express.json());
-app.use(cors());
+
+// CORS configuration - adjust origin as needed
+app.use(cors({
+    origin: 'http://localhost:3000', // Allow only your frontend domain
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
 
 // Routes
 app.use('/cars', carsRoutes);
 app.use('/filters', filterRoutes);
 app.use('/subscription-options', subscriptionsRoutes);
+app.use('/payments', paymentRoutes);  // Use the payment routes
+
+// Use the admin routes
+app.use('/admin', adminRoutes);
 
 // Stripe Payment Intent Route
 app.post('/create-payment-intent', async (req, res) => {
@@ -41,13 +54,8 @@ app.post('/create-payment-intent', async (req, res) => {
         res.status(500).send({ error: error.message });
     }
 });
+
 // Server Initialization
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
-
-
-
-
-
-

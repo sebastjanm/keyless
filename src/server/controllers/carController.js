@@ -253,6 +253,3 @@ export async function getCarDetails(req, res) {
 }
 
 
-
-
-
