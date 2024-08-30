@@ -45,69 +45,135 @@
     </header>
 
 <!-- Main Section -->
-<main class="container mx-auto px-6 py-8 mt-custom">
-    <div class="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center">
-        <img src="/mnt/data/image.png" alt="Success Icon" class="w-16 h-16 mb-6">
-        <h1 class="text-4xl font-bold text-green-500 mb-4">Congratulations on your new car!</h1>
-        <p class="text-xl text-gray-600 mb-8 text-center">
-            Your payment was successful! Here are the next steps.
-        </p>
-        <div class="flex flex-col space-y-6 w-full">
-            <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0">
-                    <span class="inline-block w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3 10 4-14 3 6h4"></path>
-                        </svg>
-                    </span>
-                </div>
-                <div>
-                    <p class="text-lg text-gray-700"><strong>We have sent a confirmation email to you.</strong> Please check your inbox for further details.</p>
-                </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero bg-blue-600 text-white flex items-center justify-center py-8 md:py-12">
+        <div class="container mx-auto px-48 lg:px-20 xl:px-32 mt-20 md:mt-10 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 max-w-2xl mx-auto">All-Inclusive Car Subscription!</h1>
+            <p class="text-lg md:text-xl mb-6 max-w-xl mx-auto">
+                Experience hassle-free, all-inclusive car subscriptions tailored to your needs—drive the perfect vehicle with complete flexibility, all for one monthly fee.
+            </p>
+            <a href="cars.html" class="px-6 py-3.5 text-base font-medium text-white w-full button-primary p-2 rounded max-w-xs mx-auto">Browse cars</a>
+        </div>
+    </section>
+
+<section id="try-buy" class="bg-gray-100 py-16">
+    <div class="container mx-auto px-24 lg:px-16 xl:px-24">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+            <!-- Left Side: Text and Button -->
+            <div>
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Experience the Ultimate Test Drive with Our Try & Buy Program</h2>
+                <ul class="mb-6 text-lg text-gray-700">
+                    <li class="mb-2">✔️ Drive with Confidence: Test your dream car in real-life conditions before making a commitment.</li>
+                    <li class="mb-2">✔️ Extended Trial Period: Enjoy a flexible trial for up to 6 months.</li>
+                    <li class="mb-2">✔️ 100% Cashback Guarantee: When you decide to buy, we'll refund 100% of your subscription fees.</li>
+                </ul>
+                <a href="cars.html" class="bg-orange-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-orange-600 transition-all duration-300">Explore Our Try & Buy Cars</a>
             </div>
 
-            <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0">
-                    <span class="inline-block w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                    </span>
-                </div>
-                <div>
-                    <p class="text-lg text-gray-700"><strong>We will contact you shortly to arrange the handover.</strong> Expect a call from us soon.</p>
-                </div>
-            </div>
-
-            <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0">
-                    <span class="inline-block w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7-5 7 5M5 10h14v10H5z"></path>
-                        </svg>
-                    </span>
-                </div>
-                <div>
-                    <p class="text-lg text-gray-700"><strong>Your first invoice will be emailed soon.</strong> This will include any initial fees and your monthly subscription.</p>
-                </div>
-            </div>
-
-            <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0">
-                    <span class="inline-block w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke- wlinejoin="round" stroke-width="2" d="M12 8v4l3 3"></path>
-                        </svg>
-                    </span>
-                </div>
-                <div>
-                    <p class="text-lg text-gray-700"><strong>Ready to drive off?</strong> Once everything is finalized, you’ll be on the road in no time!</p>
-                </div>
+            <!-- Right Side: Video -->
+            <div>
+                <iframe width="100%" height="315" src="https://www.youtube.com/embed/EDRguzin4HE?si=o7lcuEa3g_1U52mK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="rounded-lg shadow-lg"></iframe>
             </div>
         </div>
-        <a href="cars.html" class="mt-8 px-6 py-3.5 text-base font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-500">Browse More Cars</a>
     </div>
-</main>
+</section>
+
+
+<!-- How It Works Section -->
+<section id="how-it-works" class="bg-gray-100 py-20">
+    <div class="container mx-auto px-24 lg:px-16 xl:px-24">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-center">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Pick Your Favorite Car</h3>
+                <p>Browse our selection of the latest models and choose the one that suits your lifestyle.</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Risk free</h3>
+                <p>Don't spend lots of money on buying a car without knowing exactly what you want. </p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Confirm Your Booking</h3>
+                <p>Once you're happy with your configuration, confirm your booking, and we'll take care of the rest.</p>
+            </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Buy or cancel</h3>
+                <p>You can buy or change your car or cancel your subscription anytime, with 3 months’ notice.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="bg-white py-16">
+    <div class="container mx-auto px-32 lg:px-16 xl:px-24">
+        <!-- Main Title -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-4">Looking for a New Car?</h1>
+            <p class="text-lg text-gray-700">
+                We offer you an innovative and comfortable all-round solution for your personal mobility – including administration and service. So, you only need to worry about fuel or charging costs.
+            </p>
+        </div>
+
+        <div class="px-16">
+        <!-- First Row -->
+        <div class="grid md:grid-cols-12 gap-8 mb-12 items-center">
+            <div class="md:col-span-6 lg:col-span-6">
+                <img src="https://dmassets.hyundai.com/is/image/hyundaiautoever/moodpic_Hyundai-i10-N-Line_1440x813:16x9?wid=1984&hei=1116&fit=wrap,1" alt="Car Image" class="rounded-lg shadow-lg w-full">
+            </div>
+            <div class="md:col-span-5 lg:col-span-5 text-left">
+                <h2 class="text-2xl font-bold mb-2">How does it work in practice?</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    You pay a fixed monthly rate for your new car with the contract duration and mileage you choose. Services on the following pages are included. All-inclusive – with no additional costs.
+                </p>
+                <a href="#" class="text-blue-500 font-semibold flex items-center">
+                    Get an offer now <span class="ml-2">&rarr;</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Second Row -->
+        <div class="grid md:grid-cols-12 gap-8 mb-12 items-center">
+            <div class="order-2 md:order-1 md:col-span-5 lg:col-span-5 text-right">
+                <h2 class="text-2xl font-bold mb-2">Financial Benefits.</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    Unforeseen risks are not borne by you but by Hyundai All Inclusive. Your total costs are lower than financing or buying the car. Your costs are fixed, planned, and predictable. You save your capital and don’t have to make a down payment. The vehicle's depreciation is covered by us.
+                </p>
+                <a href="#" class="text-blue-500 font-semibold flex items-center justify-end">
+                    Get an offer now <span class="ml-2">&rarr;</span>
+                </a>
+            </div>
+            <div class="order-1 md:order-2 md:col-span-6 lg:col-span-6">
+                <img src="https://dmassets.hyundai.com/is/image/hyundaiautoever/moodpic_Hyundai-i30-woman-in-red:16x9?wid=1984&hei=1116&fit=wrap,1" alt="Financial Benefits Image" class="rounded-lg shadow-lg w-full">
+            </div>
+        </div>
+
+        <!-- Third Row -->
+        <div class="grid md:grid-cols-12 gap-8 items-center">
+            <div class="md:col-span-6 lg:col-span-6">
+                <img src="https://dmassets.hyundai.com/is/image/hyundaiautoever/moodpic_Hyundai-IONIQ5-comfortable:16x9?wid=1984&hei=1116&fit=wrap,1" alt="Comfort Benefits Image" class="rounded-lg shadow-lg w-full">
+            </div>
+            <div class="md:col-span-5 lg:col-span-5 text-left">
+                <h2 class="text-2xl font-bold mb-2">Comfort Benefits.</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    You have no administrative effort around your car. The term between 24 and 48 months as well as the annual mileage are selected according to your individual needs, and after the contract expires, you have the option to choose a new vehicle.
+                </p>
+                <a href="#" class="text-blue-500 font-semibold flex items-center">
+                    Get an offer now <span class="ml-2">&rarr;</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+
+
+
+
+
+
 
 <footer class="custom-footer-bg text-white py-10">
     <div class="container mx-auto text-center">
