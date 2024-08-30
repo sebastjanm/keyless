@@ -15,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = config.app.port || 3000;
+const port = config.app.port || 3001;
 const stripe = new Stripe('sk_test_JTsR7sNb71As1Q5mrrhVkw4h00J1mWXsFd');  // Replace with your actual Stripe secret key
 
 // Middleware

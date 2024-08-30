@@ -185,7 +185,7 @@ input,
   background-color: #E5E5E5;
 }
 .sideLine > div:nth-of-type(even)::after {
-  display: none;
+  display: all;
 }
 .sideLine > div:last-child::after {
   display: none;
