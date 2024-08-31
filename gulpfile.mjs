@@ -21,7 +21,7 @@ function css() {
       this.emit('end');  // Continue running on errors
     })
     .pipe(gulp.dest('public/css'))
-    .pipe(bs.stream({match: '**/*.css'}))
+    .pipe(bs.stream())  // Inject CSS changes without a full page reload
     .on('end', () => {
       console.log('CSS task completed.');
     });
@@ -37,17 +37,14 @@ function watch() {
     notify: false,
   });
 
-  gulp.watch(['src/styles/*.css', 'public/html/*.html', 'tailwind.config.js'], gulp.series(css))
-    .on('change', (path, stats) => {
-      console.log(`File ${path} was changed`);
-      bs.reload();
-    })
-    .on('error', (err) => {
-      console.error('Error in watch task:', err);
-    });
+  // Watch CSS files and run the css task on changes
+  gulp.watch('src/styles/*.css', css);
+
+  // Watch HTML and config files and trigger a full page reload on changes
+  gulp.watch(['public/html/*.html', 'tailwind.config.js']).on('change', bs.reload);
 }
 
-// Define the default task without serving backend
+// Define the default task
 const defaultTask = gulp.series(css, watch);
 
 export { css, watch, defaultTask as default };

@@ -13,9 +13,11 @@ module.exports = {
       maxWidth: {
         'custom-xl': '1140px',
       },
+      fontSize: {
+        'xxs': '0.625rem', // 10px
+      },
     },
   },
   plugins: [],
 }
-
 

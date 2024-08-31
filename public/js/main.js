@@ -149,24 +149,72 @@ function displayPopularCars(cars) {
     const defaultImage = "https://picsum.photos/600/360?random";
     if (carCardsContainer) {
         carCardsContainer.innerHTML = '';
-        if (cars.length > 0) {
-            cars.forEach(car => {
-                const carCard = document.createElement('a');
-                carCard.href = `car-details.html?carId=${car.car_id}`;
-                carCard.classList.add('block', 'border', 'bg-white', 'border-gray-300', 'rounded-lg', 'p-4', 'hover:shadow-lg');
-                const imageUrl = car.image_url || defaultImage;
-                carCard.innerHTML = `
-                    <img src="${imageUrl}" alt="${car.manufacturer} ${car.model_name}" class="w-full h-auto rounded mb-4">
-                    <h3 class="text-xl font-bold">${car.manufacturer} ${car.model_name}</h3>
-                    <p class="text-gray-600">Fuel Type: ${car.fuel_type_name || 'N/A'}</p>
-                    <p class="text-gray-600">Transmission: ${car.transmission_name || 'N/A'}</p>
-                    <p class="text-gray-600">Drive: ${car.drive_type_name || 'N/A'}</p>
-                    <p class="text-gray-600">Seats: ${car.seats || 'N/A'}</p>
-                    <p class="text-gray-600">Status: ${car.status_name || 'N/A'}</p>
-                    <p class="text-blue-500 font-bold">from: ${car.price ? `${car.price} € / month` : 'N/A'}</p>
-                `;
-                carCardsContainer.appendChild(carCard);
-            });
+if (cars.length > 0) {
+    cars.forEach(car => {
+        const carCard = document.createElement('a');
+        carCard.href = `car-details.html?carId=${car.car_id}`;
+        carCard.classList.add('block', 'border', 'bg-white', 'border-gray-300', 'rounded-lg', 'hover:shadow-lg', 'transition-shadow', 'duration-200');
+
+        // Use car.image_url from the database, with fallback to defaultImage
+        const imageUrl = car.image_url ? car.image_url : defaultImage;
+
+        carCard.innerHTML = `
+<div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-full">
+    <!-- Header: Special Badge and Carousel -->
+
+    <div class="relative w-full h-64 bg-gray-100">
+
+        <!-- Special Badge -->
+        <div class="vehicle-tile__top">
+            <div class="vehicle-tile__badge-wrapper">
+                <span class="vehicle-tile__badge">Special deal</span>
+            </div>
+        </div>
+
+        <!-- Carousel -->
+        <div id="carousel" class="relative w-full">
+            <div class="carousel-inner relative overflow-hidden w-full">
+                <!-- Active Carousel Item -->
+                <div class="carousel-item active relative float-left w-full">
+                    <img src="${imageUrl}" alt="${car.manufacturer} ${car.model_name}" class="w-full h-auto object-cover data-twe-ripple-init">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Body: Car Title, Details, and Pricing -->
+    <div class="p-4 flex-grow flex flex-col">
+        <!-- Car Title -->
+        <h3 class="text-lg md:text-xl font-bold mb-2">${car.manufacturer} ${car.model_name}</h3>
+
+        <!-- Car Details Section -->
+        <div class="text-gray-600 text-xxs font-light md:text-xs flex flex-wrap space-x-1 md:space-x-2 mb-4">
+            <span>${car.fuel_type_name || 'N/A'}</span>
+            <span>|</span>
+            <span>${car.transmission_name || 'N/A'}</span>
+            <span>|</span>
+            <span>${car.drive_type_name || 'N/A'}</span>
+        </div>
+
+        <!-- Price Section -->
+        <div class="text-gray-600 text-xs md:text-sm text-right">
+            <span class="align-top">from</span>
+            <span class="text-lg md:text-xl font-bold text-blue-900 align-middle">${car.price ? `${car.price}.` : 'N/A'}</span>
+            <span class="text-lg md:text-xl text-blue-900 align-baseline">–</span>
+            <span class="text-xs md:text-sm text-gray-600 align-baseline">/mo.</span>
+        </div>
+    </div>
+
+    <!-- Footer: Availability Badge -->
+    <div class="bg-gray-100 text-center text-red-600 text-sm font-bold py-2 rounded-b-lg mt-auto">
+        Available from ${car.availability_date || 'TBA'}
+    </div>
+</div>
+        `;
+        carCardsContainer.appendChild(carCard);
+    });
+
         } else {
             carCardsContainer.innerHTML = '<p class="text-red-500">No popular cars available at the moment.</p>';
         }
@@ -199,51 +247,64 @@ if (cars.length > 0) {
         const imageUrl = car.image_url ? car.image_url : defaultImage;
 
         carCard.innerHTML = `
-            <div class="relative bg-gray-100 min-h-[180px] rounded-lg overflow-hidden">
-                <!-- Carousel -->
-                <div id="carousel" class="relative w-full">
-                    <div class="carousel-inner relative overflow-hidden w-full">
-                        <!-- Active Carousel Item -->
-                        <div class="carousel-item active relative float-left w-full">
-                            <img src="${imageUrl}" alt="${car.manufacturer} ${car.model_name}" class="w-full h-auto object-cover">
-                        </div>
-                    </div>
+<div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-full">
+    <!-- Header: Special Badge and Carousel -->
+   
 
-                </div>
+    <div class="relative w-full h-64 bg-gray-100">
 
-                <!-- Special Badge -->
-                <ul class="absolute top-2 left-2">
-                    <li class="bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded">Special deal</li>
-                </ul>
-            </div>
 
-            <div class="p-4 bg-white"> <!-- Adding padding for text content -->
-                <!-- Car Title -->
-                <h3 class="text-lg md:text-xl font-bold mb-2">${car.manufacturer} ${car.model_name}</h3>
+    <!-- Special Badge -->
+    <div class="vehicle-tile__top">
+        <div class="vehicle-tile__badge-wrapper">
+            <span class="vehicle-tile__badge">Special deal</span>
+        </div>
+    </div>
 
-                <!-- Car Details Section -->
-                <div class="text-gray-600 text-xs font-light md:text-xs flex flex-wrap space-x-1 md:space-x-2 mb-4">
-                    <span>${car.fuel_type_name || 'N/A'}</span>
-                    <span>|</span>
-                    <span>${car.transmission_name || 'N/A'}</span>
-                    <span>|</span>
-                    <span>${car.drive_type_name || 'N/A'}</span>
-                </div>
 
-                <!-- Price Section -->
-                <div class="text-gray-600 text-xs md:text-sm text-right">
-                    <span class="align-top">from</span>
-                    <span class="text-lg md:text-xl font-bold text-blue-900 align-middle">${car.price ? `${car.price}.` : 'N/A'}</span>
-<span class="text-lg md:text-xl text-blue-900 align-baseline">–</span>
-<span class="text-xs md:text-sm text-gray-600 align-baseline">/mo.</span>
-
-                </div>
-
-                <!-- Availability Badge -->
-                <div class="bg-gray-100 text-center text-red-600 text-sm font-bold py-2 mt-4 rounded-b-lg">
-                    Available from ${car.availability_date || 'TBA'}
+        <!-- Carousel -->
+        <div id="carousel" class="relative w-full">
+            <div class="carousel-inner relative overflow-hidden w-full">
+                <!-- Active Carousel Item -->
+                <div class="carousel-item active relative float-left w-full">
+                    <img src="${imageUrl}" alt="${car.manufacturer} ${car.model_name}" class="w-full h-auto object-cover data-twe-ripple-init">
                 </div>
             </div>
+        </div>
+
+    </div>
+
+    <!-- Body: Car Title, Details, and Pricing -->
+    <div class="p-4 flex-grow flex flex-col">
+        <!-- Car Title -->
+        <h3 class="text-lg md:text-xl font-bold mb-2">${car.manufacturer} ${car.model_name}</h3>
+
+        <!-- Car Details Section -->
+        <div class="text-gray-600 text-xxs font-light md:text-xs flex flex-wrap space-x-1 md:space-x-2 mb-4">
+            <span>${car.fuel_type_name || 'N/A'}</span>
+            <span>|</span>
+            <span>${car.transmission_name || 'N/A'}</span>
+            <span>|</span>
+            <span>${car.drive_type_name || 'N/A'}</span>
+        </div>
+
+        <!-- Price Section -->
+        <div class="text-gray-600 text-xs md:text-sm text-right">
+            <span class="align-top">from</span>
+            <span class="text-lg md:text-xl font-bold text-blue-900 align-middle">${car.price ? `${car.price}.` : 'N/A'}</span>
+            <span class="text-lg md:text-xl text-blue-900 align-baseline">–</span>
+            <span class="text-xs md:text-sm text-gray-600 align-baseline">/mo.</span>
+        </div>
+    </div>
+
+    <!-- Footer: Availability Badge -->
+    <div class="bg-gray-100 text-center text-red-600 text-sm font-bold py-2 rounded-b-lg mt-auto">
+        Available from ${car.availability_date || 'TBA'}
+    </div>
+</div>
+
+
+
         `;
         vehicleList.appendChild(carCard);
     });

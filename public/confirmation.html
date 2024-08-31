@@ -1,123 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Confirmation - Subscribe2Go</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <title>Subscribe2Go - Payment Confirmation</title>
+    <link rel="stylesheet" href="../css/styles.css">
+
 </head>
+
 <body class="bg-gray-100">
-
-<!-- Header -->
-<header id="top-menu" class="fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out bg-opacity-80">
-    <div class="container mx-auto px-4 py-4 bg-transparent md:px-12 md:py-8">
-        <div class="flex items-center justify-between">
-            <a href="index.html" class="text-xl font-bold text-white" id="logo-text">Subscribe2Go - Car Subscription</a>
-            <nav class="hidden md:flex space-x-4" id="nav-links">
-                <a href="cars.html" class="text-white">Find a car</a>
-                <a href="#" class="text-white">Business customers</a>
-                <a href="#" class="text-white">Top offers</a>
-            </nav>
-            <div class="hidden md:flex space-x-4" id="menu-links">
-                <a href="#" class="text-white">FAQ</a>
-                <a href="#" class="text-white">Cart</a>
-                <a href="#" class="text-white">Profile</a>
+    <!-- Top Menu -->
+    <header id="top-menu" class="fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out bg-opacity-80">
+        <div class="container mx-auto px-4 py-4 bg-transparent md:px-8 md:py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-xl font-bold text-white" id="logo-text">Subscribe2Go</a>
+                <nav class="hidden md:flex space-x-4" id="nav-links">
+                    <a href="cars.html" class="text-white">Available cars</a>
+                    <a href="howitworks.html" class="text-white">How it works</a>
+                    <a href="tryandbuy.html" class="text-white">Try & Buy</a>
+                    <a href="business.html" class="text-white">Business</a>
+                </nav>
+                <div class="hidden md:flex space-x-4" id="menu-links">
+                    <a href="faq.html" class="text-white">FAQ</a>
+                    <a href="blog.html" class="text-white">Blog</a>
+                    <a href="#" class="text-white">Profile</a>
+                </div>
+                <button class="md:hidden text-white" id="mobile-menu-button">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
             </div>
-            <!-- Mobile Menu Button -->
-            <button class="md:hidden text-white" id="mobile-menu-button">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
-        </div>
-        <!-- Mobile Menu -->
-        <div class="hidden md:hidden mt-4 space-y-2" id="mobile-menu">
-            <a href="index.html" class="block text-white">Find a car</a>
-            <a href="#" class="block text-white">Business</a>
-            <a href="#" class="block text-white">Top offers</a>
-            <a href="#" class="block text-white">FAQ</a>
-            <a href="#" class="block text-white">Cart</a>
-            <a href="#" class="block text-white">Profile</a>
-        </div>
-    </div>
-</header>
-
-<!-- Main Section -->
-<main class="container mx-auto px-6 py-8 mt-custom">
-    <div class="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center">
-        <img src="/mnt/data/image.png" alt="Success Icon" class="w-16 h-16 mb-6">
-        <h1 class="text-4xl font-bold text-green-500 mb-4">Congratulations on your new car!</h1>
-        <p class="text-xl text-gray-600 mb-8 text-center">
-            Your payment was successful! Here are the next steps.
-        </p>
-        <div class="flex flex-col space-y-6 w-full">
-            <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0">
-                    <span class="inline-block w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3 10 4-14 3 6h4"></path>
-                        </svg>
-                    </span>
-                </div>
-                <div>
-                    <p class="text-lg text-gray-700"><strong>We have sent a confirmation email to you.</strong> Please check your inbox for further details.</p>
-                </div>
-            </div>
-
-            <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0">
-                    <span class="inline-block w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                    </span>
-                </div>
-                <div>
-                    <p class="text-lg text-gray-700"><strong>We will contact you shortly to arrange the handover.</strong> Expect a call from us soon.</p>
-                </div>
-            </div>
-
-            <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0">
-                    <span class="inline-block w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7-5 7 5M5 10h14v10H5z"></path>
-                        </svg>
-                    </span>
-                </div>
-                <div>
-                    <p class="text-lg text-gray-700"><strong>Your first invoice will be emailed soon.</strong> This will include any initial fees and your monthly subscription.</p>
-                </div>
-            </div>
-
-            <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0">
-                    <span class="inline-block w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke- wlinejoin="round" stroke-width="2" d="M12 8v4l3 3"></path>
-                        </svg>
-                    </span>
-                </div>
-                <div>
-                    <p class="text-lg text-gray-700"><strong>Ready to drive off?</strong> Once everything is finalized, you’ll be on the road in no time!</p>
-                </div>
+            <div class="hidden md:hidden mt-4 space-y-2" id="mobile-menu">
+                <a href="index.html" class="block text-white">Home</a>
+                <a href="cars.html" class="block text-white">Available cars</a>
+                <a href="howitworks.html" class="block text-white">How it works</a>
+                <a href="faq.html" class="block text-white">FAQ</a>
+                <a href="blog.html" class="block text-white">Blog</a>
+                <a href="profile.html" class="block text-white">Profile</a>
             </div>
         </div>
-        <a href="cars.html" class="mt-8 px-6 py-3.5 text-base font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-500">Browse More Cars</a>
-    </div>
-</main>
+    </header>
 
-<!-- Footer -->
-<footer class="custom-footer-bg text-white py-10">
-    <div class="container mx-auto text-center">
-        <p>&copy; 2024 Subscribe2Go Car Subscription. All rights reserved.</p>
-        <div class="flex justify-center space-x-4 mt-4">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Contact Us</a>
+    <!-- Main Section -->
+    <main class="container mx-auto px-6 py-8 mt-custom">
+        <div class="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="w-16 h-16 mb-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+            </svg>
+
+
+<section id="how-it-works" class="bg-white py-20">
+        <div class="container mx-auto px-24 lg:px-16 xl:px-24">
+
+            <h1 class="text-4xl font-bold text-green-500 mb-4">Congratulations on your car subscription!</h1>
+            <p class="text-xl text-gray-600 mb-8 text-center">
+                Your payment was successful! Here are the details:
+            </p>
+      
+<div class="text-lg text-gray-600 mb-4">
+    <p>Payment Intent ID: <span id="payment-intent-id">Loading...</span></p>
+    <p>Amount Paid: <span id="payment-amount">Loading...</span></p>
+    <p>Customer Name: <span id="customer-name">Loading...</span></p>
+    <p>Customer Email: <span id="customer-email">Loading...</span></p>
+    <p>Payment Status: <span id="payment-status">Loading...</span></p>
+    <p>Payment Method: <span id="payment-method">Loading...</span></p>
+    <p>Payment Date: <span id="payment-date">Loading...</span></p>
+</div>
+
+           
+
+<div class="text-lg text-gray-600 mb-4">
+    <p><strong>Fiat Tipo Hatchback ANZAHLUNG 36 Mt.</strong></p>
+    <p>Your monthly subscription: <strong>345 €/month</strong></p>
+  <p><span class="text-green-500">✓</span> Insurance <span class="text-green-500">✓</span> License plates <span class="text-green-500">✓</span> Tires <span class="text-green-500">✓</span> Service & Maintenance <span class="text-green-500">✓</span> Taxes <span class="text-green-500">✓</span> Initial highway vignette <span class="text-green-500">✓</span> Fuel/charging card</p>
+</div>
+
+<div class="text-lg text-gray-600 mb-4">
+    <ul class="list-disc list-inside">
+        <li>Kilometer package: <strong>350 km/month</strong></li>
+        <li>Minimum duration: <strong>36 months</strong></li>
+        <li>Deductible per claim: <strong>250 €</strong></li>
+        <li>Insurance against damages on parked car: <strong>No, 0 €/month</strong></li>
+        <li>Full coverage despite gross negligence: <strong>No, 0 €/month</strong></li>
+        <li>Legal protection insurance for traffic: <strong>7 €/month</strong></li>
+        <li>Canton of residency: <strong>VD</strong></li>
+    </ul>
+</div>
+
+<div class="text-lg text-gray-600 mb-4">
+    <p><strong>Non-recurring costs</strong></p>
+    <ul class="list-disc list-inside">
+        <li>Membership-fee for new customers: <strong>390 €</strong></li>
+        <li>Home delivery: <strong>195 €</strong></li>
+        <li>Desired delivery date: <strong>According to arrangement *</strong></li>
+    </ul>
+    <p><small>*Unfortunately, there may be some short-term postponements due to delivery delays caused by missing parts in production.</small></p>
+</div>
+
+
+</div>
+</section>
+<section id="how-it-works" class="bg-white py-20">
+        <div class="container mx-auto px-24 lg:px-16 xl:px-24">
+
+            <div class="flex flex-col space-y-6 w-full">
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <span class="inline-block w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3 10 4-14 3 6h4"></path>
+                            </svg>
+                        </span>
+                    </div>
+                    <div>
+                        <p class="text-lg text-gray-700"><strong>We have sent a confirmation email to you.</strong> Please check your inbox for further details.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <span class="inline-block w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </span>
+                    </div>
+                    <div>
+                        <p class="text-lg text-gray-700"><strong>We will contact you shortly to arrange the handover.</strong> Expect a call from us soon.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <span class="inline-block w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7-5 7 5M5 10h14v10H5z"></path>
+                            </svg>
+                        </span>
+                    </div>
+                    <div>
+                        <p class="text-lg text-gray-700"><strong>Your first invoice will be emailed soon.</strong> This will include any initial fees and your monthly subscription.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <span class="inline-block w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"></path>
+                            </svg>
+                        </span>
+                    </div>
+                    <div>
+                        <p class="text-lg text-gray-700"><strong>Ready to drive off?</strong> Once everything is finalized, you’ll be on the road in no time!</p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</footer>
-<script src="js/main.js" type="module"></script>
+    </section>
+            <a href="cars.html" class="mt-8 px-6 py-3.5 text-base font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-500">Browse More Cars</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="custom-footer-bg text-white py-10">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Subscribe2Go Car Subscription. All rights reserved.</p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+    <script src="js/stripe.js"></script>
+    <script src="js/main.js" type="module"></script>
 </body>
+
 </html>

@@ -222,28 +222,19 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <hr class="mt-4">  
                             </div>
                     <form id="payment-form" class="space-y-6">
-                      <div class="form-group">
-                        <label for="cardholder-name" class="block text-sm font-medium text-gray-700">Cardholder Name</label>
-                        <input id="cardholder-name" class="form-control mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" type="text" placeholder="Jane Doe" required>
-                      </div>
-                      
-                      <div class="form-group">
-                        <label for="card-element" class="block text-sm font-medium text-gray-700">Credit or debit card</label>
-                        <div id="card-element" class="p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white">
-                          <!-- Stripe's Card Element will be inserted here. -->
+                        <div id="payment-element" class="p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white">
+                            <!-- Stripe's Payment Element will be inserted here. -->
                         </div>
-                        <div id="card-errors" role="alert" class="text-red-500 text-sm mt-2"></div>
-                      </div>
+                        <div id="payment-errors" role="alert" class="text-red-500 text-sm mt-2"></div>
 
-                      <button id="submit-button" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit Payment</button>
-                      
+                        <button id="submit-button" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Potrdi plačilo</button>
                     </form>
-    <script>
-        // Debugging: Check sessionStorage as soon as the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('sessionStorage at page load:', JSON.parse(sessionStorage.getItem('personalInfo')));
-        });
-    </script>
+                    <script>
+                        // Debugging: Check sessionStorage as soon as the page loads
+                        document.addEventListener('DOMContentLoaded', () => {
+                            console.log('sessionStorage at page load:', JSON.parse(sessionStorage.getItem('personalInfo')));
+                        });
+                    </script>
 
 
                 </section>

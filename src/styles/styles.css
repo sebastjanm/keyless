@@ -199,3 +199,17 @@ input,
     height: 100%;
   }
 }
+
+
+.vehicle-tile__badge {
+    background-color: #dc2626; /* Or use a CSS variable like --button-background-color */
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 10px;
+    font-weight: 600;
+    border-radius: 12px;
+    position: absolute;
+    top: 0.5rem; /* Adjust as needed */
+    left: 0.5rem; /* Adjust as needed */
+    z-index: 10;
+}

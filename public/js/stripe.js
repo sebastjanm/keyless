@@ -13,6 +13,36 @@
 })();
 
 // Updated stripe.js
+(async function() {
+    const originalSetItem = sessionStorage.setItem;
+    sessionStorage.setItem = function(key, value) {
+        console.log(`sessionStorage set: ${key} = ${value}`);
+        originalSetItem.apply(this, arguments);
+    };
+
+    const originalClear = sessionStorage.clear;
+    sessionStorage.clear = function() {
+        console.log('sessionStorage cleared');
+        originalClear.apply(this, arguments);
+    };
+})();
+
+// Updated stripe.js
+(async function() {
+    const originalSetItem = sessionStorage.setItem;
+    sessionStorage.setItem = function(key, value) {
+        console.log(`sessionStorage set: ${key} = ${value}`);
+        originalSetItem.apply(this, arguments);
+    };
+
+    const originalClear = sessionStorage.clear;
+    sessionStorage.clear = function() {
+        console.log('sessionStorage cleared');
+        originalClear.apply(this, arguments);
+    };
+})();
+
+// Updated stripe.js
 async function createPaymentIntent(amount) {
     try {
         console.log("Creating payment intent...");
@@ -33,11 +63,35 @@ async function createPaymentIntent(amount) {
         }
         console.log("Received clientSecret:", clientSecret);
 
+        // Define the appearance and options for the Payment Element
+        const appearance = {
+            theme: 'flat',
+            variables: {
+                colorPrimary: '#0570de',
+                colorPrimaryText: '#262626',
+                colorText: '#30313d',
+                colorDanger: '#df1b41',
+                spacingUnit: '3px',
+            }
+        };
+
+        const options = {
+            layout: {
+                type: 'accordion',
+                defaultCollapsed: false,
+                radios: true,
+                spacedAccordionItems: true
+            }
+        };
+
+        // Initialize Stripe elements with the clientSecret and appearance options
         const stripe = Stripe('pk_test_7WLRdJPqXCD1EYQmZW3xCzKJ00Ivo5YzjO'); // Replace with your actual Stripe public key
-        const elements = stripe.elements();
-        const cardElement = elements.create('card');
-        console.log("Mounting card element...");
-        cardElement.mount('#card-element');
+        const elements = stripe.elements({ clientSecret, appearance });
+
+        // Create and mount the Payment Element
+        const paymentElement = elements.create('payment', options);
+        console.log("Mounting Payment Element...");
+        paymentElement.mount('#payment-element');
 
         const form = document.getElementById('payment-form');
         if (!form) {
@@ -49,10 +103,6 @@ async function createPaymentIntent(amount) {
             console.log("Form submitted. Attempting payment...");
 
             try {
-                if (!document.getElementById('card-element')) {
-                    throw new Error('Card Element is not properly mounted.');
-                }
-
                 // Retrieve personalData from sessionStorage
                 const personalData = JSON.parse(sessionStorage.getItem('personalData'));
 
@@ -62,55 +112,35 @@ async function createPaymentIntent(amount) {
                     return;
                 }
 
-                // Validate the structure of personalData
-                console.log('Validating personalData structure:', JSON.stringify(personalData, null, 2));
+            const isLocal = window.location.hostname === 'localhost';
+            const returnUrl = isLocal 
+                ? 'http://localhost:3000/confirmation.html'
+                : 'https://www.subscribe2go.com/confirmation.html';
 
-                console.log('First Name:', personalData.firstName);
-                console.log('Last Name:', personalData.lastName);
-                console.log('Email:', personalData.email);
-                console.log('Phone:', personalData.phone);
-                console.log('Address:', personalData.address);
-                console.log('City:', personalData.city);
-                console.log('Postal Code:', personalData.postalCode);
-                console.log('Country:', personalData.country);
-
-                const countryCodes = {
-                    "Slovenia": "SI",
-                    "United States": "US",
-                    // Add more countries as needed
-                };
-                const countryCode = countryCodes[personalData.country] || personalData.country;
-
-                const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
-                    payment_method: {
-                        card: cardElement,
-                        billing_details: {
-                            name: `${personalData.firstName} ${personalData.lastName}`,
-                            email: personalData.email,
-                            address: {
-                                city: personalData.city || '',
-                                country: countryCode || '',
-                                //postal_code: personalData.postalCode || '',
+                const { error } = await stripe.confirmPayment({
+                    elements,
+                    confirmParams: {
+                        return_url: returnUrl,
+                        payment_method_data: {
+                            billing_details: {
+                                name: `${personalData.firstName} ${personalData.lastName}`,
+                                email: personalData.email,
+                                address: {
+                                    city: personalData.city || '',
+                                    country: personalData.country || '',
+                                    postal_code: personalData.postalCode || '',
+                                },
                             },
-                        }
-                    }
+                        },
+                    },
                 });
 
                 if (error) {
                     console.error('Payment failed:', error.message);
                     alert(`Payment failed: ${error.message}`);
-                } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-                    console.log('Payment succeeded, processing reservation...');
-
-                    // Call the function to save payment and reservation details
-                    await savePaymentAndReservation(paymentIntent.id, personalData);
-
-                    console.log('Redirecting to confirmation page...');
-                    setTimeout(() => {
-                        window.location.href = '/confirmation.html';
-                    }, 1000);  // 1 second delay
                 } else {
-                    console.warn('Payment Intent did not succeed. Status:', paymentIntent.status);
+                    console.log('Payment succeeded, processing reservation...');
+                    // Handle post-payment logic here
                 }
             } catch (submitError) {
                 console.error('Error during payment submission:', submitError);
@@ -120,6 +150,8 @@ async function createPaymentIntent(amount) {
         console.error('Error creating payment intent:', error);
     }
 }
+
+
 
 
 /* ===================================
@@ -191,6 +223,56 @@ startDate: selectedSubscription.startDate || '2024-01-01',  // Add dummy start d
         }
 
 
+/* ===================================
+   GET URL PARAMETERS LOGIC
+=================================== */
+
+// Function to get URL parameters
+function getQueryParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+        paymentIntentId: params.get('payment_intent'),
+        amount: params.get('amount'),
+        currency: params.get('currency'),
+    };
+}
+
+const paymentData = getQueryParams();
+
+// Update the page with the extracted data (initially)
+document.getElementById('payment-intent-id').textContent = paymentData.paymentIntentId || 'N/A';
+document.getElementById('payment-amount').textContent = `${paymentData.amount / 100 || 'N/A'} ${paymentData.currency ? paymentData.currency.toUpperCase() : ''}`;
+
+// Fetch and display additional payment and customer details
+async function fetchPaymentDetails(paymentIntentId) {
+    try {
+        const response = await fetch(`/payment-details/${paymentIntentId}`);
+        if (!response.ok) throw new Error('Failed to fetch payment details');
+        const { paymentIntent, customer } = await response.json();
+
+        // Update the DOM with additional customer and payment info
+        document.getElementById('payment-intent-id').textContent = paymentIntent.id || 'N/A';
+        document.getElementById('payment-amount').textContent = `${(paymentIntent.amount_received / 100).toFixed(2)} ${paymentIntent.currency.toUpperCase()}`;
+        document.getElementById('customer-email').textContent = customer.email || 'N/A';
+        document.getElementById('customer-name').textContent = `${customer.name || 'N/A'}`;
+        document.getElementById('payment-status').textContent = paymentIntent.status || 'N/A';
+        document.getElementById('payment-method').textContent = paymentIntent.payment_method_types.join(', ') || 'N/A';
+        document.getElementById('payment-date').textContent = new Date(paymentIntent.created * 1000).toLocaleDateString() || 'N/A';
+
+    } catch (error) {
+        console.error('Error fetching payment details:', error);
+        alert('Failed to load payment details.');
+    }
+}
+
+// Fetch detailed payment information if paymentIntentId is available
+if (paymentData.paymentIntentId) {
+    fetchPaymentDetails(paymentData.paymentIntentId);
+} else {
+    console.error('No paymentIntentId found in URL.');
+}
+
+//-----------
 
 
 const result = await response.json();
