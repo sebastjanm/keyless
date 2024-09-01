@@ -11,7 +11,12 @@ export default {
         port: process.env.DB_PORT,
     },
     app: {
-        port: process.env.PORT 
+        port: process.env.PORT  || 3000,  // Use a default value if PORT is not set
+    },
+    stripe: {
+        publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+        secretKey: process.env.STRIPE_SECRET_KEY
     }
 };
+
 
