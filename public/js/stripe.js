@@ -1,69 +1,43 @@
-(function() {
-    const originalSetItem = sessionStorage.setItem;
-    sessionStorage.setItem = function(key, value) {
-        console.log(`sessionStorage set: ${key} = ${value}`);
-        originalSetItem.apply(this, arguments);
-    };
-
-    const originalClear = sessionStorage.clear;
-    sessionStorage.clear = function() {
-        console.log('sessionStorage cleared');
-        originalClear.apply(this, arguments);
-    };
-})();
-
-// Updated stripe.js
-(async function() {
-    const originalSetItem = sessionStorage.setItem;
-    sessionStorage.setItem = function(key, value) {
-        console.log(`sessionStorage set: ${key} = ${value}`);
-        originalSetItem.apply(this, arguments);
-    };
-
-    const originalClear = sessionStorage.clear;
-    sessionStorage.clear = function() {
-        console.log('sessionStorage cleared');
-        originalClear.apply(this, arguments);
-    };
-})();
-
-// Updated stripe.js
-(async function() {
-    const originalSetItem = sessionStorage.setItem;
-    sessionStorage.setItem = function(key, value) {
-        console.log(`sessionStorage set: ${key} = ${value}`);
-        originalSetItem.apply(this, arguments);
-    };
-
-    const originalClear = sessionStorage.clear;
-    sessionStorage.clear = function() {
-        console.log('sessionStorage cleared');
-        originalClear.apply(this, arguments);
-    };
-})();
-
-// Updated stripe.js
-async function createPaymentIntent(amount) {
+// Load publishable key and create PaymentIntent
+document.addEventListener('DOMContentLoaded', async () => {
     try {
-        console.log("Creating payment intent...");
+        // Fetch the publishable key from the server
+        const { publishableKey } = await fetch('/config').then((r) => r.json());
+        if (!publishableKey) {
+            throw new Error('Publishable key not found. Please check your server configuration.');
+        }
 
+        // Initialize Stripe with the publishable key
+        const stripe = Stripe(publishableKey, { apiVersion: '2020-08-27' });
+
+        // Check if #payment-element exists before proceeding
+        const paymentElement = document.querySelector('#payment-element');
+        if (!paymentElement) {
+            console.log('Payment Element not found in the DOM. Skipping payment setup.');
+            return; // Skip the rest of the script if the payment element doesn't exist
+        }
+
+        // Create PaymentIntent on the server
         const response = await fetch('/create-payment-intent', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount })
+            body: JSON.stringify({ amount: 5000 }) // Example amount in cents
         });
-
         if (!response.ok) {
-            throw new Error(`Error from server: ${response.statusText}`);
+            const errorDetails = await response.text(); // Get error details for better debugging
+            throw new Error(`Failed to create payment intent. Server response: ${errorDetails}`);
         }
+
+
 
         const { clientSecret } = await response.json();
         if (!clientSecret) {
-            throw new Error('Missing clientSecret from server response');
+            throw new Error('Failed to retrieve client secret from server.');
         }
+
         console.log("Received clientSecret:", clientSecret);
 
-        // Define the appearance and options for the Payment Element
+        // Initialize Stripe elements with the PaymentIntent's clientSecret and appearance options
         const appearance = {
             theme: 'flat',
             variables: {
@@ -74,60 +48,69 @@ async function createPaymentIntent(amount) {
                 spacingUnit: '3px',
             }
         };
+        const elements = stripe.elements({ clientSecret, appearance });
 
-        const options = {
+        console.log("Mounting Payment Element...");
+        elements.create('payment', {
             layout: {
                 type: 'accordion',
                 defaultCollapsed: false,
                 radios: true,
                 spacedAccordionItems: true
             }
-        };
-
-        // Initialize Stripe elements with the clientSecret and appearance options
-        const stripe = Stripe('pk_test_7WLRdJPqXCD1EYQmZW3xCzKJ00Ivo5YzjO'); // Replace with your actual Stripe public key
-        const elements = stripe.elements({ clientSecret, appearance });
-
-        // Create and mount the Payment Element
-        const paymentElement = elements.create('payment', options);
-        console.log("Mounting Payment Element...");
-        paymentElement.mount('#payment-element');
+        }).mount(paymentElement);
 
         const form = document.getElementById('payment-form');
         if (!form) {
             throw new Error('Payment form not found in the DOM');
         }
 
+        let submitted = false;
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
             console.log("Form submitted. Attempting payment...");
 
+            // Prevent double submissions
+            if (submitted) return;
+            submitted = true;
+            form.querySelector('button').disabled = true;
+
             try {
                 // Retrieve personalData from sessionStorage
                 const personalData = JSON.parse(sessionStorage.getItem('personalData'));
-
-                if (!personalData) {
-                    console.error('Personal data not found in sessionStorage.');
-                    alert('Error: Personal data not found. Please fill out the form again.');
-                    return;
+               if (!personalData || !personalData.firstName || !personalData.email) {
+                    throw new Error('Personal data not found in sessionStorage. Please fill out the form again.');
                 }
 
-            const isLocal = window.location.hostname === 'localhost';
-            const returnUrl = isLocal 
-                ? 'http://localhost:3000/confirmation.html'
-                : 'https://www.subscribe2go.com/confirmation.html';
 
+                // Validate the structure of personalData
+                console.log('Validating personalData structure:', JSON.stringify(personalData, null, 2));
+
+                const countryCodes = {
+                    "Slovenia": "SI",
+                    "United States": "US",
+                    // Add more countries as needed
+                };
+                const countryCode = countryCodes[personalData.country] || personalData.country;
+
+
+                const isLocal = window.location.hostname === 'localhost';
+                const returnUrl = isLocal 
+                    ? 'http://localhost:3000/confirmation.html'
+                    : 'https://www.subscribe2go.com/confirmation.html';
+
+                // Confirm payment with Stripe
                 const { error } = await stripe.confirmPayment({
                     elements,
                     confirmParams: {
-                        return_url: returnUrl,
+                        return_url: `${window.location.origin}/confirmation.html`, // Add return_url for redirection after payment
                         payment_method_data: {
                             billing_details: {
                                 name: `${personalData.firstName} ${personalData.lastName}`,
                                 email: personalData.email,
                                 address: {
                                     city: personalData.city || '',
-                                    country: personalData.country || '',
+                                    country: countryCode || '',
                                     postal_code: personalData.postalCode || '',
                                 },
                             },
@@ -138,27 +121,39 @@ async function createPaymentIntent(amount) {
                 if (error) {
                     console.error('Payment failed:', error.message);
                     alert(`Payment failed: ${error.message}`);
-                } else {
-                    console.log('Payment succeeded, processing reservation...');
-                    // Handle post-payment logic here
+                    submitted = false;
+                    form.querySelector('button').disabled = false;
+                    return;
                 }
+
+                console.log('Payment succeeded, processing reservation...');
+                await savePaymentAndReservation(clientSecret, personalData);
+
+                console.log('Redirecting to confirmation page...');
+                setTimeout(() => {
+                    window.location.href = '/confirmation.html';
+                }, 1000);
+
             } catch (submitError) {
                 console.error('Error during payment submission:', submitError);
+                alert(`Error: ${submitError.message}`);
+                submitted = false;
+                form.querySelector('button').disabled = false;
             }
         });
+
     } catch (error) {
-        console.error('Error creating payment intent:', error);
+        console.error('Error initializing payment process:', error);
+        alert(`Error: ${error.message}`);
     }
-}
-
-
+});
 
 
 /* ===================================
-   SAVE PAYMENT & RESERVATION  LOGIC
+   SAVE PAYMENT & RESERVATION LOGIC
 =================================== */
 
-async function savePaymentAndReservation(stripePaymentId, personalData) {
+async function savePaymentAndReservation(clientSecret, personalData) {
     try {
         console.log('Starting to save payment and reservation data...');
 
@@ -172,7 +167,7 @@ async function savePaymentAndReservation(stripePaymentId, personalData) {
         // Ensure that all required reservation details are present
         const reservationDetails = {
             carId: selectedSubscription.carId,
-startDate: selectedSubscription.startDate || '2024-01-01',  // Add dummy start date if missing
+            startDate: selectedSubscription.startDate || '2024-01-01',  // Add dummy start date if missing
             endDate: selectedSubscription.endDate || '2024-12-31',      // Add dummy end date if missing
             selectedDurationId: selectedSubscription.selectedDurationId,
             selectedMileagePlanId: selectedSubscription.selectedMileagePlanId,
@@ -181,10 +176,8 @@ startDate: selectedSubscription.startDate || '2024-01-01',  // Add dummy start d
             calculatedPricing: selectedSubscription.calculatedPricing,
         };
 
-        // Log the reservationDetails to see what's missing
         console.log('Reservation Details:', JSON.stringify(reservationDetails, null, 2));
 
-        // Check for missing required fields
         if (!reservationDetails.carId || !reservationDetails.startDate || !reservationDetails.endDate) {
             throw new Error('Reservation data is incomplete or missing: ' + JSON.stringify(reservationDetails));
         }
@@ -193,7 +186,7 @@ startDate: selectedSubscription.startDate || '2024-01-01',  // Add dummy start d
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                stripePaymentId,
+                stripePaymentId: clientSecret,
                 name: personalData.firstName,
                 surname: personalData.lastName,
                 email: personalData.email,
@@ -209,7 +202,6 @@ startDate: selectedSubscription.startDate || '2024-01-01',  // Add dummy start d
                 selected_insurance_package_id: reservationDetails.selectedInsurancePackageId,
                 selected_delivery_option_id: reservationDetails.selectedDeliveryOptionId,
                 amount: parseInt(reservationDetails.calculatedPricing.monthlyFee.replace('€', '').trim()) * 100, // Convert to cents
-                stripe_payment_id: stripePaymentId
             })
         });
 
@@ -222,83 +214,18 @@ startDate: selectedSubscription.startDate || '2024-01-01',  // Add dummy start d
             throw new Error(`Failed to save payment and reservation: ${response.statusText}`);
         }
 
+        const result = await response.json();
+        console.log('Server Response:', result);
 
-/* ===================================
-   GET URL PARAMETERS LOGIC
-=================================== */
-
-// Function to get URL parameters
-function getQueryParams() {
-    const params = new URLSearchParams(window.location.search);
-    return {
-        paymentIntentId: params.get('payment_intent'),
-        amount: params.get('amount'),
-        currency: params.get('currency'),
-    };
-}
-
-const paymentData = getQueryParams();
-
-// Update the page with the extracted data (initially)
-document.getElementById('payment-intent-id').textContent = paymentData.paymentIntentId || 'N/A';
-document.getElementById('payment-amount').textContent = `${paymentData.amount / 100 || 'N/A'} ${paymentData.currency ? paymentData.currency.toUpperCase() : ''}`;
-
-// Fetch and display additional payment and customer details
-async function fetchPaymentDetails(paymentIntentId) {
-    try {
-        const response = await fetch(`/payment-details/${paymentIntentId}`);
-        if (!response.ok) throw new Error('Failed to fetch payment details');
-        const { paymentIntent, customer } = await response.json();
-
-        // Update the DOM with additional customer and payment info
-        document.getElementById('payment-intent-id').textContent = paymentIntent.id || 'N/A';
-        document.getElementById('payment-amount').textContent = `${(paymentIntent.amount_received / 100).toFixed(2)} ${paymentIntent.currency.toUpperCase()}`;
-        document.getElementById('customer-email').textContent = customer.email || 'N/A';
-        document.getElementById('customer-name').textContent = `${customer.name || 'N/A'}`;
-        document.getElementById('payment-status').textContent = paymentIntent.status || 'N/A';
-        document.getElementById('payment-method').textContent = paymentIntent.payment_method_types.join(', ') || 'N/A';
-        document.getElementById('payment-date').textContent = new Date(paymentIntent.created * 1000).toLocaleDateString() || 'N/A';
-
-    } catch (error) {
-        console.error('Error fetching payment details:', error);
-        alert('Failed to load payment details.');
-    }
-}
-
-// Fetch detailed payment information if paymentIntentId is available
-if (paymentData.paymentIntentId) {
-    fetchPaymentDetails(paymentData.paymentIntentId);
-} else {
-    console.error('No paymentIntentId found in URL.');
-}
-
-//-----------
-
-
-const result = await response.json();
-console.log('Server Response:', result);
-
-if (response.ok && result.success) {
-    console.log('Payment and reservation saved successfully.');
-    alert('Payment and reservation saved successfully!');
-} else if (!response.ok) {
-    console.warn('Failed to save payment and reservation:', result.message);
-    alert(`Warning: Payment and reservation were not saved successfully. ${result.message}`);
-} else {
-    console.warn('Unexpected response:', result.message);
-    alert(`Warning: Unexpected issue during the payment and reservation process.`);
-}
+        if (response.ok && result.success) {
+            console.log('Payment and reservation saved successfully.');
+            alert('Payment and reservation saved successfully!');
+        } else {
+            console.warn('Failed to save payment and reservation:', result.message);
+            alert(`Warning: Payment and reservation were not saved successfully. ${result.message}`);
+        }
     } catch (error) {
         console.error('Error saving payment and reservation:', error);
         alert(`Error: An error occurred while saving payment and reservation. ${error.message}`);
     }
 }
-
-
-
-
-
-
-
-
-
