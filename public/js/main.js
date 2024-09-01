@@ -1022,83 +1022,15 @@ async function populatePaymentPage() {
         const subscriptionAmount = `${savedSubscription.calculatedPricing.monthlyFee} €`;
         document.getElementById('subscription-amount').textContent = subscriptionAmount;
 
+        // Comment out the following line to avoid redundancy
         // Handle Stripe Payment
-        createPaymentIntent(monthlyFeeInCents, savedPersonalInfo);
+        // createPaymentIntent(monthlyFeeInCents, savedPersonalInfo);
+        
     } else {
         console.error('No subscription or personal information found in session storage.');
     }
 }
 
-// /* ==========================
-//    PAYMENT INTENT LOGIC 
-// ========================== */
-
-// // Create Payment Intent with Stripe
-// async function createPaymentIntent(amount, personalInfo) {
-//     try {
-//         const response = await fetch('/create-payment-intent', {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify({ amount })
-//         });
-
-//         const { clientSecret } = await response.json();
-
-//         const stripe = Stripe('pk_test_7WLRdJPqXCD1EYQmZW3xCzKJ00Ivo5YzjO');
-//         const elements = stripe.elements();
-//         const cardElement = elements.create('card');
-//         let isCardElementMounted = false;
-
-//         // Mount only if not already mounted
-//         if (!isCardElementMounted) {
-//             cardElement.mount('#card-element');
-//             isCardElementMounted = true;
-//         }
-
-//         const form = document.getElementById('payment-form');
-//         form.addEventListener('submit', async (event) => {
-//             event.preventDefault();
-
-//             // Ensure the element is still mounted and available in the DOM
-//             if (!isCardElementMounted || !document.getElementById('card-element')) {
-//                 console.error('Card Element is not properly mounted.');
-//                 return;
-//             }
-
-//             // Convert country name to ISO alpha-2 code
-//             const countryCodes = {
-//                 "Slovenia": "SI",
-//                 "United States": "US",
-//                 // Add more countries as needed
-//             };
-//             const countryCode = countryCodes[personalInfo.country] || personalInfo.country;
-
-//             const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
-//                 payment_method: {
-//                     card: cardElement,
-//                     billing_details: {
-//                         name: `${personalInfo.firstName} ${personalInfo.lastName}`,
-//                         email: personalInfo.email,
-//                         address: {
-//                             city: personalInfo.city || null,
-//                             country: countryCode || null,
-//                             postal_code: personalInfo.postalCode || null,
-//                         },
-//                     },
-//                 },
-//             });
-
-//             if (error) {
-//                 console.error('Payment failed:', error.message);
-//                 alert(`Payment failed: ${error.message}`);
-//             } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-//                 alert('Payment successful!');
-//             }
-//         });
-//     } catch (error) {
-//         console.error('Error creating payment intent:', error);
-//    }
-//}
 
 
 /* ==========================

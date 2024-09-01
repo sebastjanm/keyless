@@ -221,14 +221,14 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </p>
                                 <hr class="mt-4">  
                             </div>
-                    <form id="payment-form" class="space-y-6">
-                        <div id="payment-element" class="p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white">
-                            <!-- Stripe's Payment Element will be inserted here. -->
-                        </div>
-                        <div id="payment-errors" role="alert" class="text-red-500 text-sm mt-2"></div>
+<form id="payment-form" class="space-y-6">
+                <div id="payment-element" class="p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white">
+                    <!-- Stripe's Payment Element will be inserted here. -->
+                </div>
+                <div id="payment-errors" role="alert" class="text-red-500 text-sm mt-2"></div>
 
-                        <button id="submit-button" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Potrdi plačilo</button>
-                    </form>
+                <button id="submit-button" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Confirm Payment</button>
+            </form>
                     <script>
                         // Debugging: Check sessionStorage as soon as the page loads
                         document.addEventListener('DOMContentLoaded', () => {
