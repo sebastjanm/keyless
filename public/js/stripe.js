@@ -17,18 +17,26 @@ document.addEventListener('DOMContentLoaded', async () => {
             return; // Skip the rest of the script if the payment element doesn't exist
         }
 
-        // Create PaymentIntent on the server
+        // Retrieve subscription details from sessionStorage
+        const selectedSubscription = JSON.parse(sessionStorage.getItem('selectedSubscription'));
+        if (!selectedSubscription) {
+            throw new Error('Selected subscription data not found in sessionStorage.');
+        }
+
+        // Calculate the amount based on the subscription
+        const amountInCents = parseFloat(selectedSubscription.calculatedPricing.monthlyFee.replace('€', '').trim()) * 100;
+
+        // Create PaymentIntent on the server with the correct amount
         const response = await fetch('/create-payment-intent', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount: 5000 }) // Example amount in cents
+            body: JSON.stringify({ amount: amountInCents }) // Send the correct amount
         });
+        
         if (!response.ok) {
             const errorDetails = await response.text(); // Get error details for better debugging
             throw new Error(`Failed to create payment intent. Server response: ${errorDetails}`);
         }
-
-
 
         const { clientSecret } = await response.json();
         if (!clientSecret) {
@@ -78,22 +86,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             try {
                 // Retrieve personalData from sessionStorage
                 const personalData = JSON.parse(sessionStorage.getItem('personalData'));
-               if (!personalData || !personalData.firstName || !personalData.email) {
+                if (!personalData || !personalData.firstName || !personalData.email) {
                     throw new Error('Personal data not found in sessionStorage. Please fill out the form again.');
                 }
 
-
-                // Validate the structure of personalData
-                console.log('Validating personalData structure:', JSON.stringify(personalData, null, 2));
-
+                // Define countryCode based on personalData
                 const countryCodes = {
                     "Slovenia": "SI",
+                    "Croatia": "HR",
                     "United States": "US",
                     // Add more countries as needed
                 };
                 const countryCode = countryCodes[personalData.country] || personalData.country;
 
-
+                // Determine if the environment is local or production
                 const isLocal = window.location.hostname === 'localhost';
                 const returnUrl = isLocal 
                     ? 'http://localhost:3000/confirmation.html'
@@ -103,7 +109,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const { error } = await stripe.confirmPayment({
                     elements,
                     confirmParams: {
-                        return_url: `${window.location.origin}/confirmation.html`, // Add return_url for redirection after payment
+                        return_url: returnUrl, // Use the conditional returnUrl for redirection after payment
                         payment_method_data: {
                             billing_details: {
                                 name: `${personalData.firstName} ${personalData.lastName}`,
@@ -131,7 +137,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 console.log('Redirecting to confirmation page...');
                 setTimeout(() => {
-                    window.location.href = '/confirmation.html';
+                    window.location.href = returnUrl; // Use the correct return URL for redirection
                 }, 1000);
 
             } catch (submitError) {
