@@ -1,4 +1,5 @@
 // Load publishable key and create PaymentIntent
+// Load publishable key and create PaymentIntent
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Fetch the publishable key from the server
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ amount: amountInCents }) // Send the correct amount
         });
-        
+
         if (!response.ok) {
             const errorDetails = await response.text(); // Get error details for better debugging
             throw new Error(`Failed to create payment intent. Server response: ${errorDetails}`);
@@ -105,11 +106,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ? 'http://localhost:3000/confirmation.html'
                     : 'https://www.subscribe2go.com/confirmation.html';
 
+
                 // Confirm payment with Stripe
-                const { error } = await stripe.confirmPayment({
+                const { error, paymentIntent } = await stripe.confirmPayment({
                     elements,
+                    redirect: 'if_required', // Prevents automatic redirection
                     confirmParams: {
-                        return_url: returnUrl, // Use the conditional returnUrl for redirection after payment
                         payment_method_data: {
                             billing_details: {
                                 name: `${personalData.firstName} ${personalData.lastName}`,
@@ -133,10 +135,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
 
                 console.log('Payment succeeded, processing reservation...');
+                
+                // Save payment and reservation details after payment succeeds
                 await savePaymentAndReservation(clientSecret, personalData);
 
                 console.log('Redirecting to confirmation page...');
                 setTimeout(() => {
+                    // Manual redirection after data has been saved
+                    const isLocal = window.location.hostname === 'localhost';
+                    const returnUrl = isLocal 
+                        ? 'http://localhost:3000/confirmation.html'
+                        : 'https://www.subscribe2go.com/confirmation.html';
+
                     window.location.href = returnUrl; // Use the correct return URL for redirection
                 }, 1000);
 
@@ -155,6 +165,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 
+
+
+
 /* ===================================
    SAVE PAYMENT & RESERVATION LOGIC
 =================================== */
@@ -170,7 +183,6 @@ async function savePaymentAndReservation(clientSecret, personalData) {
 
         const carDetails = selectedSubscription.carDetails;
 
-        // Ensure that all required reservation details are present
         const reservationDetails = {
             carId: selectedSubscription.carId,
             startDate: selectedSubscription.startDate || '2024-01-01',  // Add dummy start date if missing
@@ -188,30 +200,34 @@ async function savePaymentAndReservation(clientSecret, personalData) {
             throw new Error('Reservation data is incomplete or missing: ' + JSON.stringify(reservationDetails));
         }
 
+        const dataToSend = {
+            stripePaymentId: clientSecret,
+            name: personalData.firstName,
+            surname: personalData.lastName,
+            email: personalData.email,
+            mobile_phone: personalData.phone,
+            address: `${personalData.address}, ${personalData.city}, ${personalData.postalCode}, ${personalData.country}`,
+            citizenship: personalData.residenceStatus,
+            password_hash: "hashed_password", // Replace with secure hash or handle on server-side
+            car_id: carDetails.car_id,
+            start_date: reservationDetails.startDate,
+            end_date: reservationDetails.endDate,
+            selected_duration_id: reservationDetails.selectedDurationId,
+            selected_mileage_plan_id: reservationDetails.selectedMileagePlanId,
+            selected_insurance_package_id: reservationDetails.selectedInsurancePackageId,
+            selected_delivery_option_id: reservationDetails.selectedDeliveryOptionId,
+            amount: parseInt(reservationDetails.calculatedPricing.monthlyFee.replace('€', '').trim()) * 100, // Convert to cents
+        };
+
+        console.log('Data to be sent to the database:', JSON.stringify(dataToSend, null, 2));
+
         const response = await fetch('/payments/process-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                stripePaymentId: clientSecret,
-                name: personalData.firstName,
-                surname: personalData.lastName,
-                email: personalData.email,
-                mobile_phone: personalData.phone,
-                address: `${personalData.address}, ${personalData.city}, ${personalData.postalCode}, ${personalData.country}`,
-                citizenship: personalData.residenceStatus,
-                password_hash: "hashed_password", // Replace with secure hash or handle on server-side
-                car_id: carDetails.car_id,
-                start_date: reservationDetails.startDate,
-                end_date: reservationDetails.endDate,
-                selected_duration_id: reservationDetails.selectedDurationId,
-                selected_mileage_plan_id: reservationDetails.selectedMileagePlanId,
-                selected_insurance_package_id: reservationDetails.selectedInsurancePackageId,
-                selected_delivery_option_id: reservationDetails.selectedDeliveryOptionId,
-                amount: parseInt(reservationDetails.calculatedPricing.monthlyFee.replace('€', '').trim()) * 100, // Convert to cents
-            })
+            body: JSON.stringify(dataToSend)
         });
 
-        console.log('Response object:', response);
+        console.log('Response object from the server:', response);
 
         if (!response.ok) {
             const errorText = await response.text();
@@ -221,11 +237,17 @@ async function savePaymentAndReservation(clientSecret, personalData) {
         }
 
         const result = await response.json();
-        console.log('Server Response:', result);
+        console.log('Server Response after saving to database:', JSON.stringify(result, null, 2));
 
-        if (response.ok && result.success) {
+        if (result.success) {
             console.log('Payment and reservation saved successfully.');
             alert('Payment and reservation saved successfully!');
+            
+            // Use a breakpoint here to manually pause the script
+            debugger;
+
+            // Redirect to the confirmation page after checking the data
+            window.location.href = '/confirmation.html';
         } else {
             console.warn('Failed to save payment and reservation:', result.message);
             alert(`Warning: Payment and reservation were not saved successfully. ${result.message}`);

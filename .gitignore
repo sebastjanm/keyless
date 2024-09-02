@@ -3930,3 +3930,4 @@ dist
 /node_modules/axios/lib/env/data.js
 /supabase/seed.sql
 /supabase/config.toml
+/.vscode/extensions.json
