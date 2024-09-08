@@ -3,11 +3,11 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 //import dotenv from 'dotenv';
 import config from './config.js';
-import carsRoutes from './routes/cars.js';
-import filterRoutes from './routes/filters.js';
-import subscriptionsRoutes from './routes/subscriptions.js';  
-import adminRoutes from './routes/adminRoutes.js';
-import paymentRoutes from './routes/paymentRoutes.js';  
+import carsRoutes from '../../api/cars/index.js';
+import filterRoutes from '../../api/filters/index.js';
+import subscriptionsRoutes from '../../api/subscriptions/index.js';  
+import adminRoutes from '../../api/adminRoutes.js';
+import paymentRoutes from '../../api/paymentroutes/index.js';  
 import cors from 'cors';
 import Stripe from 'stripe';
 

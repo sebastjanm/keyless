@@ -1,7 +1,7 @@
 // fetchCarDetails.js
 export async function fetchCarDetails(carId) {
     try {
-        const response = await fetch(`/cars/${carId}`);
+        const response = await fetch(`/api/cars/${carId}`);  // Updated to use /api path for Vercel
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

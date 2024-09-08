@@ -1,9 +1,8 @@
 // fetchAllCars.js
-// fetchAllCars.js
 export async function fetchAllCars(filters = {}) {
     try {
         const queryString = new URLSearchParams(filters).toString();
-        const response = await fetch(`/cars?${queryString}`);
+        const response = await fetch(`/api/cars?${queryString}`);  // Updated to use /api path for Vercel
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -20,7 +19,6 @@ export async function fetchAllCars(filters = {}) {
         throw error;
     }
 }
-
 
 function getFilterValues() {
     const filterForm = document.getElementById('filterForm');
@@ -39,5 +37,3 @@ function getFilterValues() {
 
     return filterValues;
 }
-
-

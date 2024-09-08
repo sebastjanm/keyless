@@ -165,7 +165,7 @@ if (cars.length > 0) {
 <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-full">
     <!-- Header: Special Badge and Carousel -->
 
-    <div class="relative w-full h-64 bg-gray-100">
+    <div class="relative w-full bg-gray-100">
 
         <!-- Special Badge -->
         <div class="vehicle-tile__top">
@@ -254,7 +254,7 @@ if (cars.length > 0) {
     <!-- Header: Special Badge and Carousel -->
    
 
-    <div class="relative w-full h-64 bg-gray-100">
+    <div class="relative w-full  bg-gray-100">
 
 
     <!-- Special Badge -->
@@ -728,7 +728,9 @@ function calculatePricing() {
     const packageType = packageTypeElement.selectedOptions[0]?.text.split(' ')[0];
     const durationMonths = parseInt(minTermElement.selectedOptions[0]?.text.split(' ')[0], 10);
     const kilometers = parseInt(mileagePlansElement.selectedOptions[0]?.text.split(' ')[0], 10);
-    const insurancePackage = insurancePackagesElement.selectedOptions[0]?.text.split(' ')[0];
+    
+    // Strip extra characters from the insurance package (e.g., remove (+50.00 €))
+    const insurancePackage = insurancePackagesElement.selectedOptions[0]?.text.replace(/\s*\(\+.*?\)/, '').trim();
 
     if (!packageType || isNaN(durationMonths) || isNaN(kilometers) || !insurancePackage) {
         console.error('One or more selected values are invalid.');
@@ -747,7 +749,12 @@ function calculatePricing() {
     const packageTypeModifier = parseFloat(options.packageTypes.find(pt => pt.package_name === packageType)?.price_modifier) || 0;
     const durationModifier = parseFloat(options.subscriptionDurations.find(d => d.months === durationMonths)?.price_modifier) || 0;
     const kilometersModifier = parseFloat(options.mileagePlans.find(mp => mp.kilometers === kilometers)?.price_modifier) || 0;
+    
+    // Match the insurance package after stripping extra text
     const insuranceModifier = parseFloat(options.insurancePackages.find(ip => ip.package_name === insurancePackage)?.price_modifier) || 0;
+
+    console.log('Base Price:', basePrice);
+    console.log('Insurance Modifier:', insuranceModifier);
 
     const finalPrice = basePrice + packageTypeModifier + durationModifier + kilometersModifier + insuranceModifier;
 
@@ -761,6 +768,8 @@ function calculatePricing() {
         excess_mileage_fee: options.pricing[0]?.excess_mileage_fee || 'N/A'
     });
 }
+
+
 
 
 

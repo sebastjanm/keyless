@@ -1,7 +1,7 @@
-// src/public/js/fetchFilters.js
+// fetchFilters.js
 export async function fetchFilters() {
     try {
-        const response = await fetch('/filters');
+        const response = await fetch('/api/filters');  // Updated to use /api path for Vercel
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
         }
