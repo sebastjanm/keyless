@@ -1,14 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './src/**/*.{js,jsx,ts,tsx,html}',  // Ensure paths cover your HTML and JS files
-    './public/**/*.html',               // Ensure paths cover your HTML files in public
-  ],
-
+  content: ['./public/**/*.{html,js}', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        'custom-blue': '#0067b6', // Custom color for your footer
+        'custom-blue': '#0067b6',
       },
       maxWidth: {
         'custom-xl': '1140px',
@@ -19,5 +15,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
-
+};

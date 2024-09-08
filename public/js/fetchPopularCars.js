@@ -13,3 +13,4 @@ export async function fetchPopularCars() {
         throw error;
     }
 }
+

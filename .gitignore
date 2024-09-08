@@ -3931,3 +3931,4 @@ dist
 /supabase/seed.sql
 /supabase/config.toml
 /.vscode/extensions.json
+.vercel

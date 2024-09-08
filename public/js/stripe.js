@@ -1,5 +1,4 @@
 // Load publishable key and create PaymentIntent
-// Load publishable key and create PaymentIntent
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Fetch the publishable key from the server
@@ -20,12 +19,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Retrieve subscription details from sessionStorage
         const selectedSubscription = JSON.parse(sessionStorage.getItem('selectedSubscription'));
-        if (!selectedSubscription) {
-            throw new Error('Selected subscription data not found in sessionStorage.');
+        if (!selectedSubscription || !selectedSubscription.carId || !selectedSubscription.calculatedPricing) {
+            throw new Error('Invalid subscription data found in sessionStorage.');
         }
 
         // Calculate the amount based on the subscription
         const amountInCents = parseFloat(selectedSubscription.calculatedPricing.monthlyFee.replace('€', '').trim()) * 100;
+        if (isNaN(amountInCents) || amountInCents <= 0) {
+            throw new Error('Invalid amount calculated for PaymentIntent.');
+        }
 
         // Create PaymentIntent on the server with the correct amount
         const response = await fetch('/create-payment-intent', {
@@ -106,7 +108,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ? 'http://localhost:3000/confirmation.html'
                     : 'https://www.subscribe2go.com/confirmation.html';
 
-
                 // Confirm payment with Stripe
                 const { error, paymentIntent } = await stripe.confirmPayment({
                     elements,
@@ -142,7 +143,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.log('Redirecting to confirmation page...');
                 setTimeout(() => {
                     // Manual redirection after data has been saved
-                    const isLocal = window.location.hostname === 'localhost';
                     const returnUrl = isLocal 
                         ? 'http://localhost:3000/confirmation.html'
                         : 'https://www.subscribe2go.com/confirmation.html';
@@ -164,10 +164,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-
-
-
-
 /* ===================================
    SAVE PAYMENT & RESERVATION LOGIC
 =================================== */
@@ -177,8 +173,8 @@ async function savePaymentAndReservation(clientSecret, personalData) {
         console.log('Starting to save payment and reservation data...');
 
         const selectedSubscription = JSON.parse(sessionStorage.getItem('selectedSubscription'));
-        if (!selectedSubscription) {
-            throw new Error('No selected subscription found in sessionStorage.');
+        if (!selectedSubscription || !selectedSubscription.carId || !selectedSubscription.calculatedPricing) {
+            throw new Error('Invalid subscription data found in sessionStorage.');
         }
 
         const carDetails = selectedSubscription.carDetails;
@@ -219,6 +215,12 @@ async function savePaymentAndReservation(clientSecret, personalData) {
             amount: parseInt(reservationDetails.calculatedPricing.monthlyFee.replace('€', '').trim()) * 100, // Convert to cents
         };
 
+        // Validate the data before sending it to the server
+        if (!validateData(dataToSend)) {
+            console.error('Validation failed, not sending data to the server.');
+            return;
+        }
+
         console.log('Data to be sent to the database:', JSON.stringify(dataToSend, null, 2));
 
         const response = await fetch('/payments/process-payment', {
@@ -256,4 +258,29 @@ async function savePaymentAndReservation(clientSecret, personalData) {
         console.error('Error saving payment and reservation:', error);
         alert(`Error: An error occurred while saving payment and reservation. ${error.message}`);
     }
+}
+
+// Function to validate the data before sending it to the server
+function validateData(data) {
+    if (!data.stripePaymentId || typeof data.stripePaymentId !== 'string') {
+        console.error('Missing or invalid stripePaymentId');
+        return false;
+    }
+    if (!data.car_id || typeof data.car_id !== 'number') {
+        console.error('Missing or invalid car_id');
+        return false;
+    }
+    if (!data.start_date || isNaN(Date.parse(data.start_date))) {
+        console.error('Missing or invalid start_date');
+        return false;
+    }
+    if (!data.end_date || isNaN(Date.parse(data.end_date))) {
+        console.error('Missing or invalid end_date');
+        return false;
+    }
+    if (!data.amount || typeof data.amount !== 'number' || data.amount <= 0) {
+        console.error('Missing or invalid amount');
+        return false;
+    }
+    return true;
 }

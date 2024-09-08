@@ -2,20 +2,14 @@
   "name": "keyless",
   "version": "1.0.0",
   "description": "Keyless car rental service application",
-  "main": "src/server.js",
+  "type": "module",
   "scripts": {
-    "start": "node src/server/server.js",
-    "gulp": "NODE_OPTIONS='--max-old-space-size=4096' gulp",
+        "start": "node src/server/server.js",
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production && npm run build:css",
     "build:css": "tailwindcss -i ./src/styles/styles.css -o ./public/css/styles.css",
-    "watch:css": "tailwindcss -i ./src/styles/styles.css -o ./public/css/styles.css --watch",
-    "dev": "npm-run-all --parallel start gulp watch:css"
+    "build:debug": "webpack --mode development --progress"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/your-username/keyless.git"
-  },
-  "author": "Sebastjan",
-  "license": "AllCopyright Reserved",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -23,19 +17,16 @@
     "pg": "^8.12.0",
     "stripe": "^16.8.0"
   },
-  "type": "module",
-  "engines": {
-    "node": "20.x"
-  },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
-    "browser-sync": "^3.0.2",
-    "concurrently": "^8.2.2",
-    "gulp": "^5.0.0",
-    "gulp-postcss": "^10.0.0",
-    "npm-run-all": "^4.1.5",
+    "css-loader": "^6.11.0",
+    "mini-css-extract-plugin": "^2.9.1",
+    "postcss": "^8.4.0",
+    "postcss-loader": "^6.2.1",
     "tailwindcss": "^3.4.10",
-    "uuid": "^10.0.0"
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
   }
 }
 

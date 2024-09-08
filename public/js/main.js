@@ -1,4 +1,7 @@
-/// src/public/js/main.js
+
+
+console.log('main.js is loaded');
+// Your other JavaScript code here
 
 // Import necessary functions from other modules
 import { fetchPopularCars } from './fetchPopularCars.js';
@@ -941,95 +944,133 @@ async function populatePaymentPage() {
     const savedSubscription = JSON.parse(sessionStorage.getItem('selectedSubscription'));
     const savedPersonalInfo = JSON.parse(sessionStorage.getItem('personalData'));
 
-    if (savedSubscription && savedPersonalInfo) {
-        // Populate car details
-        const carDetails = savedSubscription.carDetails;
-
-        const setTextContent = (id, content) => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.textContent = content;
-            } else {
-                console.error(`Element with ID '${id}' not found`);
-            }
-        };
-
-        // Populate car details section
-        setTextContent('car-title', `${carDetails.manufacturer} ${carDetails.model_name}`);
-        setTextContent('car-type', carDetails.vehicle_type_name || 'N/A');
-        setTextContent('preferred-color', carDetails.color);
-        setTextContent('transmission', carDetails.transmission_name);
-        setTextContent('cost-extra-km', savedSubscription.calculatedPricing.excessMileageFee);
-        setTextContent('admin-fee', savedSubscription.calculatedPricing.adminFee);
-        setTextContent('first-payment', savedSubscription.calculatedPricing.deposit);
-        setTextContent('monthly-price', `${savedSubscription.calculatedPricing.monthlyFee} €`); // Total Monthly Subscription
-
-        // Retrieve and set formatted values for subscription details
-        const selectedDuration = savedSubscription.subscriptionOptions.subscriptionDurations.find(duration => duration.duration_id === parseInt(savedSubscription.selectedDurationId, 10));
-        const selectedMileagePlan = savedSubscription.subscriptionOptions.mileagePlans.find(plan => plan.plan_id === parseInt(savedSubscription.selectedMileagePlanId, 10));
-        const selectedInsurancePackage = savedSubscription.subscriptionOptions.insurancePackages.find(pkg => pkg.insurance_package_id === parseInt(savedSubscription.selectedInsurancePackageId, 10));
-        const selectedDeliveryOption = savedSubscription.subscriptionOptions.deliveryOptions.find(option => option.option_id === parseInt(savedSubscription.selectedDeliveryOptionId, 10));
-
-        setTextContent('subscription-duration', selectedDuration ? `${selectedDuration.months} months` : 'Not specified');
-        setTextContent('kilometer-options', selectedMileagePlan ? `${selectedMileagePlan.kilometers} km/month` : 'Not specified');
-        setTextContent('insurance-package', selectedInsurancePackage ? selectedInsurancePackage.package_name : 'Not specified');
-        setTextContent('delivery', selectedDeliveryOption ? selectedDeliveryOption.option_name : 'Not specified');
-
-        // Populate personal information section
-        const setValue = (id, value) => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.textContent = value || '';
-            } else {
-                console.error(`Element with ID '${id}' not found`);
-            }
-        };
-
-        const formatDateOfBirth = (dateString) => {
-            const date = new Date(dateString);
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}-${month}-${year}`;
-        };
-
-        setValue('firstName', savedPersonalInfo.firstName);
-        setValue('lastName', savedPersonalInfo.lastName);
-        setValue('email', savedPersonalInfo.email);
-        setValue('phone', savedPersonalInfo.phone);
-        setValue('birthdate', formatDateOfBirth(savedPersonalInfo.birthdate));
-        setValue('residenceStatus', savedPersonalInfo.residenceStatus);
-        setValue('address', savedPersonalInfo.address);
-        setValue('city', savedPersonalInfo.city);
-        setValue('postalCode', savedPersonalInfo.postalCode);
-        setValue('country', savedPersonalInfo.country);
-
-        // Load car images
-        if (carDetails.images && carDetails.images.length > 0) {
-            const largeImage = document.getElementById('image-large-new');
-            const smallImage1 = document.getElementById('image-small-1-new');
-            const smallImage2 = document.getElementById('image-small-2-new');
-
-            if (largeImage) largeImage.src = carDetails.images[0] || 'https://picsum.photos/800/600?random=1';
-            if (smallImage1) smallImage1.src = carDetails.images[1] || 'https://picsum.photos/400/300?random=2';
-            if (smallImage2) smallImage2.src = carDetails.images[2] || 'https://picsum.photos/400/300?random=3';
-        }
-
-        // Calculate the amount in cents
-        const monthlyFeeInCents = parseFloat(savedSubscription.calculatedPricing.monthlyFee) * 100; // Convert EUR to cents
-
-        // Display the subscription amount on the page
-        const subscriptionAmount = `${savedSubscription.calculatedPricing.monthlyFee} €`;
-        document.getElementById('subscription-amount').textContent = subscriptionAmount;
-
-        // Comment out the following line to avoid redundancy
-        // Handle Stripe Payment
-        // createPaymentIntent(monthlyFeeInCents, savedPersonalInfo);
-        
-    } else {
+    if (!savedSubscription || !savedPersonalInfo) {
         console.error('No subscription or personal information found in session storage.');
+        return;
     }
+
+    // Validate subscription data
+    if (!validateSubscriptionData(savedSubscription)) {
+        console.error('Subscription data is incomplete or invalid.');
+        return;
+    }
+
+    // Validate personal information data
+    if (!validatePersonalInfoData(savedPersonalInfo)) {
+        console.error('Personal information data is incomplete or invalid.');
+        return;
+    }
+
+    // Populate car details
+    const carDetails = savedSubscription.carDetails;
+
+    const setTextContent = (id, content) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = content;
+        } else {
+            console.error(`Element with ID '${id}' not found`);
+        }
+    };
+
+    // Populate car details section
+    setTextContent('car-title', `${carDetails.manufacturer} ${carDetails.model_name}`);
+    setTextContent('car-type', carDetails.vehicle_type_name || 'N/A');
+    setTextContent('preferred-color', carDetails.color);
+    setTextContent('transmission', carDetails.transmission_name);
+    setTextContent('cost-extra-km', savedSubscription.calculatedPricing.excessMileageFee);
+    setTextContent('admin-fee', savedSubscription.calculatedPricing.adminFee);
+    setTextContent('first-payment', savedSubscription.calculatedPricing.deposit);
+    setTextContent('monthly-price', `${savedSubscription.calculatedPricing.monthlyFee} €`); // Total Monthly Subscription
+
+    // Retrieve and set formatted values for subscription details
+    const selectedDuration = savedSubscription.subscriptionOptions.subscriptionDurations.find(duration => duration.duration_id === parseInt(savedSubscription.selectedDurationId, 10));
+    const selectedMileagePlan = savedSubscription.subscriptionOptions.mileagePlans.find(plan => plan.plan_id === parseInt(savedSubscription.selectedMileagePlanId, 10));
+    const selectedInsurancePackage = savedSubscription.subscriptionOptions.insurancePackages.find(pkg => pkg.insurance_package_id === parseInt(savedSubscription.selectedInsurancePackageId, 10));
+    const selectedDeliveryOption = savedSubscription.subscriptionOptions.deliveryOptions.find(option => option.option_id === parseInt(savedSubscription.selectedDeliveryOptionId, 10));
+
+    setTextContent('subscription-duration', selectedDuration ? `${selectedDuration.months} months` : 'Not specified');
+    setTextContent('kilometer-options', selectedMileagePlan ? `${selectedMileagePlan.kilometers} km/month` : 'Not specified');
+    setTextContent('insurance-package', selectedInsurancePackage ? selectedInsurancePackage.package_name : 'Not specified');
+    setTextContent('delivery', selectedDeliveryOption ? selectedDeliveryOption.option_name : 'Not specified');
+
+    // Populate personal information section
+    const setValue = (id, value) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value || '';
+        } else {
+            console.error(`Element with ID '${id}' not found`);
+        }
+    };
+
+    const formatDateOfBirth = (dateString) => {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
+
+    setValue('firstName', savedPersonalInfo.firstName);
+    setValue('lastName', savedPersonalInfo.lastName);
+    setValue('email', savedPersonalInfo.email);
+    setValue('phone', savedPersonalInfo.phone);
+    setValue('birthdate', formatDateOfBirth(savedPersonalInfo.birthdate));
+    setValue('residenceStatus', savedPersonalInfo.residenceStatus);
+    setValue('address', savedPersonalInfo.address);
+    setValue('city', savedPersonalInfo.city);
+    setValue('postalCode', savedPersonalInfo.postalCode);
+    setValue('country', savedPersonalInfo.country);
+
+    // Load car images
+    if (carDetails.images && carDetails.images.length > 0) {
+        const largeImage = document.getElementById('image-large-new');
+        const smallImage1 = document.getElementById('image-small-1-new');
+        const smallImage2 = document.getElementById('image-small-2-new');
+
+        if (largeImage) largeImage.src = carDetails.images[0] || 'https://picsum.photos/800/600?random=1';
+        if (smallImage1) smallImage1.src = carDetails.images[1] || 'https://picsum.photos/400/300?random=2';
+        if (smallImage2) smallImage2.src = carDetails.images[2] || 'https://picsum.photos/400/300?random=3';
+    }
+
+    // Calculate the amount in cents
+    const monthlyFeeInCents = parseFloat(savedSubscription.calculatedPricing.monthlyFee) * 100; // Convert EUR to cents
+
+    // Display the subscription amount on the page
+    const subscriptionAmount = `${savedSubscription.calculatedPricing.monthlyFee} €`;
+    document.getElementById('subscription-amount').textContent = subscriptionAmount;
+
+    // Handle Stripe Payment (if necessary)
+    // createPaymentIntent(monthlyFeeInCents, savedPersonalInfo);
 }
+
+// Validation function for subscription data
+function validateSubscriptionData(data) {
+    if (!data.carDetails || !data.carId || !data.calculatedPricing) {
+        console.error('Missing car details, carId, or calculatedPricing in subscription data.');
+        return false;
+    }
+    if (isNaN(parseFloat(data.calculatedPricing.monthlyFee))) {
+        console.error('Invalid monthlyFee in subscription data.');
+        return false;
+    }
+    return true;
+}
+
+// Validation function for personal information data
+function validatePersonalInfoData(data) {
+    if (!data.firstName || !data.lastName || !data.email || !data.address || !data.city || !data.country) {
+        console.error('Missing required fields in personal information data.');
+        return false;
+    }
+    if (!data.birthdate || isNaN(Date.parse(data.birthdate))) {
+        console.error('Invalid birthdate in personal information data.');
+        return false;
+    }
+    return true;
+}
+
 
 
 

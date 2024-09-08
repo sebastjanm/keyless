@@ -22,7 +22,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = config.app.port || 3000;
+//const port = config.app.port || 8080;
+const port = process.env.PORT || 3000; // Ensure it matches the frontend
 
 // Middleware
 app.use(express.static(path.join(__dirname, '../../public')));  // Correct path to serve static files
@@ -36,7 +37,7 @@ app.get('/config', (req, res) => {
 
 // CORS configuration - adjust origin as needed
 const allowedOrigins = [
-    'http://localhost:3000',  // Local development
+    'http://localhost:8080',  // Local development
     'https://www.subscribe2go.com'  // Production frontend domain
 ];
 
