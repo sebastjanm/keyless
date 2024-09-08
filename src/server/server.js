@@ -1,8 +1,8 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-//import dotenv from 'dotenv';
-import config from './config.js';
+import dotenv from 'dotenv';
+dotenv.config(); // Ensure environment variables are loaded
 import carsRoutes from '../../api/cars/index.js';
 import filterRoutes from '../../api/filters/index.js';
 import subscriptionsRoutes from '../../api/subscriptions/index.js';  
@@ -10,6 +10,8 @@ import adminRoutes from '../../api/adminRoutes.js';
 import paymentRoutes from '../../api/paymentroutes/index.js';  
 import cors from 'cors';
 import Stripe from 'stripe';
+
+
 
 
 // Initialize Stripe with the secret key (which is already loaded by config.js)
@@ -59,7 +61,8 @@ app.use(cors({
 app.use('/cars', carsRoutes);
 app.use('/filters', filterRoutes);
 app.use('/subscription-options', subscriptionsRoutes);
-app.use('/payments', paymentRoutes);  // Use the payment routes
+app.use('/paymentroutes', paymentRoutes);  // Use the payment routes
+
 
 // Use the admin routes
 app.use('/admin', adminRoutes);

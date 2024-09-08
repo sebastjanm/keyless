@@ -905,6 +905,13 @@ function populateOrderOverview() {
         if (monthlyFeeElement) {
             monthlyFeeElement.textContent = savedSubscription.calculatedPricing.monthlyFee;
         }
+
+        // Populate excess mileage fee
+        const excessMileageFeeElement = document.getElementById('excessMileageFee');
+        if (excessMileageFeeElement) {
+            excessMileageFeeElement.textContent = savedSubscription.calculatedPricing.excessMileageFee;
+        }
+
     } else {
         console.error('No subscription data found in session storage.');
     }

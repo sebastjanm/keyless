@@ -5,22 +5,23 @@ const { Pool } = pkg;
 const pool = new Pool(config.db);
 
 
+
+// Function to process payment and reservation
 export async function processPaymentAndReservation(userData, reservationData, paymentData) {
     console.log('Received userData:', JSON.stringify(userData, null, 2));
     console.log('Received reservationData:', JSON.stringify(reservationData, null, 2));
     console.log('Received paymentData:', JSON.stringify(paymentData, null, 2));
 
-            // Additional validation here
-        if (!userData.name) {
-            console.error('User data is missing the name field:', JSON.stringify(userData, null, 2));
-            throw new Error('User data validation failed');
-        }
+    if (!userData.name) {
+        console.error('User data is missing the name field:', JSON.stringify(userData, null, 2));
+        throw new Error('User data validation failed');
+    }
 
-        if (Object.keys(userData).length === 0 || Object.keys(reservationData).length === 0 || Object.keys(paymentData).length === 0) {
-            throw new Error('One or more received data objects are empty. Aborting transaction.');
-        }
+    if (Object.keys(userData).length === 0 || Object.keys(reservationData).length === 0 || Object.keys(paymentData).length === 0) {
+        throw new Error('One or more received data objects are empty. Aborting transaction.');
+    }
 
-        const client = await pool.connect();
+    const client = await pool.connect();
 
     try {
         await client.query('BEGIN'); // Start transaction
@@ -33,19 +34,11 @@ export async function processPaymentAndReservation(userData, reservationData, pa
 
         let userId;
         if (userResult.rows.length === 0) {
-            // Step 2: Validate User Data
+            // User does not exist, create new user
             console.log('User does not exist, creating new user...');
-            console.log('User Data:', JSON.stringify(userData, null, 2));
-
-            // Check if any required fields are missing
-            if (!userData.name || !userData.surname || !userData.email || !userData.mobile_phone || !userData.address || !userData.citizenship || !userData.password_hash) {
-                throw new Error('Missing required user data fields: ' + JSON.stringify(userData, null, 2));
-            }
-
-            // Insert new user into the database
             const insertUserQuery = `
                 INSERT INTO users (name, surname, email, mobile_phone, address, citizenship, status, password_hash)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                VALUES ($1, $2, $3, $4, $5, $6, 'Verified', $7)
                 RETURNING user_id
             `;
             const insertUserValues = [
@@ -55,7 +48,6 @@ export async function processPaymentAndReservation(userData, reservationData, pa
                 userData.mobile_phone,
                 userData.address,
                 userData.citizenship,
-                'Verified',  // Assuming status is 'Verified' for successful transactions
                 userData.password_hash
             ];
             const insertUserResult = await client.query(insertUserQuery, insertUserValues);
@@ -115,7 +107,7 @@ export async function processPaymentAndReservation(userData, reservationData, pa
     } catch (error) {
         await client.query('ROLLBACK'); // Rollback transaction on error
         console.error('Error processing payment and reservation:', error);
-    throw error; // Ensure this propagates correctly
+        throw error;
 
     } finally {
         client.release(); // Release the client back to the pool
@@ -123,5 +115,84 @@ export async function processPaymentAndReservation(userData, reservationData, pa
     }
 }
 
+/* ==========================
+   save Stripe payment intent
+========================== */
+
+// Function to save Stripe payment intent and client secret to the database with extensive logging
+export async function saveClientSecretToDB(paymentIntentId, clientSecret, userId, amount) {
+    const client = await pool.connect();
+
+    try {
+        console.log(`Attempting to save PaymentIntent to DB`);
+        console.log(`Received paymentIntentId: ${paymentIntentId}`);
+        console.log(`Received clientSecret: ${clientSecret}`);
+        console.log(`Received userId: ${userId}`);
+        console.log(`Received amount: ${amount}`);
+
+        // Begin a transaction
+        await client.query('BEGIN');
+        console.log('Transaction started.');
+
+        // Insert payment intent into the payment_intents table
+        const insertPaymentIntentQuery = `
+            INSERT INTO payment_intents (stripe_payment_intent_id, client_secret, user_id, amount)
+            VALUES ($1, $2, $3, $4)
+            RETURNING payment_intent_id
+        `;
+        const insertPaymentIntentValues = [paymentIntentId, clientSecret, userId, amount];
+
+        console.log('Running insert query:', insertPaymentIntentQuery);
+        console.log('With values:', insertPaymentIntentValues);
+
+        const result = await client.query(insertPaymentIntentQuery, insertPaymentIntentValues);
+
+        if (result.rows.length === 0) {
+            console.error('Insert failed: No rows returned.');
+            throw new Error('Failed to insert payment intent into the database.');
+        }
+
+        const paymentIntentRecordId = result.rows[0].payment_intent_id;
+        console.log(`Payment intent saved successfully with payment_intent_id: ${paymentIntentRecordId}`);
+
+        // Commit the transaction
+        await client.query('COMMIT');
+        console.log('Transaction committed successfully.');
+
+        return paymentIntentRecordId;
+
+    } catch (error) {
+        console.error('Error occurred while saving the client secret to DB:', error.message);
+        await client.query('ROLLBACK');
+        console.log('Transaction rolled back due to error.');
+        throw new Error(`Failed to save client secret to the database: ${error.message}`);
+    } finally {
+        client.release();
+        console.log('Database client released.');
+    }
+}
 
 
+/* ==========================
+   get client secret from DB
+========================== */
+
+// Function to get client secret from the database
+export async function getClientSecretFromDB(paymentIntentId) {
+    const client = await pool.connect();
+    try {
+        const query = `SELECT client_secret FROM payment_intents WHERE stripe_payment_intent_id = $1`;
+        const result = await client.query(query, [paymentIntentId]);
+
+        if (result.rows.length === 0) {
+            throw new Error(`No client secret found for paymentIntentId: ${paymentIntentId}`);
+        }
+
+        return result.rows[0].client_secret;
+    } catch (error) {
+        console.error('Error fetching client secret:', error);
+        throw error;
+    } finally {
+        client.release();
+    }
+}

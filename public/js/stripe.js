@@ -1,14 +1,20 @@
+// Declare variables outside of DOMContentLoaded
+let stripe;
+let elements;
+let clientSecret;  // Declare clientSecret globally
+
 // Load publishable key and create PaymentIntent
 document.addEventListener('DOMContentLoaded', async () => {
+
     try {
         // Fetch the publishable key from the server
-        const { publishableKey } = await fetch('/config').then((r) => r.json());
+        const { publishableKey } = await fetch('/api/paymentroutes/config').then((r) => r.json());
         if (!publishableKey) {
             throw new Error('Publishable key not found. Please check your server configuration.');
         }
 
         // Initialize Stripe with the publishable key
-        const stripe = Stripe(publishableKey, { apiVersion: '2020-08-27' });
+        stripe = Stripe(publishableKey, { apiVersion: '2020-08-27' });
 
         // Check if #payment-element exists before proceeding
         const paymentElement = document.querySelector('#payment-element');
@@ -30,22 +36,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Create PaymentIntent on the server with the correct amount
-        const response = await fetch('/create-payment-intent', {
+        const response = await fetch('/api/paymentroutes/create-payment-intent', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ amount: amountInCents }) // Send the correct amount
         });
 
-        if (!response.ok) {
-            const errorDetails = await response.text(); // Get error details for better debugging
-            throw new Error(`Failed to create payment intent. Server response: ${errorDetails}`);
-        }
+        const result = await response.json();
 
-        const { clientSecret } = await response.json();
+        // Log the entire response for better debugging
+        console.log("Server Response:", result);
+
+        clientSecret = result.clientSecret;
+
         if (!clientSecret) {
             throw new Error('Failed to retrieve client secret from server.');
         }
-
         console.log("Received clientSecret:", clientSecret);
 
         // Initialize Stripe elements with the PaymentIntent's clientSecret and appearance options
@@ -59,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 spacingUnit: '3px',
             }
         };
-        const elements = stripe.elements({ clientSecret, appearance });
+        elements = stripe.elements({ clientSecret, appearance });
 
         console.log("Mounting Payment Element...");
         elements.create('payment', {
@@ -81,37 +87,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             event.preventDefault();
             console.log("Form submitted. Attempting payment...");
 
-            // Prevent double submissions
             if (submitted) return;
             submitted = true;
             form.querySelector('button').disabled = true;
 
             try {
-                // Retrieve personalData from sessionStorage
                 const personalData = JSON.parse(sessionStorage.getItem('personalData'));
                 if (!personalData || !personalData.firstName || !personalData.email) {
                     throw new Error('Personal data not found in sessionStorage. Please fill out the form again.');
                 }
 
-                // Define countryCode based on personalData
-                const countryCodes = {
-                    "Slovenia": "SI",
-                    "Croatia": "HR",
-                    "United States": "US",
-                    // Add more countries as needed
-                };
+                const countryCodes = { "Slovenia": "SI", "Croatia": "HR", "United States": "US" };
                 const countryCode = countryCodes[personalData.country] || personalData.country;
 
-                // Determine if the environment is local or production
                 const isLocal = window.location.hostname === 'localhost';
                 const returnUrl = isLocal 
                     ? 'http://localhost:3000/confirmation.html'
                     : 'https://www.subscribe2go.com/confirmation.html';
 
-                // Confirm payment with Stripe
                 const { error, paymentIntent } = await stripe.confirmPayment({
                     elements,
-                    redirect: 'if_required', // Prevents automatic redirection
+                    redirect: 'if_required',
                     confirmParams: {
                         payment_method_data: {
                             billing_details: {
@@ -137,17 +133,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 console.log('Payment succeeded, processing reservation...');
                 
-                // Save payment and reservation details after payment succeeds
-                await savePaymentAndReservation(clientSecret, personalData);
+                // Pass both paymentIntentId and clientSecret to the savePaymentAndReservation function
+                await savePaymentAndReservation(paymentIntent.id, clientSecret, personalData);
 
-                console.log('Redirecting to confirmation page...');
                 setTimeout(() => {
-                    // Manual redirection after data has been saved
-                    const returnUrl = isLocal 
-                        ? 'http://localhost:3000/confirmation.html'
-                        : 'https://www.subscribe2go.com/confirmation.html';
-
-                    window.location.href = returnUrl; // Use the correct return URL for redirection
+                    window.location.href = returnUrl;
                 }, 1000);
 
             } catch (submitError) {
@@ -164,11 +154,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+
 /* ===================================
    SAVE PAYMENT & RESERVATION LOGIC
 =================================== */
 
-async function savePaymentAndReservation(clientSecret, personalData) {
+async function savePaymentAndReservation(paymentIntentId, clientSecret, personalData) {
     try {
         console.log('Starting to save payment and reservation data...');
 
@@ -197,7 +188,8 @@ async function savePaymentAndReservation(clientSecret, personalData) {
         }
 
         const dataToSend = {
-            stripePaymentId: clientSecret,
+            stripePaymentId: paymentIntentId,  // Use paymentIntentId
+            clientSecret: clientSecret,  // Save clientSecret as well
             name: personalData.firstName,
             surname: personalData.lastName,
             email: personalData.email,
@@ -223,7 +215,7 @@ async function savePaymentAndReservation(clientSecret, personalData) {
 
         console.log('Data to be sent to the database:', JSON.stringify(dataToSend, null, 2));
 
-        const response = await fetch('/payments/process-payment', {
+        const response = await fetch('/api/paymentroutes/process-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dataToSend)
@@ -244,12 +236,9 @@ async function savePaymentAndReservation(clientSecret, personalData) {
         if (result.success) {
             console.log('Payment and reservation saved successfully.');
             alert('Payment and reservation saved successfully!');
-            
-            // Use a breakpoint here to manually pause the script
-            debugger;
 
-            // Redirect to the confirmation page after checking the data
-            window.location.href = '/confirmation.html';
+            // Redirect to the confirmation page with payment_intent_id as a query parameter
+            window.location.href = `/confirmation.html?payment_intent_id=${paymentIntentId}`;
         } else {
             console.warn('Failed to save payment and reservation:', result.message);
             alert(`Warning: Payment and reservation were not saved successfully. ${result.message}`);
