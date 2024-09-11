@@ -156,13 +156,13 @@ if (cars.length > 0) {
     cars.forEach(car => {
         const carCard = document.createElement('a');
         carCard.href = `car-details.html?carId=${car.car_id}`;
-        carCard.classList.add('block', 'border', 'bg-white', 'border-gray-300', 'rounded-lg', 'hover:shadow-lg', 'transition-shadow', 'duration-200');
+        carCard.classList.add('block', 'border', 'bg-white', 'border-gray-100', 'rounded-lg', 'hover:shadow-lg', 'transition-shadow', 'duration-200');
 
         // Use car.image_url from the database, with fallback to defaultImage
         const imageUrl = car.image_url ? car.image_url : defaultImage;
 
         carCard.innerHTML = `
-<div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-full">
+<div class="bg-white rounded-lg overflow-hidden flex flex-col h-full">
     <!-- Header: Special Badge and Carousel -->
 
     <div class="relative w-full bg-gray-100">
@@ -250,7 +250,7 @@ if (cars.length > 0) {
         const imageUrl = car.image_url ? car.image_url : defaultImage;
 
         carCard.innerHTML = `
-<div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-full">
+<div class="bg-white rounded-lg overflow-hidden flex flex-col h-full">
     <!-- Header: Special Badge and Carousel -->
    
 

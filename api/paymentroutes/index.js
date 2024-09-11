@@ -1,4 +1,4 @@
-import { processPaymentAndReservation } from '../../src/server/controllers/paymentController.js';
+import { processPaymentAndReservation, saveClientSecretToDB } from '../../src/server/controllers/paymentController.js';  // Import saveClientSecretToDB
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -19,11 +19,15 @@ export default async function handler(req, res) {
     // Handle POST request to /create-payment-intent
     else if (req.method === 'POST' && req.url === '/create-payment-intent') {
         try {
-            const { amount } = req.body;
+            const { amount, userId } = req.body;  // Extract userId
 
             // Validate amount
             if (!amount || amount <= 0) {
                 return res.status(400).json({ error: 'Invalid amount for payment intent' });
+            }
+
+            if (!userId) {
+                return res.status(400).json({ error: 'User ID is required for creating payment intent' });
             }
 
             // Create a payment intent with the specified amount
@@ -31,6 +35,17 @@ export default async function handler(req, res) {
                 amount,
                 currency: 'eur',
             });
+
+            console.log('Payment intent created:', paymentIntent.id);
+
+            // Save client secret and payment intent in the database
+            try {
+                await saveClientSecretToDB(paymentIntent.id, paymentIntent.client_secret, userId, amount);
+                console.log('Successfully saved Payment Intent to DB');
+            } catch (dbError) {
+                console.error('Database save failed:', dbError);
+                return res.status(500).json({ error: 'Failed to save payment intent to database' });
+            }
 
             // Return the client secret
             res.status(200).json({ clientSecret: paymentIntent.client_secret });

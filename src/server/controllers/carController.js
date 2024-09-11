@@ -41,7 +41,7 @@ export async function getPopularCars(req, res) {
                 FROM car_model_images
                 GROUP BY model_id
             ) cim ON cm.model_id = cim.model_id
-           LIMIT 4;
+           LIMIT 8;
         `;
 
         // Execute the query with the params array (which is empty in this case)

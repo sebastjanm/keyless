@@ -8,24 +8,40 @@
     <script>
         function setRandomHeroImage() {
             const images = [
-                '/images/bg-9-min.jpg',
+                '/images/bg-0-mini.jpg',
                 '/images/bg-2-min.jpg',
                 '/images/car05-min.jpg',
                 '/images/bg-6-min.jpg',
                 '/images/car06-min.jpeg'
             ];
-            const randomImage = images[Math.floor(Math.random() * images.length)];
-            document.getElementById('hero').style.backgroundImage = `url(${randomImage})`;
+            let index = 0;
+            const heroElement = document.getElementById('hero');
+
+            function changeImage() {
+                heroElement.style.backgroundImage = `url(${images[index]})`;
+                index = (index + 1) % images.length;
+            }
+
+            // Initial image set
+            changeImage();
+
+            // Change image every 5 seconds
+            setInterval(changeImage, 5000);
         }
-        document.addEventListener('DOMContentLoaded', setRandomHeroImage);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroElement = document.getElementById('hero');
+            heroElement.style.transition = 'background-image 2s ease-in-out';
+            setRandomHeroImage();
+        });
     </script>
 </head>
 <body class="bg-gray-100">
     <!-- Top Menu -->
     <header id="top-menu" class="fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out bg-opacity-80">
-        <div class="container mx-auto px-4 py-4 bg-transparent md:px-8 md:py-4">
+        <div class="container mx-auto px-4 py-6 bg-transparent md:px-8 md:py-6">
             <div class="flex items-center justify-between">
-                <a href="index.html" class="text-xl font-bold text-white" id="logo-text">Subscribe2Go</a>
+                <a href="index.html" class="text-xl font-bold text-white" id="logo-text">Avant2Subscribe</a>
                 <nav class="hidden md:flex space-x-4" id="nav-links">
                     <a href="cars.html" class="text-white">Car Subscription</a>
                     <a href="howitworks.html" class="text-white">How it works</a>
@@ -49,7 +65,7 @@
                 <a href="index.html" class="block text-white">Home</a>
                 <a href="cars.html" class="block text-white">Available cars</a>
                 <a href="howitworks.html" class="block text-white">How it works</a>
-                 <a href="tryandbuy.html" class="block text-white">Try & Buy</a>
+                <a href="tryandbuy.html" class="block text-white">Try & Buy</a>
                 <a href="business.html" class="block text-white">For Business</a>
                 <a href="faq.html" class="block text-white">FAQ</a>
                 <a href="blog.html" class="block text-white">Blog</a>
@@ -58,174 +74,224 @@
         </div>
     </header>
 
-<!-- Hero Section -->
-<section id="hero" class="hero bg-blue-600 text-white flex items-center justify-center py-8 md:py-12">
-    <div class="container mx-auto text-center px-6 md:px-12 lg:px-32 max-w-screen-lg">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4 max-w-3xl mx-auto">Drive What You Want, When You Want. Subscribe2Go Today!</h1>
-        <p class="text-lg md:text-xl mb-6 max-w-xl mx-auto">
-            Experience hassle-free, all-inclusive car subscriptions tailored to your needs—drive the perfect vehicle with complete flexibility, all for one monthly fee.
-        </p>
-        <a href="cars.html" class="bg-orange-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-orange-600 transition-all duration-300">Browse cars</a>
-    </div>
-</section>
-
-
-
-<!-- Popular Cars Section -->
-<section id="popular-cars" class="bg-gray-100 py-20">
-    <div class="container mx-auto px-4 justify-end flex gap-4">
-        <div class="w-full flex flex-col md:flex-row">
-            <div class="md:w-1/5 mb-8 md:mb-0 md:pr-8">
-                <h2 class="text-3xl font-bold">Explore Our Top Cars</h2>
-                <p class="text-gray-600 mb-4">Car subscription: the flexible, all-inclusive alternative to leasing. One monthly fee covers everything. </p>
-            </div>
-            <div class="md:w-4/5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="car-cards-container">
-                <!-- Cards will be dynamically inserted here by JS -->
-            </div>
+    <!-- Hero Section -->
+    <section id="hero" class="hero bg-blue-600 text-white flex items-center justify-center py-10 md:py-12">
+        <div class="container mx-auto text-center px-6 md:px-12 lg:px-32 max-w-screen-lg">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 max-w-3xl mx-auto">Drive What You Want, When You Want. Subscribe2Go Today!</h1>
+            <p class="text-lg md:text-xl mb-6 max-w-xl mx-auto">
+                Experience hassle-free, all-inclusive car subscriptions tailored to your needs—drive the perfect vehicle with complete flexibility, all for one monthly fee.
+            </p>
+            <a href="cars.html" class="bg-orange-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-orange-600 transition-all duration-300">Browse cars</a>
         </div>
-    </div>
-</section>
+    </section>
 
-
-
-<!-- How It Works Section -->
-<section id="how-it-works" class="bg-gray-100">
-    <div class="container mx-auto px-24 lg:px-16 xl:px-24">
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-black">Unlock the Future of Driving with <span class="text-blue-600">Subscription2Go</span></h2>
-        </div>
-        <div class="flex flex-col md:flex-row items-center md:items-start">
-            <!-- Feature Blocks -->
-            <div class="md:w-1/2 space-y-8">
-                <div class="flex items-center bg-white rounded-lg p-6">
-                    <div class="flex-shrink-0">
-                        <span class="inline-block w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold">🔍</span>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-xl font-semibold">All-Inclusive Freedom</h3>
-                        <p class="text-gray-600">Experience seamless mobility with everything covered—except the fuel. No deposits, no surprises—just one transparent monthly fee.</p>
-                    </div>
-                </div>
-                <div class="flex items-center bg-white rounded-lg p-6">
-                    <div class="flex-shrink-0">
-                        <span class="inline-block w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold">📅</span>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-xl font-semibold">Flexible by Design</h3>
-                        <p class="text-gray-600">Drive on your terms. Choose your subscription length, starting from just 1 month. Perfect for those who know exactly what they need, when they need it.</p>
-                    </div>
-                </div>
-                <div class="flex items-center bg-white rounded-lg p-6">
-                    <div class="flex-shrink-0">
-                        <span class="inline-block w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold">🔄</span>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-xl font-semibold">Adapt as You Go</h3>
-                        <p class="text-gray-600">Various models are available to suit your current business situation. Do you need a small car in spring and SUV in summertime?</p>
-                    </div>
-                </div>
-                <div class="flex items-center bg-white rounded-lg p-6">
-                    <div class="flex-shrink-0">
-                        <span class="inline-block w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold">📍</span>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-xl font-semibold">Convenient Pick-Up Locations</h3>
-                        <p class="text-gray-600">Your new company car is ready for pick-up at your convenience. Wherever you are, we’re close by.</p>
-                    </div>
-                </div>
+    <section id="how-it-works" class="bg-gray-50 py-24">
+        <div class="container mx-auto px-24 lg:px-16 xl:px-24">
+            <div class="pb-16 text-center ">
+                <p class="text-sm font-semibold text-gray-500 tracking-widest uppercase">How It Works</p>
+                <h2 class="text-4xl font-bold text-gray-900">Making car ownership
+                    affordable and flexible.</h2>
             </div>
-            <!-- Image Placeholder -->
-            <div class="md:w-1/2 md:pl-8 mt-8 md:mt-0">
-                <div class="bg-white rounded-lg overflow-hidden">
-                    <img src="../images/features.jpeg" alt="Car Image" class="w-full h-full object-cover">
+            <div class="flex text-center justify-center items-center relative sideLine">
+                <!-- Pick Your Favorite Car -->
+                <div class="flex flex-col items-center px-8 py-6 sm:py-0 sm:my-6 relative">
+                    <img src="/images/icons/car.svg" class="mb-4 mx-auto" alt="" width="36" height="36">
+                    <h3 class="text-lg font-bold text-gray-900">Pick Your Favorite Car</h3>
+                    <p class="font-light text-gray-600 mt-2">Browse our selection of the latest models and choose the one that suits your lifestyle.</p>
+                </div>
+
+                <!-- Configure Your Subscription -->
+                <div class="flex flex-col items-center px-8 py-6 sm:py-0 sm:my-6 relative">
+                    <img src="/images/icons/location.svg" class="mb-4 mx-auto" alt="" width="36" height="36">
+                    <h3 class="text-lg font-bold text-gray-900">Configure Your Subscription</h3>
+                    <p class="font-light text-gray-600 mt-2">Customize your plan with flexible terms, mileage, and additional options—all for one monthly fee.</p>
+                </div>
+
+                <!-- Confirm Your Booking -->
+                <div class="flex flex-col items-center px-8 py-6 sm:py-0 sm:my-6 relative">
+                    <img src="/images/icons/confirmation.svg" class="mb-4 mx-auto" alt="" width="36" height="36">
+                    <h3 class="text-lg font-bold text-gray-900">Confirm Your Booking</h3>
+                    <p class="font-light text-gray-600 mt-2">Once you're happy with your configuration, confirm your booking, and we'll take care of the rest.</p>
+                </div>
+
+                <!-- Enjoy the Ride -->
+                <div class="flex flex-col items-center px-8 py-6 sm:py-0 sm:my-6 relative">
+                    <img src="/images/icons/driving.svg" class="mb-4 mx-auto" alt="" width="36" height="36">
+                    <h3 class="text-lg font-bold text-gray-900">Enjoy the Ride</h3>
+                    <p class="font-light text-gray-600 mt-2">Drive. Swap cars or cancel anytime. Charging, insurance, and roadside assistance are already included.</p>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-
-
-
-<!-- Service Comparison Section -->
-<section id="service-comparison"  class="mt-8 bg-gray-100">
-    <div class="container mx-auto px-24 lg:px-16 xl:px-24">
-                <div class="text-center mb-12">
-        <h2 class="text-4xl font-bold mb-4">Service <span class="text-blue-600">Comparison</span></h2>
-    </div>
-        <div class="overflow-x-auto">
-            <table class="table-auto w-full  mx-auto bg-white rounded-lg">
-                <thead>
-                    <tr class="bg-gray-200 text-gray-700">
-                        <th class="py-4 px-6 text-center"></th>
-                        <th class="py-4 px-6 text-center font-bold uppercase">Leasing</th>
-                        <th class="py-4 px-6 text-center font-bold uppercase bg-blue-600 text-white">Car Subscription</th>
-                        <th class="py-4 px-6 text-center font-bold uppercase">Short-Term Rental</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-700 ">
-                    <tr>
-                        <td class="py-4 px-6 text-center font-semibold">Monthly payment w/o VAT</td>
-                        <td class="py-4 px-6 text-center ">2,212.50 €</td>
-                        <td class="py-4 px-6 text-center bg-blue-100 text-blue-600 font-bold ">1,500.00 €</td>
-                        <td class="py-4 px-6 text-center">2,500.00 €</td>
-                    </tr>
-                    <tr class="border-t">
-                        <td class="py-4 px-6 text-center font-semibold">Without initial payment / deposit</td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                    </tr>
-                    <tr class="border-t">
-                        <td class="py-4 px-6 text-center font-semibold">Insurance</td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
-                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
-                    </tr>
-                    <tr class="border-t">
-                        <td class="py-4 px-6 text-center font-semibold">Registration and Fees</td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
-                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
-                    </tr>
-                    <tr class="border-t">
-                        <td class="py-4 px-6 text-center font-semibold">Service</td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
-                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
-                    </tr>
-                    <tr class="border-t">
-                        <td class="py-4 px-6 text-center font-semibold">Seasonal Tires</td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
-                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
-                    </tr>
-                    <tr class="border-t">
-                        <td class="py-4 px-6 text-center font-semibold">Roadside assistance 24/7</td>
-                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
-                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
-                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
-                    </tr>
-                    <tr class="border-t">
-                        <td class="py-4 px-6 text-center"></td>
-                        <td class="py-4 px-6 text-center"></td>
-                        <td class="py-4 px-6 text-center bg-blue-100">
-                            <a href="#" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg">Browse cars</a>
-                        </td>
-                        <td class="py-4 px-6 text-center"></td>
-                    </tr>
-                </tbody>
-            </table>
+    <!-- Popular Cars Section -->
+    <section id="popular-cars" class="bg-gray-50 py-24">
+        <div class="container mx-auto px-24 lg:px-16 xl:px-24">
+            <div class="pb-32 text-center ">
+                <p class="text-sm font-semibold text-gray-500 tracking-widest uppercase">Get on the road with Avant2Go</p>
+                <h2 class="text-4xl font-bold text-gray-900">Looking for a new car?</h2>
+            </div>
+            <div class="w-full flex flex-col md:flex-row">
+                <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="car-cards-container">
+                    <!-- Cards will be dynamically inserted here by JS -->
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
+    <!-- Mobile App Section -->
+    <section id="mobile-app" class="relative bg-white py-24">
+        <div class="container mx-auto px-16 text-center">
 
-<!-- Testimonials Section -->
-<section id="testimonials" class="py-20 bg-gray-100">
-    <div class="container mx-auto px-24 lg:px-16 xl:px-24">
-        <h2 class="text-4xl font-bold text-center mb-8">What Our Customers Say About Us</h2>
-        <p class="text-center text-gray-600 mb-12">Here are some comments from our customers, be one of them</p>
+            <!-- Background design elements -->
+            <div class="absolute inset-x-0 bottom-36 h-80 z-0">
+                <img src="/images/background-design.png" alt="Background Design" class="w-full h-full object-cover opacity-80">
+            </div>
+
+            <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between px-4 lg:px-12">
+
+                <!-- Left Column -->
+                <div class="lg:w-1/2 flex flex-col justify-center items-start text-left space-y-6 z-10">
+                    <h2 class="text-4xl font-bold text-white">Download Subscribe2Go Mobile App for free</h2>
+                    <p class="text-white">For faster, easier booking and exclusive deals.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-black text-white py-2 px-4 rounded-lg flex items-center space-x-2">
+                            <img src="/images/app-store.png" alt="App Store" class="w-6 h-6">
+                            <span>Download on the App Store</span>
+                        </a>
+                        <a href="#" class="bg-black text-white py-2 px-4 rounded-lg flex items-center space-x-2">
+                            <img src="/images/google-play.png" alt="Google Play" class="w-6 h-6">
+                            <span>Get it on Google Play</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Right Column -->
+                <div class="lg:w-1/2 mt-12 lg:mt-0 flex justify-center relative">
+                    <div class="relative w-64 h-auto">
+                        <img src="/images/phone-mockup.png" alt="Phone Mockup" class="w-64 h-auto object-contain z-30">
+                    </div>
+                </div>
+            </div>
+
+    </section>
+
+    <!-- FAQs Section -->
+    <section id="faqs" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-16 text-center">
+            <h2 class="text-4xl font-bold mb-4">FAQ</h2>
+            <p class="text-lg mb-12">Cars, Running Time & Kilometers</p>
+            <div class="text-left max-w-4xl mx-auto space-y-4">
+                <!-- Question 1 -->
+                <details class="bg-white p-4 rounded-lg">
+                    <summary class="font-semibold text-lg">Can I also subscribe to cars with alternative drive systems at Subscribe2Go?</summary>
+                    <p class="mt-2 text-gray-700">
+                        Yes, at Subscribe2Go, we offer a diverse range of vehicles, including those with alternative drive systems. 
+                        You can choose from electric and hybrid cars, providing you with eco-friendly options that suit your driving preferences 
+                        and environmental values. Whether you are looking to reduce your carbon footprint or experience the latest in automotive technology, 
+                        we have options available to meet your needs.
+                    </p>
+                </details>
+                <!-- Question 2 -->
+                <details class="bg-white p-4 rounded-lg">
+                    <summary class="font-semibold text-lg">What license plate will my car have?</summary>
+                    <p class="mt-2 text-gray-700">
+                        Your car will come with a standard license plate registered in the country of service. This ensures that your vehicle complies with 
+                        all local regulations, and you can drive it legally without any additional steps. The license plate will reflect the standard 
+                        format used in your region, providing a seamless experience as you transition to your new vehicle.
+                    </p>
+                </details>
+                <!-- Question 3 -->
+                <details class="bg-white p-4 rounded-lg">
+                    <summary class="font-semibold text-lg">How long are the subscription periods at Subscribe2Go?</summary>
+                    <p class="mt-2 text-gray-700">
+                        Our subscription periods are designed with flexibility in mind. You can start with a subscription as short as 1 month, 
+                        giving you the freedom to choose how long you want to keep the vehicle. If your needs change, you can easily extend your 
+                        subscription on a month-to-month basis or opt for a longer-term plan that suits your lifestyle. This flexibility ensures 
+                        that you only commit to what works best for you.
+                    </p>
+                </details>
+                <!-- Question 4 -->
+                <details class="bg-white p-4 rounded-lg">
+                    <summary class="font-semibold text-lg">What happens if I exceed my monthly mileage package?</summary>
+                    <p class="mt-2 text-gray-700">
+                        If you exceed your monthly mileage package, there will be an additional charge based on the number of extra miles driven. 
+                        We will notify you of the cost per mile over your allotted limit in advance, so there are no surprises. This way, you can 
+                        manage your driving and adjust your plans accordingly, ensuring you stay within budget or prepare for any additional expenses.
+                    </p>
+                </details>
+                <!-- Question 5 -->
+                <details class="bg-white p-4 rounded-lg">
+                    <summary class="font-semibold text-lg">Can I change my car during the term?</summary>
+                    <p class="mt-2 text-gray-700">
+                        Yes, you have the flexibility to change your car during your subscription term. If your needs or preferences shift, 
+                        simply contact our customer service team to discuss your options. We can assist you in selecting a new vehicle and 
+                        arrange for a seamless transition, ensuring that you continue to drive a car that perfectly fits your lifestyle.
+                    </p>
+                </details>
+                <!-- Question 6 -->
+                <details class="bg-white p-4 rounded-lg">
+                    <summary class="font-semibold text-lg">My subscription is expiring and I would like to keep the car. Can I seamlessly take out a new subscription?</summary>
+                    <p class="mt-2 text-gray-700">
+                        Absolutely, renewing your subscription to keep the same car is a straightforward process. As your current subscription 
+                        nears its end, you can choose to renew it for another term without any interruption to your service. This allows you 
+                        to continue driving your preferred vehicle with the same peace of mind and convenience that Subscribe2Go offers.
+                    </p>
+                </details>
+                <!-- Question 7 -->
+                <details class="bg-white p-4 rounded-lg">
+                    <summary class="font-semibold text-lg">Is insurance included in the subscription fee?</summary>
+                    <p class="mt-2 text-gray-700">
+                        Yes, comprehensive insurance is included in your monthly subscription fee. This coverage ensures that you are protected 
+                        against a wide range of risks, including accidents and theft, giving you peace of mind as you drive. There are no additional 
+                        costs for insurance, and you don't need to worry about arranging it separately—everything is handled for you.
+                    </p>
+                </details>
+                <!-- Question 8 -->
+                <details class="bg-white p-4 rounded-lg">
+                    <summary class="font-semibold text-lg">What should I do if my car needs maintenance?</summary>
+                    <p class="mt-2 text-gray-700">
+                        If your car requires maintenance, simply contact our support team, and we will arrange for the necessary service. Maintenance 
+                        is fully covered under your subscription, meaning you won't have to pay out of pocket for routine repairs or servicing. We'll 
+                        guide you through the process, from scheduling an appointment to providing a replacement vehicle if needed, so you can stay 
+                        on the road without any inconvenience.
+                    </p>
+                </details>
+                <!-- Question 9 -->
+                <details class="bg-white p-4 rounded-lg">
+                    <summary class="font-semibold text-lg">Are there any hidden fees?</summary>
+                    <p class="mt-2 text-gray-700">
+                        No, there are no hidden fees in our subscription service. The monthly fee you pay covers all costs except for fuel. This includes 
+                        insurance, maintenance, and any other standard charges associated with your vehicle. We believe in transparency and simplicity, 
+                        ensuring that you know exactly what you're paying for each month without any unexpected costs.
+                    </p>
+                </details>
+                <!-- Question 10 -->
+                <details class="bg-white p-4 rounded-lg">
+                    <summary class="font-semibold text-lg">How can I contact customer support?</summary>
+                    <p class="mt-2 text-gray-700">
+                        You can reach our customer support team through multiple channels: by phone, email, or live chat on our website. Our support team 
+                        is available to assist you with any questions or issues you might have, ensuring you have a smooth and enjoyable experience with 
+                        Subscribe2Go. We're here to help, no matter how you prefer to get in touch.
+                    </p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="custom-footer-bg text-white py-10">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Subscribe2Go Car Subscription. All rights reserved.</p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+    <script src="/js/main.js" type="module"></script>
+</body>
+</html>
         <div class="flex flex-col lg:flex-row lg:justify-center lg:space-x-8">
             <!-- Testimonial 1 -->
             <div class="bg-white rounded-lg p-6  flex-1 mb-8 lg:mb-0">
@@ -285,8 +351,8 @@
     </div>
 </section>
 
- <!-- Mobile App Section -->
-<section id="mobile-app" class="py-20 relative">
+<!-- Mobile App Section -->
+<section id="mobile-app" class="relative bg-white py-24">
      <div class="container mx-auto px-16 text-center">
 
         <!-- Background design elements -->
@@ -394,7 +460,7 @@
                 <p class="mt-2 text-gray-700">
                     Yes, comprehensive insurance is included in your monthly subscription fee. This coverage ensures that you are protected 
                     against a wide range of risks, including accidents and theft, giving you peace of mind as you drive. There are no additional 
-                    costs for insurance, and you don’t need to worry about arranging it separately—everything is handled for you.
+                    costs for insurance, and you don't need to worry about arranging it separately—everything is handled for you.
                 </p>
             </details>
             <!-- Question 8 -->
@@ -402,7 +468,7 @@
                 <summary class="font-semibold text-lg">What should I do if my car needs maintenance?</summary>
                 <p class="mt-2 text-gray-700">
                     If your car requires maintenance, simply contact our support team, and we will arrange for the necessary service. Maintenance 
-                    is fully covered under your subscription, meaning you won’t have to pay out of pocket for routine repairs or servicing. We’ll 
+                    is fully covered under your subscription, meaning you won't have to pay out of pocket for routine repairs or servicing. We'll 
                     guide you through the process, from scheduling an appointment to providing a replacement vehicle if needed, so you can stay 
                     on the road without any inconvenience.
                 </p>
@@ -413,7 +479,7 @@
                 <p class="mt-2 text-gray-700">
                     No, there are no hidden fees in our subscription service. The monthly fee you pay covers all costs except for fuel. This includes 
                     insurance, maintenance, and any other standard charges associated with your vehicle. We believe in transparency and simplicity, 
-                    ensuring that you know exactly what you’re paying for each month without any unexpected costs.
+                    ensuring that you know exactly what you're paying for each month without any unexpected costs.
                 </p>
             </details>
             <!-- Question 10 -->
@@ -422,7 +488,7 @@
                 <p class="mt-2 text-gray-700">
                     You can reach our customer support team through multiple channels: by phone, email, or live chat on our website. Our support team 
                     is available to assist you with any questions or issues you might have, ensuring you have a smooth and enjoyable experience with 
-                    Subscribe2Go. We’re here to help, no matter how you prefer to get in touch.
+                    Subscribe2Go. We're here to help, no matter how you prefer to get in touch.
                 </p>
             </details>
         </div>

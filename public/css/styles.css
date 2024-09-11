@@ -1198,6 +1198,10 @@ video {
   --tw-bg-opacity: 0.8;
 }
 
+.bg-opacity-90 {
+  --tw-bg-opacity: 0.9;
+}
+
 .object-contain {
   -o-object-fit: contain;
      object-fit: contain;
@@ -1302,6 +1306,11 @@ video {
   padding-bottom: 5rem;
 }
 
+.py-24 {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -1325,6 +1334,10 @@ video {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.pb-16 {
+  padding-bottom: 4rem;
 }
 
 .pt-16 {
@@ -1600,7 +1613,7 @@ video {
 .hero {
   background-size: cover;
   background-position: center;
-  height: 60vh;
+  height: 100vh;
   /* Make the hero section full height */
 }
 
@@ -2045,6 +2058,11 @@ input,
   .md\:py-4 {
     padding-top: 1rem;
     padding-bottom: 1rem;
+  }
+
+  .md\:py-6 {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
   }
 
   .md\:pl-8 {
