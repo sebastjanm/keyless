@@ -899,12 +899,12 @@ video {
   max-width: 42rem;
 }
 
-.max-w-3xl {
-  max-width: 48rem;
-}
-
 .max-w-4xl {
   max-width: 56rem;
+}
+
+.max-w-6xl {
+  max-width: 72rem;
 }
 
 .max-w-screen-lg {
@@ -1045,12 +1045,6 @@ video {
   margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
 }
 
-.space-y-8 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(2rem * var(--tw-space-y-reverse));
-}
-
 .divide-y > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-y-reverse: 0;
   border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
@@ -1113,6 +1107,11 @@ video {
 .border-blue-500 {
   --tw-border-opacity: 1;
   border-color: rgb(59 130 246 / var(--tw-border-opacity));
+}
+
+.border-gray-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(243 244 246 / var(--tw-border-opacity));
 }
 
 .border-gray-300 {
@@ -1198,8 +1197,12 @@ video {
   --tw-bg-opacity: 0.8;
 }
 
-.bg-opacity-90 {
-  --tw-bg-opacity: 0.9;
+.bg-cover {
+  background-size: cover;
+}
+
+.bg-center {
+  background-position: center;
 }
 
 .object-contain {
@@ -1340,8 +1343,16 @@ video {
   padding-bottom: 4rem;
 }
 
+.pb-24 {
+  padding-bottom: 6rem;
+}
+
 .pt-16 {
   padding-top: 4rem;
+}
+
+.pt-4 {
+  padding-top: 1rem;
 }
 
 .text-left {
@@ -1383,6 +1394,11 @@ video {
   line-height: 2.5rem;
 }
 
+.text-5xl\/snug {
+  font-size: 3rem;
+  line-height: 1.375;
+}
+
 .text-base {
   font-size: 1rem;
   line-height: 1.5rem;
@@ -1391,6 +1407,11 @@ video {
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
+}
+
+.text-lg\/snug {
+  font-size: 1.125rem;
+  line-height: 1.375;
 }
 
 .text-sm {
@@ -1438,6 +1459,10 @@ video {
 
 .leading-tight {
   line-height: 1.25;
+}
+
+.tracking-wide {
+  letter-spacing: 0.025em;
 }
 
 .tracking-wider {
@@ -1610,11 +1635,32 @@ video {
 
 /* Custom styles for better alignment with avant2go.si */
 
-.hero {
+#hero {
+  width: 100%;
+  height: 80vh;
   background-size: cover;
   background-position: center;
-  height: 100vh;
-  /* Make the hero section full height */
+  background-repeat: no-repeat;
+  transition: background-image 2s ease-in-out;
+  background-color: rgb(0,0,0);
+  background-image: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 100%);
+}
+
+#hero-cars {
+  width: 100%;
+  height: 30vh;
+}
+
+#hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  transition: opacity 2s ease-in-out;
+  z-index: -1;
 }
 
 .custom-header {
@@ -1991,16 +2037,12 @@ input,
     width: 33.333333%;
   }
 
-  .md\:w-1\/5 {
-    width: 20%;
-  }
-
   .md\:w-2\/3 {
     width: 66.666667%;
   }
 
-  .md\:w-4\/5 {
-    width: 80%;
+  .md\:grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 
   .md\:grid-cols-12 {
@@ -2017,10 +2059,6 @@ input,
 
   .md\:flex-row {
     flex-direction: row;
-  }
-
-  .md\:items-start {
-    align-items: flex-start;
   }
 
   .md\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
@@ -2065,14 +2103,6 @@ input,
     padding-bottom: 1.5rem;
   }
 
-  .md\:pl-8 {
-    padding-left: 2rem;
-  }
-
-  .md\:pr-8 {
-    padding-right: 2rem;
-  }
-
   .md\:text-4xl {
     font-size: 2.25rem;
     line-height: 2.5rem;
@@ -2083,6 +2113,11 @@ input,
     line-height: 1;
   }
 
+  .md\:text-5xl\/snug {
+    font-size: 3rem;
+    line-height: 1.375;
+  }
+
   .md\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -2091,6 +2126,11 @@ input,
   .md\:text-xl {
     font-size: 1.25rem;
     line-height: 1.75rem;
+  }
+
+  .md\:text-xl\/snug {
+    font-size: 1.25rem;
+    line-height: 1.375;
   }
 
   .md\:text-xs {
@@ -2145,6 +2185,10 @@ input,
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .lg\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -2176,11 +2220,6 @@ input,
   .lg\:px-20 {
     padding-left: 5rem;
     padding-right: 5rem;
-  }
-
-  .lg\:px-32 {
-    padding-left: 8rem;
-    padding-right: 8rem;
   }
 
   .lg\:text-4xl {

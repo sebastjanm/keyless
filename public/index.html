@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avant2go Car subscription - Home</title>
+    <title>Avant2go - Naročnina na avto - Domov</title>
     <link rel="stylesheet" href="/css/styles.css">
     <script>
+        function preloadImages(imageArray) {
+            imageArray.forEach((src) => {
+                const img = new Image();
+                img.src = src;
+            });
+        }
+    
         function setRandomHeroImage() {
             const images = [
                 '/images/bg-0-mini.jpg',
@@ -14,44 +21,57 @@
                 '/images/bg-6-min.jpg',
                 '/images/car06-min.jpeg'
             ];
+    
+            preloadImages(images);
+    
             let index = 0;
             const heroElement = document.getElementById('hero');
-
+            
             function changeImage() {
-                heroElement.style.backgroundImage = `url(${images[index]})`;
+                heroElement.style.background = `url(${images[index]})`;
+                heroElement.style.backgroundSize = 'cover';
+                heroElement.style.backgroundPosition = 'center';
                 index = (index + 1) % images.length;
             }
-
+    
             // Initial image set
             changeImage();
-
-            // Change image every 5 seconds
-            setInterval(changeImage, 5000);
+    
+            // Change image every 5 seconds using setTimeout for smoother transitions
+            function smoothImageChange() {
+                setTimeout(() => {
+                    changeImage();
+                    smoothImageChange(); // Recursively call for continuous transitions
+                }, 5000); // Set to 5 seconds
+            }
+    
+            smoothImageChange();
         }
-
+    
         document.addEventListener('DOMContentLoaded', () => {
             const heroElement = document.getElementById('hero');
-            heroElement.style.transition = 'background-image 2s ease-in-out';
+            heroElement.style.transition = 'background 2s ease-in-out';
             setRandomHeroImage();
         });
     </script>
+    
 </head>
 <body class="bg-gray-100">
-    <!-- Top Menu -->
+    <!-- Zgornji meni -->
     <header id="top-menu" class="fixed top-0 left-0 w-full z-50 transition duration-300 ease-in-out bg-opacity-80">
         <div class="container mx-auto px-4 py-6 bg-transparent md:px-8 md:py-6">
             <div class="flex items-center justify-between">
                 <a href="index.html" class="text-xl font-bold text-white" id="logo-text">Avant2Subscribe</a>
                 <nav class="hidden md:flex space-x-4" id="nav-links">
-                    <a href="cars.html" class="text-white">Car Subscription</a>
-                    <a href="howitworks.html" class="text-white">How it works</a>
-                    <a href="tryandbuy.html" class="text-white">Try & Buy</a>
-                    <a href="business.html" class="text-white">For Business</a>
+                    <a href="cars.html" class="text-white">Naročnina na avto</a>
+                    <a href="howitworks.html" class="text-white">Kako deluje</a>
+                    <a href="tryandbuy.html" class="text-white">Preizkusi & Kupi</a>
+                    <a href="business.html" class="text-white">Za podjetja</a>
                 </nav>
                 <div class="hidden md:flex space-x-4" id="menu-links">
-                    <a href="faq.html" class="text-white">FAQ</a>
+                    <a href="faq.html" class="text-white">Pogosta vprašanja</a>
                     <a href="blog.html" class="text-white">Blog</a>
-                    <a href="#" class="text-white">Profile</a>
+                    <a href="#" class="text-white">Profil</a>
                 </div>
                 <button class="md:hidden text-white" id="mobile-menu-button">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -62,236 +82,163 @@
                 </button>
             </div>
             <div class="hidden md:hidden mt-4 space-y-2" id="mobile-menu">
-                <a href="index.html" class="block text-white">Home</a>
-                <a href="cars.html" class="block text-white">Available cars</a>
-                <a href="howitworks.html" class="block text-white">How it works</a>
-                <a href="tryandbuy.html" class="block text-white">Try & Buy</a>
-                <a href="business.html" class="block text-white">For Business</a>
-                <a href="faq.html" class="block text-white">FAQ</a>
+                <a href="index.html" class="block text-white">Domov</a>
+                <a href="cars.html" class="block text-white">Razpoložljivi avti</a>
+                <a href="howitworks.html" class="block text-white">Kako deluje</a>
+                 <a href="tryandbuy.html" class="block text-white">Preizkusi & Kupi</a>
+                <a href="business.html" class="block text-white">Za podjetja</a>
+                <a href="faq.html" class="block text-white">Pogosta vprašanja</a>
                 <a href="blog.html" class="block text-white">Blog</a>
-                <a href="profile.html" class="block text-white">Profile</a>
+                <a href="profile.html" class="block text-white">Profil</a>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="hero" class="hero bg-blue-600 text-white flex items-center justify-center py-10 md:py-12">
-        <div class="container mx-auto text-center px-6 md:px-12 lg:px-32 max-w-screen-lg">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 max-w-3xl mx-auto">Drive What You Want, When You Want. Subscribe2Go Today!</h1>
-            <p class="text-lg md:text-xl mb-6 max-w-xl mx-auto">
-                Experience hassle-free, all-inclusive car subscriptions tailored to your needs—drive the perfect vehicle with complete flexibility, all for one monthly fee.
+    <!-- Hero sekcija -->
+    <section id="hero" class="hero bg-cover bg-center text-white flex items-center justify-center py-10 md:py-12">
+        <div class="container mx-auto text-center px-6 md:px-12 lg:px-12 max-w-screen-lg">
+            <h1 class="text-5xl/snug md:text-5xl/snug font-bold mb-4 max-w-6xl mx-auto">
+                Izberite svoje sanjsko vozilo. <br>
+                Enostaven, prilagodljiv dolgoročni najem.
+            </h1>
+            <p class="font-light tracking-wide text-lg/snug md:text-xl/snug mb-12 max-w-xl mx-auto">
+                Brez skrbi, brez zapletov in tveganj! Dolgoročni najem avtomobila s popolno prilagodljivostjo, brez skritih stroškov, fiksna mesečno naročnina za celotno obdobje najema 
             </p>
-            <a href="cars.html" class="bg-orange-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-orange-600 transition-all duration-300">Browse cars</a>
+            <a href="cars.html" class="bg-orange-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-orange-600 transition-all duration-300">Izberite svoje novo vozilo</a>
         </div>
     </section>
 
-    <section id="how-it-works" class="bg-gray-50 py-24">
+<section id="how-it-works" class="bg-gray-50 py-24">
         <div class="container mx-auto px-24 lg:px-16 xl:px-24">
-            <div class="pb-16 text-center ">
-                <p class="text-sm font-semibold text-gray-500 tracking-widest uppercase">How It Works</p>
-                <h2 class="text-4xl font-bold text-gray-900">Making car ownership
-                    affordable and flexible.</h2>
+        <div class="pb-16 text-center ">
+            <p class="text-sm font-semibold text-gray-500 tracking-widest uppercase">Kako deluje dolgoročni najem avtomobila?</p>
+            <h2 class="text-4xl font-bold text-gray-900">Kako brez skrbi do vozila z Avant2Subscribe.</h2>
+        </div>
+        <div class="flex text-center  justify-center items-center relative sideLine">
+            <!-- Izberite svoj najljubši avto -->
+            <div class="flex flex-col items-center px-8 py-6 sm:py-0 sm:my-6 relative">
+                <img src="/images/icons/car.svg" class="mb-4 mx-auto" alt="" width="36" height="36">
+                <h3 class="text-lg font-bold text-gray-900">Izberite svoj najljubši avto</h3>
+                <p class="font-light text-gray-600 mt-2">Prebrskajte našo ponudbo najnovejših modelov in izberite tistega, ki ustreza vašemu življenjskemu slogu.</p>
             </div>
-            <div class="flex text-center justify-center items-center relative sideLine">
-                <!-- Pick Your Favorite Car -->
-                <div class="flex flex-col items-center px-8 py-6 sm:py-0 sm:my-6 relative">
-                    <img src="/images/icons/car.svg" class="mb-4 mx-auto" alt="" width="36" height="36">
-                    <h3 class="text-lg font-bold text-gray-900">Pick Your Favorite Car</h3>
-                    <p class="font-light text-gray-600 mt-2">Browse our selection of the latest models and choose the one that suits your lifestyle.</p>
-                </div>
 
-                <!-- Configure Your Subscription -->
-                <div class="flex flex-col items-center px-8 py-6 sm:py-0 sm:my-6 relative">
-                    <img src="/images/icons/location.svg" class="mb-4 mx-auto" alt="" width="36" height="36">
-                    <h3 class="text-lg font-bold text-gray-900">Configure Your Subscription</h3>
-                    <p class="font-light text-gray-600 mt-2">Customize your plan with flexible terms, mileage, and additional options—all for one monthly fee.</p>
-                </div>
+            <!-- Konfigurirajte svojo naročnino -->
+            <div class="flex flex-col items-center px-8 py-6 sm:py-0 sm:my-6 relative">
+                <img src="/images/icons/location.svg" class="mb-4 mx-auto" alt="" width="36" height="36">
+                <h3 class="text-lg font-bold text-gray-900">Konfigurirajte svojo naročnino</h3>
+                <p class="font-light text-gray-600 mt-2">Prilagodite svoj načrt s prilagodljivimi pogoji, kilometri in dodatnimi možnostmi—vse za en mesečni strošek.</p>
+            </div>
 
-                <!-- Confirm Your Booking -->
-                <div class="flex flex-col items-center px-8 py-6 sm:py-0 sm:my-6 relative">
-                    <img src="/images/icons/confirmation.svg" class="mb-4 mx-auto" alt="" width="36" height="36">
-                    <h3 class="text-lg font-bold text-gray-900">Confirm Your Booking</h3>
-                    <p class="font-light text-gray-600 mt-2">Once you're happy with your configuration, confirm your booking, and we'll take care of the rest.</p>
-                </div>
+            <!-- Potrdite svojo rezervacijo -->
+            <div class="flex flex-col items-center px-8 py-6 sm:py-0 sm:my-6 relative">
+                <img src="/images/icons/confirmation.svg" class="mb-4 mx-auto" alt="" width="36" height="36">
+                <h3 class="text-lg font-bold text-gray-900">Potrdite svojo rezervacijo</h3>
+                <p class="font-light text-gray-600 mt-2">Ko ste zadovoljni s svojo konfiguracijo, potrdite rezervacijo in mi bomo poskrbeli za ostalo.</p>
+            </div>
 
-                <!-- Enjoy the Ride -->
-                <div class="flex flex-col items-center px-8 py-6 sm:py-0 sm:my-6 relative">
-                    <img src="/images/icons/driving.svg" class="mb-4 mx-auto" alt="" width="36" height="36">
-                    <h3 class="text-lg font-bold text-gray-900">Enjoy the Ride</h3>
-                    <p class="font-light text-gray-600 mt-2">Drive. Swap cars or cancel anytime. Charging, insurance, and roadside assistance are already included.</p>
-                </div>
+            <!-- Uživajte v vožnji -->
+            <div class="flex flex-col items-center px-8 py-6 sm:py-0 sm:my-6 relative">
+                <img src="/images/icons/driving.svg" class="mb-4 mx-auto" alt="" width="36" height="36">
+                <h3 class="text-lg font-bold text-gray-900">Uživajte v vožnji</h3>
+                <p class="font-light text-gray-600 mt-2">Vozite. Zamenjajte avto ali prekličite kadar koli. Polnjenje, zavarovanje in pomoč na cesti so že vključeni.</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Popular Cars Section -->
-    <section id="popular-cars" class="bg-gray-50 py-24">
-        <div class="container mx-auto px-24 lg:px-16 xl:px-24">
-            <div class="pb-32 text-center ">
-                <p class="text-sm font-semibold text-gray-500 tracking-widest uppercase">Get on the road with Avant2Go</p>
-                <h2 class="text-4xl font-bold text-gray-900">Looking for a new car?</h2>
-            </div>
-            <div class="w-full flex flex-col md:flex-row">
-                <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="car-cards-container">
-                    <!-- Cards will be dynamically inserted here by JS -->
-                </div>
+<!-- Priljubljeni avti -->
+<section id="popular-cars" class="bg-gray-50 pt-4 pb-24">
+    <div class="container mx-auto px-24 lg:px-16 xl:px-24">
+        <div class="pb-16 text-center ">
+            <p class="text-sm font-semibold text-gray-500 tracking-widest uppercase">Na cesto z Avant2Subscribe</p>
+            <h2 class="text-4xl font-bold text-gray-900">Izberite optimalno vozilo zase</h2>
+        </div>
+        <div class="w-full flex flex-col md:flex-row">
+            <div class="w-full grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8" id="car-cards-container">
+                <!-- Kartice bodo dinamično vstavljene z JS -->
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Mobile App Section -->
-    <section id="mobile-app" class="relative bg-white py-24">
-        <div class="container mx-auto px-16 text-center">
-
-            <!-- Background design elements -->
-            <div class="absolute inset-x-0 bottom-36 h-80 z-0">
-                <img src="/images/background-design.png" alt="Background Design" class="w-full h-full object-cover opacity-80">
-            </div>
-
-            <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between px-4 lg:px-12">
-
-                <!-- Left Column -->
-                <div class="lg:w-1/2 flex flex-col justify-center items-start text-left space-y-6 z-10">
-                    <h2 class="text-4xl font-bold text-white">Download Subscribe2Go Mobile App for free</h2>
-                    <p class="text-white">For faster, easier booking and exclusive deals.</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="bg-black text-white py-2 px-4 rounded-lg flex items-center space-x-2">
-                            <img src="/images/app-store.png" alt="App Store" class="w-6 h-6">
-                            <span>Download on the App Store</span>
-                        </a>
-                        <a href="#" class="bg-black text-white py-2 px-4 rounded-lg flex items-center space-x-2">
-                            <img src="/images/google-play.png" alt="Google Play" class="w-6 h-6">
-                            <span>Get it on Google Play</span>
-                        </a>
-                    </div>
-                </div>
-                <!-- Right Column -->
-                <div class="lg:w-1/2 mt-12 lg:mt-0 flex justify-center relative">
-                    <div class="relative w-64 h-auto">
-                        <img src="/images/phone-mockup.png" alt="Phone Mockup" class="w-64 h-auto object-contain z-30">
-                    </div>
-                </div>
-            </div>
-
-    </section>
-
-    <!-- FAQs Section -->
-    <section id="faqs" class="py-20 bg-gray-100">
-        <div class="container mx-auto px-16 text-center">
-            <h2 class="text-4xl font-bold mb-4">FAQ</h2>
-            <p class="text-lg mb-12">Cars, Running Time & Kilometers</p>
-            <div class="text-left max-w-4xl mx-auto space-y-4">
-                <!-- Question 1 -->
-                <details class="bg-white p-4 rounded-lg">
-                    <summary class="font-semibold text-lg">Can I also subscribe to cars with alternative drive systems at Subscribe2Go?</summary>
-                    <p class="mt-2 text-gray-700">
-                        Yes, at Subscribe2Go, we offer a diverse range of vehicles, including those with alternative drive systems. 
-                        You can choose from electric and hybrid cars, providing you with eco-friendly options that suit your driving preferences 
-                        and environmental values. Whether you are looking to reduce your carbon footprint or experience the latest in automotive technology, 
-                        we have options available to meet your needs.
-                    </p>
-                </details>
-                <!-- Question 2 -->
-                <details class="bg-white p-4 rounded-lg">
-                    <summary class="font-semibold text-lg">What license plate will my car have?</summary>
-                    <p class="mt-2 text-gray-700">
-                        Your car will come with a standard license plate registered in the country of service. This ensures that your vehicle complies with 
-                        all local regulations, and you can drive it legally without any additional steps. The license plate will reflect the standard 
-                        format used in your region, providing a seamless experience as you transition to your new vehicle.
-                    </p>
-                </details>
-                <!-- Question 3 -->
-                <details class="bg-white p-4 rounded-lg">
-                    <summary class="font-semibold text-lg">How long are the subscription periods at Subscribe2Go?</summary>
-                    <p class="mt-2 text-gray-700">
-                        Our subscription periods are designed with flexibility in mind. You can start with a subscription as short as 1 month, 
-                        giving you the freedom to choose how long you want to keep the vehicle. If your needs change, you can easily extend your 
-                        subscription on a month-to-month basis or opt for a longer-term plan that suits your lifestyle. This flexibility ensures 
-                        that you only commit to what works best for you.
-                    </p>
-                </details>
-                <!-- Question 4 -->
-                <details class="bg-white p-4 rounded-lg">
-                    <summary class="font-semibold text-lg">What happens if I exceed my monthly mileage package?</summary>
-                    <p class="mt-2 text-gray-700">
-                        If you exceed your monthly mileage package, there will be an additional charge based on the number of extra miles driven. 
-                        We will notify you of the cost per mile over your allotted limit in advance, so there are no surprises. This way, you can 
-                        manage your driving and adjust your plans accordingly, ensuring you stay within budget or prepare for any additional expenses.
-                    </p>
-                </details>
-                <!-- Question 5 -->
-                <details class="bg-white p-4 rounded-lg">
-                    <summary class="font-semibold text-lg">Can I change my car during the term?</summary>
-                    <p class="mt-2 text-gray-700">
-                        Yes, you have the flexibility to change your car during your subscription term. If your needs or preferences shift, 
-                        simply contact our customer service team to discuss your options. We can assist you in selecting a new vehicle and 
-                        arrange for a seamless transition, ensuring that you continue to drive a car that perfectly fits your lifestyle.
-                    </p>
-                </details>
-                <!-- Question 6 -->
-                <details class="bg-white p-4 rounded-lg">
-                    <summary class="font-semibold text-lg">My subscription is expiring and I would like to keep the car. Can I seamlessly take out a new subscription?</summary>
-                    <p class="mt-2 text-gray-700">
-                        Absolutely, renewing your subscription to keep the same car is a straightforward process. As your current subscription 
-                        nears its end, you can choose to renew it for another term without any interruption to your service. This allows you 
-                        to continue driving your preferred vehicle with the same peace of mind and convenience that Subscribe2Go offers.
-                    </p>
-                </details>
-                <!-- Question 7 -->
-                <details class="bg-white p-4 rounded-lg">
-                    <summary class="font-semibold text-lg">Is insurance included in the subscription fee?</summary>
-                    <p class="mt-2 text-gray-700">
-                        Yes, comprehensive insurance is included in your monthly subscription fee. This coverage ensures that you are protected 
-                        against a wide range of risks, including accidents and theft, giving you peace of mind as you drive. There are no additional 
-                        costs for insurance, and you don't need to worry about arranging it separately—everything is handled for you.
-                    </p>
-                </details>
-                <!-- Question 8 -->
-                <details class="bg-white p-4 rounded-lg">
-                    <summary class="font-semibold text-lg">What should I do if my car needs maintenance?</summary>
-                    <p class="mt-2 text-gray-700">
-                        If your car requires maintenance, simply contact our support team, and we will arrange for the necessary service. Maintenance 
-                        is fully covered under your subscription, meaning you won't have to pay out of pocket for routine repairs or servicing. We'll 
-                        guide you through the process, from scheduling an appointment to providing a replacement vehicle if needed, so you can stay 
-                        on the road without any inconvenience.
-                    </p>
-                </details>
-                <!-- Question 9 -->
-                <details class="bg-white p-4 rounded-lg">
-                    <summary class="font-semibold text-lg">Are there any hidden fees?</summary>
-                    <p class="mt-2 text-gray-700">
-                        No, there are no hidden fees in our subscription service. The monthly fee you pay covers all costs except for fuel. This includes 
-                        insurance, maintenance, and any other standard charges associated with your vehicle. We believe in transparency and simplicity, 
-                        ensuring that you know exactly what you're paying for each month without any unexpected costs.
-                    </p>
-                </details>
-                <!-- Question 10 -->
-                <details class="bg-white p-4 rounded-lg">
-                    <summary class="font-semibold text-lg">How can I contact customer support?</summary>
-                    <p class="mt-2 text-gray-700">
-                        You can reach our customer support team through multiple channels: by phone, email, or live chat on our website. Our support team 
-                        is available to assist you with any questions or issues you might have, ensuring you have a smooth and enjoyable experience with 
-                        Subscribe2Go. We're here to help, no matter how you prefer to get in touch.
-                    </p>
-                </details>
-            </div>
+<!-- Razlika med storitvami -->
+<section id="service-comparison"  class="bg-gray-100 py-24">
+    <div class="container mx-auto px-24 lg:px-16 xl:px-24">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold mb-4">Primerjava <span class="text-blue-600">storitev</span></h2>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="custom-footer-bg text-white py-10">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 Subscribe2Go Car Subscription. All rights reserved.</p>
-            <div class="flex justify-center space-x-4 mt-4">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Contact Us</a>
-            </div>
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full  mx-auto bg-white rounded-lg">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-700">
+                        <th class="py-4 px-6 text-center"></th>
+                        <th class="py-4 px-6 text-center font-bold uppercase">Leasing</th>
+                        <th class="py-4 px-6 text-center font-bold uppercase bg-blue-600 text-white">Naročnina na avto</th>
+                        <th class="py-4 px-6 text-center font-bold uppercase">Kratkoročni najem</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700 ">
+                    <tr>
+                        <td class="py-4 px-6 text-center font-semibold">Mesečno plačilo brez DDV</td>
+                        <td class="py-4 px-6 text-center ">2.212,50 €</td>
+                        <td class="py-4 px-6 text-center bg-blue-100 text-blue-600 font-bold ">1.500,00 €</td>
+                        <td class="py-4 px-6 text-center">2.500,00 €</td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-4 px-6 text-center font-semibold">Brez začetnega plačila / depozita</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-4 px-6 text-center font-semibold">Zavarovanje</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-4 px-6 text-center font-semibold">Registracija in pristojbine</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-4 px-6 text-center font-semibold">Servis</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-4 px-6 text-center font-semibold">Sezonske pnevmatike</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-4 px-6 text-center font-semibold">Pomoč na cesti 24/7</td>
+                        <td class="py-4 px-6 text-center"><span class="text-red-500">&times;</span></td>
+                        <td class="py-4 px-6 text-center bg-blue-100"><span class="text-green-500">&check;</span></td>
+                        <td class="py-4 px-6 text-center"><span class="text-green-500">&check;</span></td>
+                    </tr>
+                    <tr class="border-t">
+                        <td class="py-4 px-6 text-center"></td>
+                        <td class="py-4 px-6 text-center"></td>
+                        <td class="py-4 px-6 text-center bg-blue-100">
+                            <a href="#" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg">Prebrskajte avtomobile</a>
+                        </td>
+                        <td class="py-4 px-6 text-center"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-    </footer>
-    <script src="/js/main.js" type="module"></script>
-</body>
-</html>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section id="testimonials" class="bg-white py-24">
+    <div class="container mx-auto px-24 lg:px-16 xl:px-24">
+        <h2 class="text-4xl font-bold text-center mb-8">Kaj o nas pravijo naše stranke</h2>
+        <p class="text-center text-gray-600 mb-12">Tukaj so komentarji naših strank, postanite ena izmed njih</p>
         <div class="flex flex-col lg:flex-row lg:justify-center lg:space-x-8">
             <!-- Testimonial 1 -->
             <div class="bg-white rounded-lg p-6  flex-1 mb-8 lg:mb-0">
@@ -299,10 +246,10 @@
                     <img src="https://via.placeholder.com/50" alt="Jane Cooper" class="rounded-full w-12 h-12">
                     <div class="ml-4">
                         <h3 class="text-xl font-semibold">Jane Cooper</h3>
-                        <p class="text-gray-600">Abuja, Nigeria</p>
+                        <p class="text-gray-600">Abuja, Nigerija</p>
                     </div>
                 </div>
-                <p class="text-gray-600 mb-4">"I had an incredible experience renting from Rent Cars! The process was seamless, the car was in pristine condition, and the customer service was top-notch.."</p>
+                <p class="text-gray-600 mb-4">"Imela sem neverjetno izkušnjo z najemom pri Rent Cars! Postopek je bil brezhiben, avto v brezhibnem stanju, storitev za stranke pa vrhunska."</p>
                 <div class="flex">
                     <span class="text-yellow-500">★</span>
                     <span class="text-yellow-500">★</span>
@@ -317,10 +264,10 @@
                     <img src="https://via.placeholder.com/50" alt="Leslie Alexander" class="rounded-full w-12 h-12">
                     <div class="ml-4">
                         <h3 class="text-xl font-semibold">Leslie Alexander</h3>
-                        <p class="text-gray-300">Lagos, Nigeria</p>
+                        <p class="text-gray-300">Lagos, Nigerija</p>
                     </div>
                 </div>
-                <p class="text-gray-300 mb-4">"I was really impressed with the level of service I received from this car rental company. The process was smooth and easy, and the car I rented was in excellent condition.."</p>
+                <p class="text-gray-300 mb-4">"Bil sem resnično navdušen nad ravnijo storitve, ki sem jo prejel pri tej avto najemni družbi. Postopek je bil gladek in enostaven, avto pa v odličnem stanju."</p>
                 <div class="flex">
                     <span class="text-yellow-500">★</span>
                     <span class="text-yellow-500">★</span>
@@ -335,10 +282,10 @@
                     <img src="https://via.placeholder.com/50" alt="Ajay Kushni" class="rounded-full w-12 h-12">
                     <div class="ml-4">
                         <h3 class="text-xl font-semibold">Ajay Kushni</h3>
-                        <p class="text-gray-600">Port Harcourt, Nigeria</p>
+                        <p class="text-gray-600">Port Harcourt, Nigerija</p>
                     </div>
                 </div>
-                <p class="text-gray-600 mb-4">"Rent Cars truly stands out. From their convenient online booking system to their prompt pickup and drop-off service, everything was convenient and stress-free."</p>
+                <p class="text-gray-600 mb-4">"Rent Cars resnično izstopa. Od njihovega priročnega spletnega sistema rezervacij do hitrega prevzema in vračila vozil je vse potekalo brez težav."</p>
                 <div class="flex">
                     <span class="text-yellow-500">★</span>
                     <span class="text-yellow-500">★</span>
@@ -351,7 +298,7 @@
     </div>
 </section>
 
-<!-- Mobile App Section -->
+ <!-- Mobile App Section -->
 <section id="mobile-app" class="relative bg-white py-24">
      <div class="container mx-auto px-16 text-center">
 
@@ -364,16 +311,16 @@
        
         <!-- Left Column -->
         <div class="lg:w-1/2 flex flex-col justify-center items-start text-left space-y-6 z-10">
-            <h2 class="text-4xl font-bold text-white">Download Subscribe2Go Mobile App for free</h2>
-            <p class="text-white">For faster, easier booking and exclusive deals.</p>
+            <h2 class="text-4xl font-bold text-white">Prenesite mobilno aplikacijo Subscribe2Go brezplačno</h2>
+            <p class="text-white">Za hitrejšo, enostavnejšo rezervacijo in ekskluzivne ponudbe.</p>
             <div class="flex space-x-4">
                 <a href="#" class="bg-black text-white py-2 px-4 rounded-lg flex items-center space-x-2">
                     <img src="/images/app-store.png" alt="App Store" class="w-6 h-6">
-                    <span>Download on the App Store</span>
+                    <span>Prenesite na App Store</span>
                 </a>
                 <a href="#" class="bg-black text-white py-2 px-4 rounded-lg flex items-center space-x-2">
                     <img src="/images/google-play.png" alt="Google Play" class="w-6 h-6">
-                    <span>Get it on Google Play</span>
+                    <span>Prenesite na Google Play</span>
                 </a>
             </div>
         </div>
@@ -387,108 +334,104 @@
 
 </section>
 
-
-
-
-
-
 <!-- FAQs Section -->
 <section id="faqs" class="py-20 bg-gray-100">
     <div class="container mx-auto px-16 text-center">
-        <h2 class="text-4xl font-bold mb-4">FAQ</h2>
-        <p class="text-lg mb-12">Cars, Running Time & Kilometers</p>
+        <h2 class="text-4xl font-bold mb-4">Pogosta vprašanja</h2>
+        <p class="text-lg mb-12">Avtomobili, Čas uporabe & Kilometri</p>
         <div class="text-left max-w-4xl mx-auto space-y-4">
             <!-- Question 1 -->
             <details class="bg-white p-4 rounded-lg">
-                <summary class="font-semibold text-lg">Can I also subscribe to cars with alternative drive systems at Subscribe2Go?</summary>
+                <summary class="font-semibold text-lg">Ali lahko pri Subscribe2Go naročim avtomobile z alternativnimi pogonskimi sistemi?</summary>
                 <p class="mt-2 text-gray-700">
-                    Yes, at Subscribe2Go, we offer a diverse range of vehicles, including those with alternative drive systems. 
-                    You can choose from electric and hybrid cars, providing you with eco-friendly options that suit your driving preferences 
-                    and environmental values. Whether you are looking to reduce your carbon footprint or experience the latest in automotive technology, 
-                    we have options available to meet your needs.
+                    Da, pri Subscribe2Go ponujamo raznoliko paleto vozil, vključno z avtomobili z alternativnimi pogonskimi sistemi. 
+                    Izbirate lahko med električnimi in hibridnimi avtomobili, kar vam omogoča ekološke možnosti, ki ustrezajo vašim 
+                    voznim preferencam in okoljskim vrednotam. Ne glede na to, ali želite zmanjšati svoj ogljični odtis ali preizkusiti 
+                    najnovejšo avtomobilsko tehnologijo, imamo na voljo možnosti, ki ustrezajo vašim potrebam.
                 </p>
             </details>
             <!-- Question 2 -->
             <details class="bg-white p-4 rounded-lg">
-                <summary class="font-semibold text-lg">What license plate will my car have?</summary>
+                <summary class="font-semibold text-lg">Kakšno registrsko tablico bo imel moj avto?</summary>
                 <p class="mt-2 text-gray-700">
-                    Your car will come with a standard license plate registered in the country of service. This ensures that your vehicle complies with 
-                    all local regulations, and you can drive it legally without any additional steps. The license plate will reflect the standard 
-                    format used in your region, providing a seamless experience as you transition to your new vehicle.
+                    Vaše vozilo bo imelo standardno registrsko tablico, registrirano v državi storitve. To zagotavlja, da je vaše vozilo v 
+                    skladu z vsemi lokalnimi predpisi in ga lahko zakonito vozite brez dodatnih korakov. Registrska tablica bo odražala 
+                    standardni format, ki se uporablja v vaši regiji, kar vam zagotavlja brezskrbno izkušnjo pri prehodu na novo vozilo.
                 </p>
             </details>
             <!-- Question 3 -->
             <details class="bg-white p-4 rounded-lg">
-                <summary class="font-semibold text-lg">How long are the subscription periods at Subscribe2Go?</summary>
+                <summary class="font-semibold text-lg">Kako dolga so naročniška obdobja pri Subscribe2Go?</summary>
                 <p class="mt-2 text-gray-700">
-                    Our subscription periods are designed with flexibility in mind. You can start with a subscription as short as 1 month, 
-                    giving you the freedom to choose how long you want to keep the vehicle. If your needs change, you can easily extend your 
-                    subscription on a month-to-month basis or opt for a longer-term plan that suits your lifestyle. This flexibility ensures 
-                    that you only commit to what works best for you.
+                    Naša naročniška obdobja so zasnovana s fleksibilnostjo v mislih. Začnete lahko z naročnino, ki traja samo 1 mesec, 
+                    kar vam omogoča, da sami izberete, kako dolgo želite obdržati vozilo. Če se vaše potrebe spremenijo, lahko preprosto 
+                    podaljšate svojo naročnino mesečno ali izberete daljši načrt, ki ustreza vašemu življenjskemu slogu. Ta prilagodljivost 
+                    zagotavlja, da se zavežete le k temu, kar vam najbolj ustreza.
                 </p>
             </details>
             <!-- Question 4 -->
             <details class="bg-white p-4 rounded-lg">
-                <summary class="font-semibold text-lg">What happens if I exceed my monthly mileage package?</summary>
+                <summary class="font-semibold text-lg">Kaj se zgodi, če presežem mesečni paket kilometrov?</summary>
                 <p class="mt-2 text-gray-700">
-                    If you exceed your monthly mileage package, there will be an additional charge based on the number of extra miles driven. 
-                    We will notify you of the cost per mile over your allotted limit in advance, so there are no surprises. This way, you can 
-                    manage your driving and adjust your plans accordingly, ensuring you stay within budget or prepare for any additional expenses.
+                    Če presežete svoj mesečni paket kilometrov, boste dodatno zaračunani glede na število dodatnih prevoženih kilometrov. 
+                    O ceni na kilometer, ki presega vaš dodeljeni limit, vas bomo vnaprej obvestili, da ne bo presenečenj. Na ta način 
+                    lahko upravljate svojo vožnjo in po potrebi prilagodite svoje načrte, tako da ostanete v okviru proračuna ali pripravite 
+                    za morebitne dodatne stroške.
                 </p>
             </details>
             <!-- Question 5 -->
             <details class="bg-white p-4 rounded-lg">
-                <summary class="font-semibold text-lg">Can I change my car during the term?</summary>
+                <summary class="font-semibold text-lg">Ali lahko med trajanjem pogodbe zamenjam avto?</summary>
                 <p class="mt-2 text-gray-700">
-                    Yes, you have the flexibility to change your car during your subscription term. If your needs or preferences shift, 
-                    simply contact our customer service team to discuss your options. We can assist you in selecting a new vehicle and 
-                    arrange for a seamless transition, ensuring that you continue to drive a car that perfectly fits your lifestyle.
+                    Da, med trajanjem vaše naročnine imate možnost zamenjati avto. Če se vaše potrebe ali želje spremenijo, preprosto stopite v stik 
+                    z našo službo za pomoč strankam, da se dogovorimo za zamenjavo. Pomagali vam bomo izbrati novo vozilo in organizirali brezhiben 
+                    prehod, kar vam zagotavlja, da še naprej vozite avto, ki popolnoma ustreza vašemu življenjskemu slogu.
                 </p>
             </details>
             <!-- Question 6 -->
             <details class="bg-white p-4 rounded-lg">
-                <summary class="font-semibold text-lg">My subscription is expiring and I would like to keep the car. Can I seamlessly take out a new subscription?</summary>
+                <summary class="font-semibold text-lg">Moja naročnina se izteka in želim obdržati avto. Ali lahko brez težav sklenem novo naročnino?</summary>
                 <p class="mt-2 text-gray-700">
-                    Absolutely, renewing your subscription to keep the same car is a straightforward process. As your current subscription 
-                    nears its end, you can choose to renew it for another term without any interruption to your service. This allows you 
-                    to continue driving your preferred vehicle with the same peace of mind and convenience that Subscribe2Go offers.
+                    Seveda, obnova vaše naročnine za obdržanje istega avtomobila je preprost postopek. Ko se vaša trenutna naročnina bliža koncu, 
+                    se lahko odločite za njeno podaljšanje za novo obdobje brez prekinitve storitve. To vam omogoča, da še naprej vozite svoje 
+                    priljubljeno vozilo z enakim občutkom miru in udobja, ki ga ponuja Subscribe2Go.
                 </p>
             </details>
             <!-- Question 7 -->
             <details class="bg-white p-4 rounded-lg">
-                <summary class="font-semibold text-lg">Is insurance included in the subscription fee?</summary>
+                <summary class="font-semibold text-lg">Ali je zavarovanje vključeno v naročnino?</summary>
                 <p class="mt-2 text-gray-700">
-                    Yes, comprehensive insurance is included in your monthly subscription fee. This coverage ensures that you are protected 
-                    against a wide range of risks, including accidents and theft, giving you peace of mind as you drive. There are no additional 
-                    costs for insurance, and you don't need to worry about arranging it separately—everything is handled for you.
+                    Da, celovito zavarovanje je vključeno v vašo mesečno naročnino. Ta pokritost zagotavlja, da ste zaščiteni pred različnimi 
+                    tveganji, vključno z nesrečami in tatvinami, kar vam zagotavlja mir med vožnjo. Dodatnih stroškov za zavarovanje ni in 
+                    vam ni treba skrbeti za njegovo ureditev posebej—vse je urejeno za vas.
                 </p>
             </details>
             <!-- Question 8 -->
             <details class="bg-white p-4 rounded-lg">
-                <summary class="font-semibold text-lg">What should I do if my car needs maintenance?</summary>
+                <summary class="font-semibold text-lg">Kaj naj storim, če moje vozilo potrebuje vzdrževanje?</summary>
                 <p class="mt-2 text-gray-700">
-                    If your car requires maintenance, simply contact our support team, and we will arrange for the necessary service. Maintenance 
-                    is fully covered under your subscription, meaning you won't have to pay out of pocket for routine repairs or servicing. We'll 
-                    guide you through the process, from scheduling an appointment to providing a replacement vehicle if needed, so you can stay 
-                    on the road without any inconvenience.
+                    Če vaše vozilo potrebuje vzdrževanje, preprosto stopite v stik z našo podporno ekipo in organizirali bomo potrebno storitev. 
+                    Vzdrževanje je v celoti pokrito v okviru vaše naročnine, kar pomeni, da vam ne bo treba plačati iz lastnega žepa za rutinska 
+                    popravila ali servisiranje. Vodili vas bomo skozi postopek, od dogovora za termin do zagotovitve nadomestnega vozila, če bo potrebno, 
+                    da boste lahko brez težav ostali na poti.
                 </p>
             </details>
             <!-- Question 9 -->
             <details class="bg-white p-4 rounded-lg">
-                <summary class="font-semibold text-lg">Are there any hidden fees?</summary>
+                <summary class="font-semibold text-lg">Ali obstajajo kakšni skriti stroški?</summary>
                 <p class="mt-2 text-gray-700">
-                    No, there are no hidden fees in our subscription service. The monthly fee you pay covers all costs except for fuel. This includes 
-                    insurance, maintenance, and any other standard charges associated with your vehicle. We believe in transparency and simplicity, 
-                    ensuring that you know exactly what you're paying for each month without any unexpected costs.
+                    Ne, v naši naročniški storitvi ni skritih stroškov. Mesečna naročnina, ki jo plačujete, zajema vse stroške, razen goriva. 
+                    To vključuje zavarovanje, vzdrževanje in vse druge standardne stroške, povezane z vašim vozilom. Verjamemo v transparentnost 
+                    in preprostost, kar zagotavlja, da natančno veste, kaj plačujete vsak mesec, brez nepričakovanih stroškov.
                 </p>
             </details>
             <!-- Question 10 -->
             <details class="bg-white p-4 rounded-lg">
-                <summary class="font-semibold text-lg">How can I contact customer support?</summary>
+                <summary class="font-semibold text-lg">Kako lahko stopim v stik s podporo za stranke?</summary>
                 <p class="mt-2 text-gray-700">
-                    You can reach our customer support team through multiple channels: by phone, email, or live chat on our website. Our support team 
-                    is available to assist you with any questions or issues you might have, ensuring you have a smooth and enjoyable experience with 
-                    Subscribe2Go. We're here to help, no matter how you prefer to get in touch.
+                    Našo podporno ekipo lahko dosežete prek več kanalov: po telefonu, e-pošti ali v klepetu v živo na naši spletni strani. Naša podporna 
+                    ekipa vam je na voljo za pomoč pri morebitnih vprašanjih ali težavah, kar zagotavlja, da imate gladko in prijetno izkušnjo z 
+                    Subscribe2Go. Tukaj smo, da vam pomagamo, ne glede na to, kako želite stopiti v stik z nami.
                 </p>
             </details>
         </div>
@@ -499,11 +442,11 @@
 <!-- Footer -->
 <footer class="custom-footer-bg text-white py-10">
     <div class="container mx-auto text-center">
-        <p>&copy; 2024 Subscribe2Go Car Subscription. All rights reserved.</p>
+        <p>&copy; 2024 Subscribe2Go Naročnina na avto. Vse pravice pridržane.</p>
         <div class="flex justify-center space-x-4 mt-4">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Contact Us</a>
+            <a href="#">Pravilnik o zasebnosti</a>
+            <a href="#">Pogoji uporabe</a>
+            <a href="#">Kontaktirajte nas</a>
         </div>
     </div>
 </footer>
